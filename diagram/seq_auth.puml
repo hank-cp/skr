@@ -1,0 +1,20 @@
+@startuml
+title Sign Up
+AppClient -> AuthServer: I want to sign up
+AuthServer -> AppClient: <font color=red>sign up token</font> and <font color=red>captcha</font>
+AppClient -> AuthServer: My <font color=red>principle</font> and <font color=red>credential</font>\n(with sign up token and captcha)
+AuthServer -> SecurityRealm: Check if this <font color=red>principle</font> is valid to register
+SecurityRealm -> AuthServer: check result
+AuthServer -> SecurityRealm: All right, save it to your database
+SecurityRealm -> AuthServer: saved
+AuthServer -->x AppClient: Refused because:\n - sign up token expired\n - principle existed\n - or...
+AuthServer -> AppClient: OK. here is your <font color=red>authentication token</font>
+
+newpage Login
+AppClient -> AuthServer: I want to login with my <font color=red>principle</font> and <font color=red>credential</font>
+AuthServer -> SecurityRealm: Check if this <font color=red>principle</font> and <font color=red>credential</font> is valid
+SecurityRealm -> AuthServer: check result
+AuthServer -->x AppClient: Refused because:\n - principle not found\n - credential not match
+AuthServer -> AppClient: All right. here is your <font color=red>authentication token</font>
+
+@enduml

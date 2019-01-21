@@ -1,0 +1,18 @@
+@startuml
+title Request
+autonumber
+AppClient -> AppServer1: I want to access API <font color=blue>x</font>, \nand here is my <font color=red>authentication token</font>
+AppServer1 -> SessionCache: Is there any user recently login with this <font color=red>authentication token</font>
+SessionCache -> AppServer1: Nope.
+AppServer1 -> AuthServer: Help my to resolve this token, see who is this <font color=red>principle</font>,\nand if he has right <font color=red>permission</font> to access this API
+AuthServer -->x AppServer1: Ops...\n - principle not found\n - authentication token expired\n - no permission
+AppServer1 -->x AppClient: 401, get out
+AuthServer -> AppServer1: Ok. here is <font color=red>principle</font> information and\nhe has right <font color=red>permission</font>
+AuthServer --> SessionCache: Hold this <font color=red>authentication token</font> with this <font color=red>principle</font> for a 20 mins
+AppServer1 -> AppServer2: I want to access API <font color=blue>y</font>, \nand here is user's <font color=red>authentication token</font>
+AppServer2 -> SessionCache: Is there any user recently login with this <font color=red>authentication token</font>
+SessionCache -> AppServer2: Yes, here is <font color=red>principle</font> information and\nhe has right <font color=red>permission</font>
+AppServer2 -->x AppServer1: 200, request result
+AppServer1 -->x AppClient: 200, request result
+
+@enduml

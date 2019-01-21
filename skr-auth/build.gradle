@@ -1,0 +1,9 @@
+ext.httpPort = "${auth_httpPort}"
+
+dependencies {
+    compile project(':skr-common')
+
+    implementation 'com.auth0:java-jwt:3.5.0'
+
+    testImplementation 'org.springframework.security:spring-security-test'
+}

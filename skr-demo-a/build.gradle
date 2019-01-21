@@ -1,0 +1,19 @@
+ext.httpPort = demoA_httpPort
+
+dependencies {
+    compile project(':skr-common')
+
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+
+    runtimeOnly "org.hsqldb:hsqldb"
+}
+
+//*************************************************************************
+// App Properties
+//*************************************************************************
+
+mainClassName = 'org.skr.a.DemoA'
+
+manifest {
+    attributes 'Main-Class': 'org.skr.a.DemoA'
+}
