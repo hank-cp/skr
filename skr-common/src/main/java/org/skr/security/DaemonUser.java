@@ -1,22 +1,15 @@
-package org.skr.security.model;
+package org.skr.security;
 
-import org.skr.common.Constants;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.validation.constraints.NotNull;
 import java.util.Collection;
 
-public class User implements UserDetails {
-
-    /** 用户状态 0=启用;1=停用*/
-    public byte status;
+public class DaemonUser implements UserDetails {
 
     @NotNull
     public Organization organization;
-
-    @NotNull
-    public String username;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -30,7 +23,7 @@ public class User implements UserDetails {
 
     @Override
     public String getUsername() {
-        return username;
+        return "∆daemon∆";
     }
 
     @Override
@@ -50,6 +43,6 @@ public class User implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return status == Constants.ENABLED;
+        return true;
     }
 }

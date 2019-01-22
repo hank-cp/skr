@@ -1,0 +1,7 @@
+skr:
+  auth:
+    token:
+      secret: sKrRrRrRrRrRrRrRr
+      expiration: 120000
+      prefix: Bearer-
+      header: AuthToken

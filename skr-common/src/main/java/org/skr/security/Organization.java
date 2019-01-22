@@ -1,4 +1,4 @@
-package org.skr.security.model;
+package org.skr.security;
 
 public class Organization {
 
