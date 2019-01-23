@@ -7,28 +7,26 @@ import org.skr.common.exception.AuthException;
 import org.skr.common.util.BeanUtil;
 import org.skr.common.util.JwtUtil;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
+import org.springframework.web.filter.OncePerRequestFilter;
 
+import javax.servlet.FilterChain;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Optional;
 
-public class JwtAuthenticationFilter extends AbstractAuthenticationProcessingFilter {
+public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private SecurityProperties securityProperties;
 
-    JwtAuthenticationFilter(String defaultFilterProcessesUrl,
-                            SecurityProperties securityProperties) {
-        super(defaultFilterProcessesUrl);
+    JwtAuthenticationFilter(SecurityProperties securityProperties) {
         this.securityProperties = securityProperties;
     }
 
     @Override
-    public Authentication attemptAuthentication(HttpServletRequest request,
-                                                HttpServletResponse response) throws AuthenticationException {
-
+    protected void doFilterInternal(HttpServletRequest request,
+                                    HttpServletResponse response,
+                                    FilterChain filterChain) {
         try {
             Authentication authentication = getAuthentication(request,
                     securityProperties.getAccessToken().getHeader(),
@@ -38,7 +36,7 @@ public class JwtAuthenticationFilter extends AbstractAuthenticationProcessingFil
                 throw new AuthException(Errors.AUTHENTICATION_REQUIRED);
             }
             SecurityContextHolder.getContext().setAuthentication(authentication);
-            return authentication;
+            filterChain.doFilter(request, response);
 
         } catch (TokenExpiredException ex) {
             throw new AuthException(Errors.ACCESS_TOKEN_EXPIRED);
@@ -60,4 +58,5 @@ public class JwtAuthenticationFilter extends AbstractAuthenticationProcessingFil
             .map(decoded -> new JwtAuthenticationToken(BeanUtil.fromJSON(User.class, decoded)))
             .orElse(null);
     }
+
 }

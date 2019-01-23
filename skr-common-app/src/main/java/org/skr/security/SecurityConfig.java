@@ -24,7 +24,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                     .anyRequest().permitAll()
                 .and()
-                    .addFilterBefore(new JwtAuthenticationFilter("/**", securityProperties),
+                    .addFilterBefore(new JwtAuthenticationFilter(securityProperties),
                             UsernamePasswordAuthenticationFilter.class)
                     .addFilterBefore(new JwtAuthExceptionFilter(),
                             JwtAuthenticationFilter.class)
