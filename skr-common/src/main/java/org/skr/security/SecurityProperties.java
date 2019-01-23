@@ -15,7 +15,7 @@ import org.springframework.stereotype.Component;
 @Data
 public class SecurityProperties {
 
-    private String coreRobotName;
+    private boolean renewRefreshToken;
 
     private Token accessToken = new Token();
 

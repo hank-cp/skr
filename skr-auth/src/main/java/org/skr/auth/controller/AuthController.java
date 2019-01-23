@@ -84,20 +84,19 @@ public class AuthController {
         );
     }
 
-    @PostMapping("/refreshToken")
+    @PostMapping("/refresh-token")
     public @ResponseBody Map<String, Object> loginByUsernamePassword(
+            @RequestParam String orgCode,
             @RequestParam String refreshToken) {
 
         String refreshPrefix = securityProperties.getRefreshToken().getPrefix();
         String refreshSecret = securityProperties.getRefreshToken().getSecret();
 
-        org.skr.security.User commonUser;
+        String username;
         try {
-            commonUser = Optional.of(refreshToken)
+            username = Optional.of(refreshToken)
                     .map(token -> token.replace(refreshPrefix, ""))
                     .map(token -> JwtUtil.decode(token, refreshSecret))
-                    .map(decoded -> (org.skr.security.User)
-                            BeanUtil.fromJSON(org.skr.security.User.class, decoded))
                     .orElse(null);
         } catch (TokenExpiredException ex) {
             throw new AuthException(Errors.REFRESH_TOKEN_EXPIRED);
@@ -107,12 +106,11 @@ public class AuthController {
             throw new AuthException(Errors.AUTHENTICATION_REQUIRED);
         }
 
-        if (commonUser == null) {
+        if (username == null) {
             throw new AuthException(Errors.AUTHENTICATION_REQUIRED);
         }
 
-        User user = userRepository.findOneByOrgCodeAndAccount(
-                commonUser.organization.code, commonUser.username);
+        User user = userRepository.findOneByOrgCodeAndAccount(orgCode, username);
 
         if (user == null) throw new AuthException(Errors.ACCOUNT_NOT_BELONG_TO_ORG);
         if (user.status == Constants.DISABLED)
@@ -123,21 +121,27 @@ public class AuthController {
             throw new AuthException(Errors.USER_REJECTED);
 
         // refresh user info
-        commonUser = user.buildCommonUser();
+        org.skr.security.User commonUser = user.buildCommonUser();
 
         String accessToken = JwtUtil.encode(BeanUtil.toJSON(commonUser),
                 securityProperties.getAccessToken().getExpiration(),
                 securityProperties.getAccessToken().getSecret());
-        String newRefreshToken = JwtUtil.encode(commonUser.username,
-                securityProperties.getRefreshToken().getExpiration(),
-                securityProperties.getRefreshToken().getSecret());
 
-        return Apis.apiResult(Errors.OK, map(
+        Map<String, Object> result = Apis.apiResult(Errors.OK, map(
                 entry(securityProperties.getAccessToken().getHeader(),
-                        securityProperties.getAccessToken().getPrefix() + accessToken),
-                entry(securityProperties.getRefreshToken().getHeader(),
-                        securityProperties.getRefreshToken().getPrefix() + newRefreshToken))
-                );
+                        securityProperties.getAccessToken().getPrefix() + accessToken)
+        ));
+
+        // renew refresh token
+        if (securityProperties.isRenewRefreshToken()) {
+            String newRefreshToken = JwtUtil.encode(commonUser.username,
+                    securityProperties.getRefreshToken().getExpiration(),
+                    securityProperties.getRefreshToken().getSecret());
+            result.put(securityProperties.getRefreshToken().getHeader(),
+                    securityProperties.getRefreshToken().getPrefix() + newRefreshToken);
+        }
+
+        return result;
     }
 
 }

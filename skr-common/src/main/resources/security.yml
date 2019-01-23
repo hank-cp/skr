@@ -1,5 +1,6 @@
 skr:
   security:
+    renewRefreshToken: false
     accessToken:
       secret: sKrRrRrRrRrRrRrRrAccess
       expiration: 1200000
