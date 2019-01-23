@@ -1,10 +1,7 @@
 ext.httpPort = demoA_httpPort
 
 dependencies {
-    compile project(':skr-common')
-
-    implementation "org.springframework.boot:spring-boot-starter-web"
-    implementation "org.springframework.boot:spring-boot-starter-security"
+    compile project(':skr-common-app')
 
     runtimeOnly "org.hsqldb:hsqldb"
 }

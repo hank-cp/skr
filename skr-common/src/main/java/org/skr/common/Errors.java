@@ -8,7 +8,9 @@ import java.util.Objects;
 public final class Errors {
 
     public enum ErrorLevel implements StringValuedEnum {
-        WARNING("warn"), FAIL("fail");
+        WARNING("warn"), // client should prompt user with warning message
+        ERROR("error"),  // client should stop user operating, generally caused by error input or data restrictions
+        FATAL("fatal");  // client should stop to be functional, shit happens...
 
         private final String value;
 
@@ -26,7 +28,7 @@ public final class Errors {
                 if (!Objects.equals(item.value(), value)) continue;
                 return item;
             }
-            return FAIL;
+            return FATAL;
         }
     }
 
@@ -76,9 +78,13 @@ public final class Errors {
     public static final Errors MODEL_DEFINITION_ERROR   = new Errors(1010, "Model definition error.");
 
     public static final Errors NOT_AUTHENTICATED            = new Errors(1100, "Account is not authenticated.");
-    public static final Errors ACCOUNT_NOT_BELONG_TO_ORG    = new Errors(1101, "Account is not belong to org.");
-    public static final Errors USER_DISABLED                = new Errors(1102, "User is disabled.");
-    public static final Errors USER_NEED_APPROVAL           = new Errors(1103, "User need to be approved.");
-    public static final Errors USER_REJECTED                = new Errors(1104, "User joining get rejected.");
-    public static final Errors ORGANIZATION_NOT_EXISTED     = new Errors(1105, "Organization is not existed.");
+    public static final Errors ACCESS_TOKEN_EXPIRED         = new Errors(1101, "Access token is expired.");
+    public static final Errors ACCESS_TOKEN_BROKEN          = new Errors(1102, "Access token is broken.");
+    public static final Errors REFRESH_TOKEN_EXPIRED        = new Errors(1103, "Refresh token is expired.");
+    public static final Errors REFRESH_TOKEN_BROKEN         = new Errors(1104, "Refresh token is broken.");
+    public static final Errors ACCOUNT_NOT_BELONG_TO_ORG    = new Errors(1105, "Account is not belong to org.");
+    public static final Errors USER_DISABLED                = new Errors(1106, "User is disabled.");
+    public static final Errors USER_NEED_APPROVAL           = new Errors(1107, "User need to be approved.");
+    public static final Errors USER_REJECTED                = new Errors(1108, "User joining get rejected.");
+    public static final Errors ORGANIZATION_NOT_EXISTED     = new Errors(1109, "Organization is not existed.");
 }

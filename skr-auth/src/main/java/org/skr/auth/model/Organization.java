@@ -17,7 +17,7 @@ public class Organization extends BaseEntity {
     @Column(unique = true)
     public String name;
 
-    /** 付费等级 */
+    /** Paying level */
     public int vipLevel;
 
 }

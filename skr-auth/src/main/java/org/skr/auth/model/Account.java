@@ -20,7 +20,7 @@ public class Account extends BaseEntity implements UserDetails {
     @NotNull
     public String password;
 
-    /** 状态 0=启用; 1=禁用; 2=状态异常 */
+    /** 0=enabled; 1=disabled; 2=fault state; */
     public byte status;
 
     @Override

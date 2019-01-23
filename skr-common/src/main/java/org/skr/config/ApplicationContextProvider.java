@@ -23,11 +23,13 @@ public class ApplicationContextProvider implements ApplicationContextAware {
     }
 
     public static <T> T getBean(Class<T> clazz) {
+        if (ctx == null) return null;
         return ctx.getBean(clazz);
     }
 
     @SuppressWarnings("unchecked")
     public static <T> T getBean(String beanName) {
+        if (ctx == null) return null;
         return (T) ctx.getBean(beanName);
     }
 
@@ -51,6 +53,7 @@ public class ApplicationContextProvider implements ApplicationContextAware {
     }
 
     public static Validator getJSR303Validator() {
+        if (ctx == null) return null;
         LocalValidatorFactoryBean factoryBean = ctx.getBean(LocalValidatorFactoryBean.class);
         return factoryBean.getValidator();
     }

@@ -9,7 +9,7 @@ import java.util.Iterator;
 import java.util.stream.Stream;
 
 /**
- * Java8 Stream的JSON序列化
+ * Lazy JSON Serialization for Stream
  */
 public class StreamSerializer extends StdSerializer<Stream> {
 

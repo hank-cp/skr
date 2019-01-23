@@ -7,7 +7,7 @@ import com.fasterxml.jackson.databind.ser.std.StdSerializer;
 import java.io.IOException;
 
 /**
- * 带值Enum的JSON序列化
+ * JSON Serialization for Int value Enum
  */
 public class IntValuedEnumSerializer extends StdSerializer<IntValuedEnum> {
 

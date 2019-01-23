@@ -1,0 +1,12 @@
+skr:
+  security:
+    accessToken:
+      secret: sKrRrRrRrRrRrRrRrAccess
+      expiration: 1200000
+      prefix: Bearer-
+      header: access-token
+    refreshToken:
+      secret: sKrRrRrRrRrRrRrRrRefresh
+      expiration: 3600000
+      prefix: Bearer-
+      header: refresh-token

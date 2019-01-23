@@ -3,3 +3,7 @@ spring:
     url: "jdbc:hsqldb:mem:testdb;sql.syntax_pgs=true"
   jpa:
     show-sql: true
+
+logging:
+  level:
+    org.hibernate.tool.schema.internal.ExceptionHandlerLoggedImpl: ERROR

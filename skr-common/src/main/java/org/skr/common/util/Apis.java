@@ -62,7 +62,7 @@ public class Apis {
                 violation -> Errors.INVALID_SUBMITTED_DATA
                         .setPath(violation.getPropertyPath().toString())
                         .setMsg(violation.getMessage())
-                        .setLevel(Errors.ErrorLevel.FAIL)
+                        .setLevel(Errors.ErrorLevel.ERROR)
         ).collect(Collectors.toList());
     }
 }

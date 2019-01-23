@@ -1,10 +1,13 @@
 package org.skr.a.task;
 
+import org.skr.common.Errors;
+import org.skr.common.util.Apis;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/task")
@@ -19,8 +22,8 @@ public class TaskController {
     }
 
     @GetMapping("/list")
-    public List<Task> getTasks() {
-        return taskRepository.findAll();
+    public @ResponseBody Map<String, Object> getTasks() {
+        return Apis.apiResult(Errors.OK, taskRepository.findAll());
     }
 
     @GetMapping("/{id}")

@@ -24,7 +24,7 @@ public class User extends BaseEntity {
 
     public String nickName;
 
-    /** 状态 0=正常; 1=禁用; 2=申请加入组织待批准; 3=申请加入组织被拒绝 */
+    /** 0=enabled; 1=disabled; 2=apply to join org; 3=reject to join org; */
     public byte status;
 
     //*************************************************************************

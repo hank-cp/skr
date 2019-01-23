@@ -3,10 +3,6 @@ ext.httpPort = "${auth_httpPort}"
 dependencies {
     compile project(':skr-common')
 
-    implementation 'org.springframework.boot:spring-boot-starter-web'
-
-    implementation 'com.auth0:java-jwt:3.5.0'
-
     runtimeOnly "org.hsqldb:hsqldb"
 }
 
