@@ -14,4 +14,6 @@ public class User {
     public String username;
 
     public String nickName;
+
+    public Boolean isRobot;
 }

@@ -10,3 +10,7 @@ skr:
       expiration: 3600000
       prefix: Bearer-
       header: refresh-token
+    robotToken:
+      secret: sKrRrRrRrRrRrRrRrRobot
+      prefix: Robot-
+      username: ∆coreRobot∆

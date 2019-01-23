@@ -1,9 +1,12 @@
 package org.skr.auth.controller;
 
+import com.auth0.jwt.exceptions.JWTVerificationException;
+import com.auth0.jwt.exceptions.TokenExpiredException;
 import org.skr.auth.model.User;
 import org.skr.auth.repository.UserRepository;
 import org.skr.common.Constants;
 import org.skr.common.Errors;
+import org.skr.common.exception.AuthException;
 import org.skr.common.util.Apis;
 import org.skr.common.util.BeanUtil;
 import org.skr.common.util.JwtUtil;
@@ -20,6 +23,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletResponse;
 import java.util.Map;
+import java.util.Optional;
+
+import static org.skr.common.util.CollectionUtils.*;
 
 @RestController
 public class AuthController {
@@ -39,7 +45,7 @@ public class AuthController {
             @RequestParam String username,
             @RequestParam String password,
             HttpServletResponse response) {
-        Authentication auth = null;
+        Authentication auth;
         try {
             auth = authenticationManager
                     .authenticate(new UsernamePasswordAuthenticationToken(username, password));
@@ -48,35 +54,90 @@ public class AuthController {
             return Apis.apiResult(Errors.NOT_AUTHENTICATED);
         }
         if (!auth.isAuthenticated()) {
-            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-            return Apis.apiResult(Errors.NOT_AUTHENTICATED);
+            throw new AuthException(Errors.NOT_AUTHENTICATED);
         }
 
         User user = userRepository.findOneByOrgCodeAndAccount(orgCode, username);
 
-        if (user == null) return Apis.apiResult(Errors.ACCOUNT_NOT_BELONG_TO_ORG);
+        if (user == null) throw new AuthException(Errors.ACCOUNT_NOT_BELONG_TO_ORG);
         if (user.status == Constants.DISABLED)
-            return Apis.apiResult(Errors.USER_DISABLED);
-
-        if (user.status == User.USER_STATUS_JOINING_NEED_APPROVAL) return Apis.apiResult(Errors.USER_NEED_APPROVAL);
+            throw new AuthException(Errors.USER_DISABLED);
+        if (user.status == User.USER_STATUS_JOINING_NEED_APPROVAL)
+            throw new AuthException(Errors.USER_NEED_APPROVAL);
         if (user.status == User.USER_STATUS_JOINING_REJECT)
-            return Apis.apiResult(Errors.USER_REJECTED);
+            throw new AuthException(Errors.USER_REJECTED);
 
         org.skr.security.User commonUser = user.buildCommonUser();
 
         String accessToken = JwtUtil.encode(BeanUtil.toJSON(commonUser),
                 securityProperties.getAccessToken().getExpiration(),
                 securityProperties.getAccessToken().getSecret());
-        response.addHeader(securityProperties.getAccessToken().getHeader(),
-                securityProperties.getAccessToken().getPrefix() + accessToken);
-
         String refreshToken = JwtUtil.encode(commonUser.username,
                 securityProperties.getRefreshToken().getExpiration(),
                 securityProperties.getRefreshToken().getSecret());
-        response.addHeader(securityProperties.getRefreshToken().getHeader(),
-                securityProperties.getRefreshToken().getPrefix() + refreshToken);
 
-        return Apis.apiResult(Errors.OK);
+        return Apis.apiResult(Errors.OK, map(
+                entry(securityProperties.getAccessToken().getHeader(),
+                        securityProperties.getAccessToken().getPrefix() + accessToken),
+                entry(securityProperties.getRefreshToken().getHeader(),
+                        securityProperties.getRefreshToken().getPrefix() + refreshToken))
+        );
+    }
+
+    @PostMapping("/refreshToken")
+    public @ResponseBody Map<String, Object> loginByUsernamePassword(
+            @RequestParam String refreshToken) {
+
+        String refreshPrefix = securityProperties.getRefreshToken().getPrefix();
+        String refreshSecret = securityProperties.getRefreshToken().getSecret();
+
+        org.skr.security.User commonUser;
+        try {
+            commonUser = Optional.of(refreshToken)
+                    .map(token -> token.replace(refreshPrefix, ""))
+                    .map(token -> JwtUtil.decode(token, refreshSecret))
+                    .map(decoded -> (org.skr.security.User)
+                            BeanUtil.fromJSON(org.skr.security.User.class, decoded))
+                    .orElse(null);
+        } catch (TokenExpiredException ex) {
+            throw new AuthException(Errors.REFRESH_TOKEN_EXPIRED);
+        } catch (JWTVerificationException ex) {
+            throw new AuthException(Errors.REFRESH_TOKEN_BROKEN);
+        } catch (Exception ex) {
+            throw new AuthException(Errors.AUTHENTICATION_REQUIRED);
+        }
+
+        if (commonUser == null) {
+            throw new AuthException(Errors.AUTHENTICATION_REQUIRED);
+        }
+
+        User user = userRepository.findOneByOrgCodeAndAccount(
+                commonUser.organization.code, commonUser.username);
+
+        if (user == null) throw new AuthException(Errors.ACCOUNT_NOT_BELONG_TO_ORG);
+        if (user.status == Constants.DISABLED)
+            throw new AuthException(Errors.USER_DISABLED);
+        if (user.status == User.USER_STATUS_JOINING_NEED_APPROVAL)
+            throw new AuthException(Errors.USER_NEED_APPROVAL);
+        if (user.status == User.USER_STATUS_JOINING_REJECT)
+            throw new AuthException(Errors.USER_REJECTED);
+
+        // refresh user info
+        commonUser = user.buildCommonUser();
+
+        String accessToken = JwtUtil.encode(BeanUtil.toJSON(commonUser),
+                securityProperties.getAccessToken().getExpiration(),
+                securityProperties.getAccessToken().getSecret());
+        String newRefreshToken = JwtUtil.encode(commonUser.username,
+                securityProperties.getRefreshToken().getExpiration(),
+                securityProperties.getRefreshToken().getSecret());
+
+        return Apis.apiResult(Errors.OK, map(
+                entry(securityProperties.getAccessToken().getHeader(),
+                        securityProperties.getAccessToken().getPrefix() + accessToken),
+                entry(securityProperties.getRefreshToken().getHeader(),
+                        securityProperties.getRefreshToken().getPrefix() + newRefreshToken))
+                );
     }
 
 }

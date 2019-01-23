@@ -27,7 +27,7 @@ class DataAuditorConfig {
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
             if (authentication == null) {
-                return Optional.of("∆Anonymous∆");
+                return Optional.of("∆anonymous∆");
             }
 
             if (authentication.getPrincipal() instanceof UserDetails) {

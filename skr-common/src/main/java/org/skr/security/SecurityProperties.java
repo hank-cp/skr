@@ -15,9 +15,13 @@ import org.springframework.stereotype.Component;
 @Data
 public class SecurityProperties {
 
+    private String coreRobotName;
+
     private Token accessToken = new Token();
 
     private Token refreshToken = new Token();
+
+    private Token robotToken = new Token();
 
     @Data
     public static class Token {
