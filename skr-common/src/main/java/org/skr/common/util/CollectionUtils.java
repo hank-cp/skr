@@ -2,6 +2,7 @@ package org.skr.common.util;
 
 import jdk.nashorn.api.scripting.ScriptObjectMirror;
 
+import javax.validation.constraints.NotNull;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
 import java.util.*;
@@ -32,13 +33,24 @@ public class CollectionUtils {
     public static <K, V> Map<K, V> map(Entry... entries) {
         Map<K, V> result = new LinkedHashMap<>(entries.length);
 
-        for (Entry<? extends K, ? extends V> entry : entries)
-            result.put(entry.key, entry.value);
+        for (Entry<? extends K, ? extends V> entry : entries) {
+            if (entry != null) result.put(entry.key, entry.value);
+        }
 
         return result;
     }
 
     public static <K, V> Entry<K, V> entry(K key, V value) {
+        return new Entry<>(key, value);
+    }
+
+    public static <K, V> Entry<K, V> optionalEntry(K key, V value) {
+        if (value == null) return null;
+        return new Entry<>(key, value);
+    }
+
+    public static <K, V> Entry<K, V> solidEntry(K key, @NotNull V value) {
+        if (value == null) throw new RuntimeException("Entry value must not be empty");
         return new Entry<>(key, value);
     }
 

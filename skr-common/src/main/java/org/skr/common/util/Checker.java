@@ -1,12 +1,12 @@
 package org.skr.common.util;
 
 import org.joda.time.DateTime;
+import org.skr.common.exception.Errors;
 
+import javax.validation.ConstraintViolation;
 import java.io.File;
-import java.util.Collection;
-import java.util.Date;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public final class Checker {
 
@@ -113,4 +113,13 @@ public final class Checker {
         return bool != null && bool.isPresent() && bool.get();
     }
 
+    public static <T> List<Errors> convertViolationsToErrors(Set<ConstraintViolation<T>> violations) {
+        if (Checker.isEmpty(violations)) return new ArrayList<>();
+        return violations.stream().map(
+                violation -> Errors.INVALID_SUBMITTED_DATA
+                        .setPath(violation.getPropertyPath().toString())
+                        .setMsg(violation.getMessage())
+                        .setLevel(Errors.ErrorLevel.ERROR)
+        ).collect(Collectors.toList());
+    }
 }

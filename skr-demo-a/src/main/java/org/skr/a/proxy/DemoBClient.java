@@ -20,4 +20,7 @@ public interface DemoBClient {
 	@GetMapping("/task_record/list")
 	List<Map<String, Object>> getTaskRecords();
 
+	@GetMapping("/task_record/welcome_to_hell")
+	void welcomeToHell();
+
 }

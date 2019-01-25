@@ -1,7 +1,5 @@
 package org.skr.common.exception;
 
-import org.skr.common.Errors;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;

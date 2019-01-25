@@ -12,6 +12,7 @@ import org.springframework.context.ApplicationListener;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Component;
+import org.springframework.web.servlet.DispatcherServlet;
 
 @SpringBootApplication(scanBasePackages = "org.skr")
 @EnableDiscoveryClient
@@ -34,9 +35,13 @@ public class CommonConfig {
         @Autowired
         private ObjectMapper objectMapper;
 
+        @Autowired
+        private DispatcherServlet dispatcherServlet;
+
         @Override
         public void onApplicationEvent(ContextRefreshedEvent event) {
             BeanUtil.setupObjectMapper(objectMapper);
+            dispatcherServlet.setThrowExceptionIfNoHandlerFound(true);
         }
     }
 

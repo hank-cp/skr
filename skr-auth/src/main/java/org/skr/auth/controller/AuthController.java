@@ -5,9 +5,8 @@ import com.auth0.jwt.exceptions.TokenExpiredException;
 import org.skr.auth.model.User;
 import org.skr.auth.repository.UserRepository;
 import org.skr.common.Constants;
-import org.skr.common.Errors;
+import org.skr.common.exception.Errors;
 import org.skr.common.exception.AuthException;
-import org.skr.common.util.Apis;
 import org.skr.common.util.BeanUtil;
 import org.skr.common.util.JwtUtil;
 import org.skr.security.JwtPrincipal;
@@ -22,7 +21,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.servlet.http.HttpServletResponse;
 import java.util.Map;
 import java.util.Optional;
 
@@ -44,15 +42,13 @@ public class AuthController {
     public @ResponseBody Map<String, Object> loginByUsernamePassword(
             @RequestParam String orgCode,
             @RequestParam String username,
-            @RequestParam String password,
-            HttpServletResponse response) {
+            @RequestParam String password) {
         Authentication auth;
         try {
             auth = authenticationManager
                     .authenticate(new UsernamePasswordAuthenticationToken(username, password));
         } catch (BadCredentialsException ex) {
-            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-            return Apis.apiResult(Errors.NOT_AUTHENTICATED);
+            throw new AuthException(Errors.NOT_AUTHENTICATED);
         }
         if (!auth.isAuthenticated()) {
             throw new AuthException(Errors.NOT_AUTHENTICATED);
@@ -77,11 +73,11 @@ public class AuthController {
                 skrSecurityProperties.getRefreshToken().getExpiration(),
                 skrSecurityProperties.getRefreshToken().getSecret());
 
-        return Apis.apiResult(Errors.OK, map(
-                entry(skrSecurityProperties.getAccessToken().getHeader(),
-                        skrSecurityProperties.getAccessToken().getPrefix() + accessToken),
-                entry(skrSecurityProperties.getRefreshToken().getHeader(),
-                        skrSecurityProperties.getRefreshToken().getPrefix() + refreshToken))
+        return map(
+            entry(skrSecurityProperties.getAccessToken().getHeader(),
+                    skrSecurityProperties.getAccessToken().getPrefix() + accessToken),
+            entry(skrSecurityProperties.getRefreshToken().getHeader(),
+                    skrSecurityProperties.getRefreshToken().getPrefix() + refreshToken)
         );
     }
 
@@ -128,10 +124,10 @@ public class AuthController {
                 skrSecurityProperties.getAccessToken().getExpiration(),
                 skrSecurityProperties.getAccessToken().getSecret());
 
-        Map<String, Object> result = Apis.apiResult(Errors.OK, map(
-                entry(skrSecurityProperties.getAccessToken().getHeader(),
-                        skrSecurityProperties.getAccessToken().getPrefix() + accessToken)
-        ));
+        Map<String, Object> result = map(
+            entry(skrSecurityProperties.getAccessToken().getHeader(),
+                    skrSecurityProperties.getAccessToken().getPrefix() + accessToken)
+        );
 
         // renew refresh token
         if (skrSecurityProperties.isRenewRefreshToken()) {

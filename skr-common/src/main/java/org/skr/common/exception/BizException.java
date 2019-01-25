@@ -1,7 +1,5 @@
 package org.skr.common.exception;
 
-import org.skr.common.Errors;
-
 import javax.validation.constraints.NotNull;
 
 public class BizException extends BaseException {

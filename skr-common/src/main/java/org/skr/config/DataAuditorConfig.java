@@ -1,6 +1,6 @@
 package org.skr.config;
 
-import org.skr.common.Errors;
+import org.skr.common.exception.Errors;
 import org.skr.common.exception.ConfException;
 import org.skr.security.JwtPrincipal;
 import org.springframework.context.annotation.Bean;
@@ -9,7 +9,6 @@ import org.springframework.data.domain.AuditorAware;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 
 @Configuration
 @EnableJpaAuditing

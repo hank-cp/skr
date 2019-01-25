@@ -2,7 +2,7 @@ package org.skr.security;
 
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.exceptions.TokenExpiredException;
-import org.skr.common.Errors;
+import org.skr.common.exception.Errors;
 import org.skr.common.exception.AuthException;
 import org.skr.common.exception.ConfException;
 import org.skr.common.util.BeanUtil;

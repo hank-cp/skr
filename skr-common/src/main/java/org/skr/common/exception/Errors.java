@@ -1,5 +1,6 @@
-package org.skr.common;
+package org.skr.common.exception;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.rits.cloning.Cloner;
 import org.skr.config.json.StringValuedEnum;
 
@@ -32,16 +33,24 @@ public final class Errors {
         }
     }
 
-
+    @JsonProperty("ec")
     public int code;
 
+    @JsonProperty("ep")
     public String path;
 
+    @JsonProperty("elv")
     public ErrorLevel level;
 
+    @JsonProperty("msg")
     public String msg;
 
-    public Errors(int code, String msg) {
+    @JsonProperty("rpc")
+    public String failedRpc;
+
+    protected Errors() {}
+
+    protected Errors(int code, String msg) {
         this.code = code;
         this.msg = msg;
     }

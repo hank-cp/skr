@@ -1,14 +1,11 @@
 package org.skr.a.task;
 
 import org.skr.a.proxy.DemoBClient;
-import org.skr.common.Errors;
-import org.skr.common.util.Apis;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/task")
@@ -27,12 +24,13 @@ public class TaskController {
     }
 
     @GetMapping("/list")
-    public @ResponseBody Map<String, Object> getTasks() {
-        return Apis.apiResult(Errors.OK, taskRepository.findAll());
+    public @ResponseBody List<Task> getTasks() {
+        return taskRepository.findAll();
     }
 
     @GetMapping("/{id}")
     public Task getTask(@PathVariable long id) {
+        demoBClient.welcomeToHell();
         return taskRepository.findOne(id);
     }
 

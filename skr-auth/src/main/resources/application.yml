@@ -5,6 +5,10 @@ spring:
     hibernate:
       ddl-auto: create-drop
     show-sql: true
+  mvc:
+    throw-exception-if-no-handler-found: true
+  resources:
+    add-mappings: false
 
 logging:
   level:

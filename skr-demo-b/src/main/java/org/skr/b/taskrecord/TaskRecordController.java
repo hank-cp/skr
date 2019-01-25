@@ -26,4 +26,9 @@ public class TaskRecordController {
         return taskRecordRepository.findAll();
     }
 
+    @GetMapping("/welcome_to_hell")
+    public void welcomeToHell() {
+        throw new RuntimeException("This is a test exception");
+    }
+
 }

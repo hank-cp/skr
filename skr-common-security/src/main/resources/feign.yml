@@ -4,5 +4,6 @@ feign:
   client:
     config:
       default:
+        errorDecoder: org.skr.security.SkrErrorDecoder
         requestInterceptors:
           - org.skr.security.JwtFeignInterceptor

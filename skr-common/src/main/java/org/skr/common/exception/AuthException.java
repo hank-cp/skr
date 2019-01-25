@@ -1,7 +1,5 @@
 package org.skr.common.exception;
 
-import org.skr.common.Errors;
-
 public class AuthException extends BaseException {
 
     private Errors errors;
