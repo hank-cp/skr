@@ -1,0 +1,8 @@
+# https://cloud.spring.io/spring-cloud-netflix/multi/multi_spring-cloud-feign.html
+
+feign:
+  client:
+    config:
+      default:
+        requestInterceptors:
+          - org.skr.security.JwtFeignInterceptor

@@ -7,3 +7,11 @@ spring:
 logging:
   level:
     org.hibernate.tool.schema.internal.ExceptionHandlerLoggedImpl: ERROR
+
+tsf:
+  swagger:
+    enabled: false
+
+skr:
+  security:
+    jwtPrincipalClazz: org.skr.security.User

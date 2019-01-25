@@ -1,6 +1,7 @@
 skr:
   security:
     renewRefreshToken: false
+    jwtPrincipalClass: org.skr.security.JwtPrincipal
     accessToken:
       secret: sKrRrRrRrRrRrRrRrAccess
       expiration: 1200000
@@ -9,9 +10,12 @@ skr:
     refreshToken:
       secret: sKrRrRrRrRrRrRrRrRefresh
       expiration: 3600000
-      prefix: Bearer-
+      prefix: Refresh-
       header: refresh-token
     robotToken:
       secret: sKrRrRrRrRrRrRrRrRobot
       prefix: Robot-
       username: ∆coreRobot∆
+    ghostToken:
+      secret: sKrRrRrRrRrRrRrRrGhost
+      prefix: Ghost-

@@ -1,6 +1,7 @@
 package org.skr.auth.model;
 
 import org.skr.model.BaseEntity;
+import org.skr.security.JwtPrincipal;
 
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
@@ -31,7 +32,7 @@ public class User extends BaseEntity {
     // Domain Methods
     //*************************************************************************
 
-    public org.skr.security.User buildCommonUser() {
+    public JwtPrincipal buildJwtPrincipal() {
         org.skr.security.User commonUser = new org.skr.security.User();
         // TODO set organization
 //        commonUser.organization = organization;

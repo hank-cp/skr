@@ -48,6 +48,7 @@ public class BeanUtil {
      * @param fields, including or excluding fields
      * @param isInclude
      */
+    @SuppressWarnings("unchecked")
     public static <E> void copyIncludeOrExcludeFields(E source, E target, boolean isInclude, String... fields) {
         Assert.notNull(source, "Source must not be null");
         Assert.notNull(target, "Target must not be null");
@@ -125,10 +126,11 @@ public class BeanUtil {
                 .withSetterVisibility(JsonAutoDetect.Visibility.PUBLIC_ONLY));
     }
 
-    public static <T> T fromJSON(final Class type,
+    @SuppressWarnings("unchecked")
+    public static <T> T fromJSON(final Class<?> type,
                                  final String json) {
         try {
-            return getObjectMapper().readValue(json, (Class<T>) type);
+            return (T) getObjectMapper().readValue(json, type);
         } catch (Exception e) {
             throw new RuntimeException("Deserialize json text failed. "+json, e);
         }

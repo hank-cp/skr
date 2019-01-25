@@ -5,13 +5,19 @@ import org.skr.common.util.BeanUtil;
 import org.skr.config.ApplicationContextProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
+import org.springframework.cloud.netflix.feign.EnableFeignClients;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Component;
 
 @SpringBootApplication(scanBasePackages = "org.skr")
-public class AppConfig {
+@EnableDiscoveryClient
+@EnableFeignClients
+@EnableConfigurationProperties
+public class CommonConfig {
 
     @Bean
     public ApplicationContextProvider applicationContextProvider() {

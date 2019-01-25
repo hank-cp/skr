@@ -3,25 +3,29 @@ package org.skr.security;
 import lombok.Data;
 import org.skr.config.YamlPropertyLoaderFactory;
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Component;
 
 @Component
-@Configuration
 @PropertySource(value = "classpath:security.yml",
         factory = YamlPropertyLoaderFactory.class)
 @ConfigurationProperties(prefix = "skr.security")
+@RefreshScope
 @Data
-public class SecurityProperties {
+public class SkrSecurityProperties {
 
     private boolean renewRefreshToken;
+
+    private String jwtPrincipalClazz;
 
     private Token accessToken = new Token();
 
     private Token refreshToken = new Token();
 
     private Token robotToken = new Token();
+
+    private Token ghostToken = new Token();
 
     @Data
     public static class Token {
@@ -31,7 +35,9 @@ public class SecurityProperties {
 
         private String prefix = "";
 
-        private String header = "";
+        private String header;
+
+        private String username;
     }
 
 }

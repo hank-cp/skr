@@ -7,17 +7,17 @@ import java.util.Collections;
 
 public class JwtAuthenticationToken extends AbstractAuthenticationToken {
 
-    private final User user;
+    private final JwtPrincipal principal;
 
-    public JwtAuthenticationToken(@NotNull User user) {
+    public JwtAuthenticationToken(@NotNull JwtPrincipal principal) {
         super(Collections.emptyList());
 
-        if (user == null) {
+        if (principal == null) {
             throw new IllegalArgumentException(
                     "Cannot pass null or empty values to constructor");
         }
 
-        this.user = user;
+        this.principal = principal;
         setAuthenticated(true);
     }
 
@@ -28,6 +28,6 @@ public class JwtAuthenticationToken extends AbstractAuthenticationToken {
 
     @Override
     public Object getPrincipal() {
-        return this.user;
+        return this.principal;
     }
 }

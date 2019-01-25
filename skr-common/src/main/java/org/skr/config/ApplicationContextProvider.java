@@ -1,6 +1,6 @@
 package org.skr.config;
 
-import org.skr.security.User;
+import org.skr.security.JwtPrincipal;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
@@ -42,12 +42,12 @@ public class ApplicationContextProvider implements ApplicationContextAware {
         }
     }
 
-    public static User getCurrentLoginAccount() {
+    public static JwtPrincipal getCurrentPrincipal() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        User user = null;
+        JwtPrincipal user = null;
         if (authentication != null && authentication.isAuthenticated()
-                && authentication.getPrincipal() instanceof User) {
-            user = (User) authentication.getPrincipal();
+                && authentication.getPrincipal() instanceof JwtPrincipal) {
+            user = (JwtPrincipal) authentication.getPrincipal();
         }
         return user;
     }

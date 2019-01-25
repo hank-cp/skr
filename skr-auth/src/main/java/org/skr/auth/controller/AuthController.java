@@ -10,7 +10,8 @@ import org.skr.common.exception.AuthException;
 import org.skr.common.util.Apis;
 import org.skr.common.util.BeanUtil;
 import org.skr.common.util.JwtUtil;
-import org.skr.security.SecurityProperties;
+import org.skr.security.JwtPrincipal;
+import org.skr.security.SkrSecurityProperties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -37,7 +38,7 @@ public class AuthController {
     private UserRepository userRepository;
 
     @Autowired
-    private SecurityProperties securityProperties;
+    private SkrSecurityProperties skrSecurityProperties;
 
     @PostMapping("/login")
     public @ResponseBody Map<String, Object> loginByUsernamePassword(
@@ -67,30 +68,30 @@ public class AuthController {
         if (user.status == User.USER_STATUS_JOINING_REJECT)
             throw new AuthException(Errors.USER_REJECTED);
 
-        org.skr.security.User commonUser = user.buildCommonUser();
+        JwtPrincipal principal = user.buildJwtPrincipal();
 
-        String accessToken = JwtUtil.encode(BeanUtil.toJSON(commonUser),
-                securityProperties.getAccessToken().getExpiration(),
-                securityProperties.getAccessToken().getSecret());
-        String refreshToken = JwtUtil.encode(commonUser.username,
-                securityProperties.getRefreshToken().getExpiration(),
-                securityProperties.getRefreshToken().getSecret());
+        String accessToken = JwtUtil.encode(BeanUtil.toJSON(principal),
+                skrSecurityProperties.getAccessToken().getExpiration(),
+                skrSecurityProperties.getAccessToken().getSecret());
+        String refreshToken = JwtUtil.encode(principal.username,
+                skrSecurityProperties.getRefreshToken().getExpiration(),
+                skrSecurityProperties.getRefreshToken().getSecret());
 
         return Apis.apiResult(Errors.OK, map(
-                entry(securityProperties.getAccessToken().getHeader(),
-                        securityProperties.getAccessToken().getPrefix() + accessToken),
-                entry(securityProperties.getRefreshToken().getHeader(),
-                        securityProperties.getRefreshToken().getPrefix() + refreshToken))
+                entry(skrSecurityProperties.getAccessToken().getHeader(),
+                        skrSecurityProperties.getAccessToken().getPrefix() + accessToken),
+                entry(skrSecurityProperties.getRefreshToken().getHeader(),
+                        skrSecurityProperties.getRefreshToken().getPrefix() + refreshToken))
         );
     }
 
     @PostMapping("/refresh-token")
-    public @ResponseBody Map<String, Object> loginByUsernamePassword(
+    public @ResponseBody Map<String, Object> refreshToken(
             @RequestParam String orgCode,
             @RequestParam String refreshToken) {
 
-        String refreshPrefix = securityProperties.getRefreshToken().getPrefix();
-        String refreshSecret = securityProperties.getRefreshToken().getSecret();
+        String refreshPrefix = skrSecurityProperties.getRefreshToken().getPrefix();
+        String refreshSecret = skrSecurityProperties.getRefreshToken().getSecret();
 
         String username;
         try {
@@ -121,24 +122,24 @@ public class AuthController {
             throw new AuthException(Errors.USER_REJECTED);
 
         // refresh user info
-        org.skr.security.User commonUser = user.buildCommonUser();
+        JwtPrincipal commonUser = user.buildJwtPrincipal();
 
         String accessToken = JwtUtil.encode(BeanUtil.toJSON(commonUser),
-                securityProperties.getAccessToken().getExpiration(),
-                securityProperties.getAccessToken().getSecret());
+                skrSecurityProperties.getAccessToken().getExpiration(),
+                skrSecurityProperties.getAccessToken().getSecret());
 
         Map<String, Object> result = Apis.apiResult(Errors.OK, map(
-                entry(securityProperties.getAccessToken().getHeader(),
-                        securityProperties.getAccessToken().getPrefix() + accessToken)
+                entry(skrSecurityProperties.getAccessToken().getHeader(),
+                        skrSecurityProperties.getAccessToken().getPrefix() + accessToken)
         ));
 
         // renew refresh token
-        if (securityProperties.isRenewRefreshToken()) {
+        if (skrSecurityProperties.isRenewRefreshToken()) {
             String newRefreshToken = JwtUtil.encode(commonUser.username,
-                    securityProperties.getRefreshToken().getExpiration(),
-                    securityProperties.getRefreshToken().getSecret());
-            result.put(securityProperties.getRefreshToken().getHeader(),
-                    securityProperties.getRefreshToken().getPrefix() + newRefreshToken);
+                    skrSecurityProperties.getRefreshToken().getExpiration(),
+                    skrSecurityProperties.getRefreshToken().getSecret());
+            result.put(skrSecurityProperties.getRefreshToken().getHeader(),
+                    skrSecurityProperties.getRefreshToken().getPrefix() + newRefreshToken);
         }
 
         return result;
