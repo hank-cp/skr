@@ -62,8 +62,7 @@ public abstract class BaseException extends RuntimeException {
     public static List<StackTraceElement> getTopStackTraceElement(Throwable cause) {
         List<StackTraceElement> topStack = new ArrayList<>(TOP_STACK);
         for (StackTraceElement stackTraceElement : cause.getStackTrace()) {
-            if (stackTraceElement.getLineNumber() <= 0
-                    || !stackTraceElement.getClassName().startsWith("com.atsoa")) continue;
+            if (stackTraceElement.getLineNumber() <= 0) continue;
             topStack.add(stackTraceElement);
             if (topStack.size() >= 5) break;
         }
@@ -73,7 +72,9 @@ public abstract class BaseException extends RuntimeException {
     public static String summaryTopStack(Throwable cause) {
         List<StackTraceElement> stack = getTopStackTraceElement(cause);
         return stack.stream().map(element -> {
-            return String.format("%s:%s(%s)", element.getClassName(), element.getMethodName(), element.getLineNumber());
+            String fullClassName = element.getClassName();
+            String className = fullClassName.substring(fullClassName.lastIndexOf('.') + 1);
+            return String.format("%s:%s(%s)", className, element.getMethodName(), element.getLineNumber());
         }).collect(Collectors.joining("\n"));
     }
 

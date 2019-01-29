@@ -2,15 +2,15 @@ package org.skr.security;
 
 import javax.validation.constraints.NotNull;
 
-public class JwtPrincipal {
-
-    /** 0=enabled; 1=disabled*/
-    public byte status;
+public interface JwtPrincipal {
 
     @NotNull
-    public String username;
+    String getUsername();
 
-    public Boolean isRobot;
+    Boolean isRobot();
 
-    public String serviceJwtToken;
+    String getServiceJwtToken();
+
+    void setServiceJwtToken(String token);
+
 }

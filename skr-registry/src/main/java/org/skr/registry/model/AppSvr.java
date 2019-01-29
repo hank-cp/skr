@@ -1,4 +1,4 @@
-package org.skr.auth.model;
+package org.skr.registry.model;
 
 import org.skr.model.CodeBasedEntity;
 
@@ -7,13 +7,10 @@ import javax.persistence.Entity;
 import javax.validation.constraints.NotNull;
 
 @Entity
-public class Organization extends CodeBasedEntity {
+public class AppSvr extends CodeBasedEntity {
 
     @NotNull
     @Column(unique = true)
     public String name;
-
-    /** Paying level */
-    public int vipLevel;
 
 }

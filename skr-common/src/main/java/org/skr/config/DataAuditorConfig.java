@@ -1,7 +1,7 @@
 package org.skr.config;
 
-import org.skr.common.exception.Errors;
 import org.skr.common.exception.ConfException;
+import org.skr.common.exception.Errors;
 import org.skr.security.JwtPrincipal;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -31,7 +31,7 @@ class DataAuditorConfig {
 
             if (authentication.getPrincipal() instanceof JwtPrincipal) {
                 JwtPrincipal principal = (JwtPrincipal) authentication.getPrincipal();
-                return principal.username;
+                return principal.getUsername();
 
             } else {
                 throw new ConfException(Errors.INTERNAL_SERVER_ERROR);

@@ -12,21 +12,34 @@ public class UnvarnishedFeignException extends BaseException {
 
     private UnvarnishedFeignException() {}
 
+    public UnvarnishedFeignException(String message) {
+        super(message);
+    }
+
+    public UnvarnishedFeignException(String message, Throwable cause) {
+        super(message, cause);
+    }
+
     public static UnvarnishedFeignException build(String methodKey, Response response) {
-        UnvarnishedFeignException exception = new UnvarnishedFeignException();
-        exception.responseStatus = response.status();
+        int responseStatus = response.status();
+        Errors errors = null;
+        UnvarnishedFeignException exception;
         try {
             if (response.body() != null) {
                 String errorJson = Util.toString(response.body().asReader());
-                exception.errors = BeanUtil.fromJSON(Errors.class, errorJson);
-                if (Checker.isEmpty(exception.errors.failedRpc)) {
+                errors = BeanUtil.fromJSON(Errors.class, errorJson);
+                if (Checker.isEmpty(errors.failedRpc)) {
                     // take methodKey if it hasn't not set in Exception handling chain.
-                    exception.errors.failedRpc = methodKey;
+                    errors.failedRpc = methodKey;
                 }
             }
+            exception = new UnvarnishedFeignException(errors.msg);
         } catch (Exception ex) {
-            exception.errors = Errors.INTERNAL_SERVER_ERROR.setMsg(ex.getMessage());
+            errors = Errors.INTERNAL_SERVER_ERROR.setMsg(ex.getMessage());
+            exception = new UnvarnishedFeignException(errors.msg, ex);
         }
+        exception.responseStatus = responseStatus;
+        exception.errors = errors;
         return exception;
     }
 

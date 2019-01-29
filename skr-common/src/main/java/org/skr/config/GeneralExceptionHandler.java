@@ -1,9 +1,6 @@
 package org.skr.config;
 
-import org.skr.common.exception.Errors;
-import org.skr.common.exception.AuthException;
-import org.skr.common.exception.BizException;
-import org.skr.common.exception.UnvarnishedFeignException;
+import org.skr.common.exception.*;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpHeaders;
@@ -60,7 +57,9 @@ public class GeneralExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(Exception.class)
     public ResponseEntity<Object> handleUncaughtException(Exception ex, WebRequest request) {
         return handleExceptionInternal(ex,
-                Errors.INTERNAL_SERVER_ERROR.setMsg(ex.getMessage()),
+                Errors.INTERNAL_SERVER_ERROR
+                        .setMsg(ex.getMessage())
+                        .setExceptionDetail(BaseException.summaryTopStack(ex)),
                 new HttpHeaders(),
                 HttpStatus.INTERNAL_SERVER_ERROR,
                 request);

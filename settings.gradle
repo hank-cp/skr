@@ -1,6 +1,7 @@
 include 'skr-auth',
         'skr-common',
         'skr-common-security',
+        'skr-registry',
         'skr-demo-a',
         'skr-demo-b'
 

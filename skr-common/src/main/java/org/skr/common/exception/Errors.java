@@ -2,6 +2,7 @@ package org.skr.common.exception;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.rits.cloning.Cloner;
+import org.skr.common.util.Checker;
 import org.skr.config.json.StringValuedEnum;
 
 import java.util.Objects;
@@ -48,6 +49,9 @@ public final class Errors {
     @JsonProperty("rpc")
     public String failedRpc;
 
+    @JsonProperty("ed")
+    public String exceptionDetail;
+
     protected Errors() {}
 
     protected Errors(int code, String msg) {
@@ -55,19 +59,28 @@ public final class Errors {
         this.msg = msg;
     }
 
-    public Errors setMsg(String msg) {
-        this.msg = msg;
-        return Cloner.shared().shallowClone(this);
+    public Errors setMsg(String msg, String... args) {
+        Errors newInstance = Cloner.shared().shallowClone(this);
+        newInstance.msg = !Checker.isEmpty(args) ? String.format(msg, args) : msg;
+        return newInstance;
     }
 
     public Errors setPath(String path) {
-        this.path = path;
-        return Cloner.shared().shallowClone(this);
+        Errors newInstance = Cloner.shared().shallowClone(this);
+        newInstance.path = path;
+        return newInstance;
     }
 
     public Errors setLevel(ErrorLevel level) {
-        this.level = level;
-        return Cloner.shared().shallowClone(this);
+        Errors newInstance = Cloner.shared().shallowClone(this);
+        newInstance.level = level;
+        return newInstance;
+    }
+
+    public Errors setExceptionDetail(String exceptionDetail) {
+        Errors newInstance = Cloner.shared().shallowClone(this);
+        newInstance.exceptionDetail = exceptionDetail;
+        return newInstance;
     }
 
     //*************************************************************************
@@ -85,6 +98,7 @@ public final class Errors {
     public static final Errors AUTHENTICATION_REQUIRED  = new Errors(1008, "Authentication required.");
     public static final Errors PERMISSION_DENIED        = new Errors(1009, "Permission Denied.");
     public static final Errors MODEL_DEFINITION_ERROR   = new Errors(1010, "Model definition error.");
+    public static final Errors REGISTRATION_ERROR       = new Errors(1011, "Registration error.");
 
     public static final Errors NOT_AUTHENTICATED            = new Errors(1100, "Account is not authenticated.");
     public static final Errors ACCESS_TOKEN_EXPIRED         = new Errors(1101, "Access token is expired.");

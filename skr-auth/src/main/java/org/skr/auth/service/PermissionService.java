@@ -9,7 +9,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 @Service
-public class AuthDetailsService implements UserDetailsService {
+public class PermissionService implements UserDetailsService {
 
     @Autowired
     private AccountRepository accountRepository;

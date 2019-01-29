@@ -1,7 +1,6 @@
 package org.skr.model;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Type;
 import org.hibernate.annotations.TypeDef;
 import org.hibernate.annotations.TypeDefs;
@@ -11,7 +10,6 @@ import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
-import org.springframework.data.jpa.domain.AbstractPersistable;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
@@ -23,22 +21,7 @@ import java.util.UUID;
 @MappedSuperclass
 @EntityListeners({AuditingEntityListener.class, BaseEntity.BaseEntityListener.class})
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class BaseEntity extends AbstractPersistable<Long> implements Cloneable {
-
-    @Id
-    @GeneratedValue(generator="native")
-    @GenericGenerator(name="native", strategy="native")
-    public long id;
-
-    @Override
-    public Long getId() {
-        return id;
-    }
-
-    @Override
-    protected void setId(Long id) {
-        this.id = id;
-    }
+public class BaseEntity implements Cloneable {
 
     @Type(type="uuid-char")
     @Column(name = "`uid`")

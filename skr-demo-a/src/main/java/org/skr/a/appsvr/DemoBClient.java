@@ -1,5 +1,5 @@
 
-package org.skr.a.proxy;
+package org.skr.a.appsvr;
 
 import org.springframework.cloud.netflix.feign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;

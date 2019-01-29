@@ -1,6 +1,6 @@
 package org.skr.a.task;
 
-import org.skr.a.proxy.DemoBClient;
+import org.skr.a.appsvr.DemoBClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.*;

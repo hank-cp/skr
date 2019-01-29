@@ -5,11 +5,10 @@ import com.auth0.jwt.exceptions.TokenExpiredException;
 import org.skr.auth.model.User;
 import org.skr.auth.repository.UserRepository;
 import org.skr.common.Constants;
-import org.skr.common.exception.Errors;
 import org.skr.common.exception.AuthException;
+import org.skr.common.exception.Errors;
 import org.skr.common.util.BeanUtil;
 import org.skr.common.util.JwtUtil;
-import org.skr.security.JwtPrincipal;
 import org.skr.security.SkrSecurityProperties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -40,7 +39,7 @@ public class AuthController {
 
     @PostMapping("/login")
     public @ResponseBody Map<String, Object> loginByUsernamePassword(
-            @RequestParam String orgCode,
+            @RequestParam(required = false) String orgCode,
             @RequestParam String username,
             @RequestParam String password) {
         Authentication auth;
@@ -64,12 +63,10 @@ public class AuthController {
         if (user.status == User.USER_STATUS_JOINING_REJECT)
             throw new AuthException(Errors.USER_REJECTED);
 
-        JwtPrincipal principal = user.buildJwtPrincipal();
-
-        String accessToken = JwtUtil.encode(BeanUtil.toJSON(principal),
+        String accessToken = JwtUtil.encode(BeanUtil.toJSON(user),
                 skrSecurityProperties.getAccessToken().getExpiration(),
                 skrSecurityProperties.getAccessToken().getSecret());
-        String refreshToken = JwtUtil.encode(principal.username,
+        String refreshToken = JwtUtil.encode(user.getUsername(),
                 skrSecurityProperties.getRefreshToken().getExpiration(),
                 skrSecurityProperties.getRefreshToken().getSecret());
 
@@ -117,10 +114,7 @@ public class AuthController {
         if (user.status == User.USER_STATUS_JOINING_REJECT)
             throw new AuthException(Errors.USER_REJECTED);
 
-        // refresh user info
-        JwtPrincipal commonUser = user.buildJwtPrincipal();
-
-        String accessToken = JwtUtil.encode(BeanUtil.toJSON(commonUser),
+        String accessToken = JwtUtil.encode(BeanUtil.toJSON(user),
                 skrSecurityProperties.getAccessToken().getExpiration(),
                 skrSecurityProperties.getAccessToken().getSecret());
 
@@ -131,7 +125,7 @@ public class AuthController {
 
         // renew refresh token
         if (skrSecurityProperties.isRenewRefreshToken()) {
-            String newRefreshToken = JwtUtil.encode(commonUser.username,
+            String newRefreshToken = JwtUtil.encode(user.getUsername(),
                     skrSecurityProperties.getRefreshToken().getExpiration(),
                     skrSecurityProperties.getRefreshToken().getSecret());
             result.put(skrSecurityProperties.getRefreshToken().getHeader(),

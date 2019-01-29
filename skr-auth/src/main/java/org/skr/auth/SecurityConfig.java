@@ -1,6 +1,6 @@
 package org.skr.auth;
 
-import org.skr.auth.service.AuthDetailsService;
+import org.skr.auth.service.PermissionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -19,7 +19,7 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
-    private AuthDetailsService authDetailsService;
+    private PermissionService authDetailsService;
 
     @Bean
     public PasswordEncoder passwordEncoder() {

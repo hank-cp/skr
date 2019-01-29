@@ -5,7 +5,6 @@ dependencies {
     compile "org.springframework.boot:spring-boot-starter-web"
     compile "org.springframework.boot:spring-boot-starter-data-jpa"
     compile "org.springframework.boot:spring-boot-starter-aop"
-    compile "org.springframework.boot:spring-boot-starter-security"
     compile "org.springframework.boot:spring-boot-configuration-processor"
     compile "org.springframework.boot:spring-boot-starter-actuator"
 
@@ -20,11 +19,15 @@ dependencies {
     compile "com.tencent.tsf:spring-cloud-tsf-ratelimit:${tsfVersion}"
     compile "com.tencent.tsf:spring-cloud-tsf-encrypt:${tsfVersion}"
 
+    compile "org.springframework.security:spring-security-core" //:4.2.5.RELEASE"
     compile "org.springframework:spring-context-support"
+
+    // https://github.com/sixhours-team/memcached-spring-boot
+    compile 'io.sixhours:memcached-spring-boot-starter:1.3.1'
 
     compile "javax.validation:validation-api:2.0.1.Final"
     compile "joda-time:joda-time"
-    compile "org.jadira.usertype:usertype.core:5.0.0.GA"//6.0.1.GA"
+    compile "org.jadira.usertype:usertype.core:5.0.0.GA" //6.0.1.GA"
     compile "com.fasterxml.jackson.datatype:jackson-datatype-joda"
     compile 'com.auth0:java-jwt:3.5.0'
 

@@ -1,9 +1,7 @@
-ext.httpPort = "${auth_httpPort}"
+ext.httpPort = "${registry_httpPort}"
 
 dependencies {
     compile project(':skr-common')
-
-    compile "org.springframework.boot:spring-boot-starter-security"
 
     runtimeOnly "org.hsqldb:hsqldb"
 }
@@ -12,8 +10,8 @@ dependencies {
 // App Properties
 //*************************************************************************
 
-mainClassName = 'org.skr.auth.AuthApp'
+mainClassName = 'org.skr.registry.RegistryApp'
 
 manifest {
-    attributes 'Main-Class': 'org.skr.auth.AuthApp'
+    attributes 'Main-Class': 'org.skr.registry.RegistryApp'
 }

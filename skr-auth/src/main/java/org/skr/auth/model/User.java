@@ -1,16 +1,17 @@
 package org.skr.auth.model;
 
-import org.skr.model.BaseEntity;
+import org.skr.model.IdBasedEntity;
 import org.skr.security.JwtPrincipal;
 
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "org_user")
-public class User extends BaseEntity {
+public class User extends IdBasedEntity implements JwtPrincipal {
 
     public static final byte USER_STATUS_JOINING_NEED_APPROVAL = 2;
     public static final byte USER_STATUS_JOINING_REJECT = 3;
@@ -29,16 +30,33 @@ public class User extends BaseEntity {
     public byte status;
 
     //*************************************************************************
+    // Transients & Getters
+    //*************************************************************************
+
+    @Transient
+    public String accessToken;
+
+    //*************************************************************************
     // Domain Methods
     //*************************************************************************
 
-    public JwtPrincipal buildJwtPrincipal() {
-        org.skr.security.User commonUser = new org.skr.security.User();
-        // TODO set organization
-//        commonUser.organization = organization;
-        commonUser.username = account.username;
-        commonUser.nickName = nickName;
-        return commonUser;
+    @Override
+    public @NotNull String getUsername() {
+        return account.username;
     }
 
+    @Override
+    public Boolean isRobot() {
+        return false;
+    }
+
+    @Override
+    public String getServiceJwtToken() {
+        return accessToken;
+    }
+
+    @Override
+    public void setServiceJwtToken(String token) {
+        accessToken = token;
+    }
 }

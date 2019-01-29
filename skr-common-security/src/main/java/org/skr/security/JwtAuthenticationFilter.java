@@ -74,14 +74,14 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                     .map(token -> new Tuple2<>(JwtUtil.decode(token, secret), token))
                     .map(decodedTuple -> {
                         JwtPrincipal principal = BeanUtil.fromJSON(principalClazz, decodedTuple._0);
-                        if (Checker.isTrue(principal.isRobot)) {
-                            principal.serviceJwtToken = accessToken;
+                        if (Checker.isTrue(principal.isRobot())) {
+                            principal.setServiceJwtToken(accessToken);
                         } else {
-                            principal.serviceJwtToken =
+                            principal.setServiceJwtToken(
                                     skrSecurityProperties.getGhostToken().getPrefix() +
                                     JwtUtil.encode(BeanUtil.toJSON(principal),
                                         skrSecurityProperties.getGhostToken().getExpiration(),
-                                        skrSecurityProperties.getGhostToken().getSecret());
+                                        skrSecurityProperties.getGhostToken().getSecret()));
                         }
 
                         return new JwtAuthenticationToken(principal);
