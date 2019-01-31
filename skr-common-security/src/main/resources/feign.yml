@@ -7,3 +7,6 @@ feign:
         errorDecoder: org.skr.security.SkrErrorDecoder
         requestInterceptors:
           - org.skr.security.JwtFeignInterceptor
+        connectTimeout: 60000
+        readTimeout: 60000
+

@@ -9,4 +9,6 @@ public interface Constants {
     byte PERMISSION_DENIED = 1;
     byte PERMISSION_NOT_PAID = 2;
 
+    String CACHE_NAME_DEFAULT = "default";
+
 }

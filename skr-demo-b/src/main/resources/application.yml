@@ -15,4 +15,4 @@ tsf:
 skr:
   security:
     renewRefreshToken: false
-    jwtPrincipalClazz: org.skr.security.User
+    jwtPrincipalClazz: org.skr.security.SimpleJwtPrincipal

@@ -3,6 +3,8 @@ spring:
     url: "jdbc:hsqldb:mem:testdb;sql.syntax_pgs=true"
   jpa:
     show-sql: true
+  sleuth:
+    enabled: false
 
 logging:
   level:
@@ -14,4 +16,4 @@ tsf:
 
 skr:
   security:
-    jwtPrincipalClazz: org.skr.security.User
+    jwtPrincipalClazz: org.skr.security.SimpleJwtPrincipal

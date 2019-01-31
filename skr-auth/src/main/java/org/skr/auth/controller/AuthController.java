@@ -9,6 +9,7 @@ import org.skr.common.exception.AuthException;
 import org.skr.common.exception.Errors;
 import org.skr.common.util.BeanUtil;
 import org.skr.common.util.JwtUtil;
+import org.skr.security.JwtPrincipal;
 import org.skr.security.SkrSecurityProperties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -63,10 +64,11 @@ public class AuthController {
         if (user.status == User.USER_STATUS_JOINING_REJECT)
             throw new AuthException(Errors.USER_REJECTED);
 
-        String accessToken = JwtUtil.encode(BeanUtil.toJSON(user),
+        JwtPrincipal principal = user.buildJwtPrincipal();
+        String accessToken = JwtUtil.encode(BeanUtil.toJSON(principal),
                 skrSecurityProperties.getAccessToken().getExpiration(),
                 skrSecurityProperties.getAccessToken().getSecret());
-        String refreshToken = JwtUtil.encode(user.getUsername(),
+        String refreshToken = JwtUtil.encode(principal.getUsername(),
                 skrSecurityProperties.getRefreshToken().getExpiration(),
                 skrSecurityProperties.getRefreshToken().getSecret());
 
@@ -114,7 +116,8 @@ public class AuthController {
         if (user.status == User.USER_STATUS_JOINING_REJECT)
             throw new AuthException(Errors.USER_REJECTED);
 
-        String accessToken = JwtUtil.encode(BeanUtil.toJSON(user),
+        JwtPrincipal principal = user.buildJwtPrincipal();
+        String accessToken = JwtUtil.encode(BeanUtil.toJSON(principal),
                 skrSecurityProperties.getAccessToken().getExpiration(),
                 skrSecurityProperties.getAccessToken().getSecret());
 
@@ -125,7 +128,7 @@ public class AuthController {
 
         // renew refresh token
         if (skrSecurityProperties.isRenewRefreshToken()) {
-            String newRefreshToken = JwtUtil.encode(user.getUsername(),
+            String newRefreshToken = JwtUtil.encode(principal.getUsername(),
                     skrSecurityProperties.getRefreshToken().getExpiration(),
                     skrSecurityProperties.getRefreshToken().getSecret());
             result.put(skrSecurityProperties.getRefreshToken().getHeader(),

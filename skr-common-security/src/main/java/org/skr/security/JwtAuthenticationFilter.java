@@ -2,6 +2,8 @@ package org.skr.security;
 
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.exceptions.TokenExpiredException;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang.exception.ExceptionUtils;
 import org.skr.common.exception.Errors;
 import org.skr.common.exception.AuthException;
 import org.skr.common.exception.ConfException;
@@ -20,6 +22,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Optional;
 
+@Slf4j
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private SkrSecurityProperties skrSecurityProperties;
@@ -45,6 +48,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         } catch (JWTVerificationException ex) {
             throw new AuthException(Errors.ACCESS_TOKEN_BROKEN);
         } catch (Exception ex) {
+            log.error(ExceptionUtils.getStackTrace(ex));
             throw new AuthException(Errors.AUTHENTICATION_REQUIRED);
         }
 

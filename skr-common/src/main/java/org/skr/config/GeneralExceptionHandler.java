@@ -1,5 +1,6 @@
 package org.skr.config;
 
+import lombok.extern.slf4j.Slf4j;
 import org.skr.common.exception.*;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
@@ -13,8 +14,11 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 
 import java.util.Optional;
 
+import static org.apache.commons.lang.exception.ExceptionUtils.getStackTrace;
+
 @Order(Ordered.HIGHEST_PRECEDENCE)
 @ControllerAdvice
+@Slf4j
 public class GeneralExceptionHandler extends ResponseEntityExceptionHandler {
 
     @Override
@@ -56,6 +60,7 @@ public class GeneralExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<Object> handleUncaughtException(Exception ex, WebRequest request) {
+        log.error(getStackTrace(ex));
         return handleExceptionInternal(ex,
                 Errors.INTERNAL_SERVER_ERROR
                         .setMsg(ex.getMessage())

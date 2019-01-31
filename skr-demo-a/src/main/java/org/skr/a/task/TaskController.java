@@ -1,6 +1,7 @@
 package org.skr.a.task;
 
 import org.skr.a.appsvr.DemoBClient;
+import org.skr.security.annotation.RequirePermission;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.*;
@@ -24,6 +25,7 @@ public class TaskController {
     }
 
     @GetMapping("/list")
+    @RequirePermission("Task_Management")
     public @ResponseBody List<Task> getTasks() {
         return taskRepository.findAll();
     }

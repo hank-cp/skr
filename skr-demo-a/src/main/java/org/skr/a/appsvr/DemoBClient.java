@@ -13,6 +13,11 @@ import java.util.Map;
 @FeignClient(name = "demo-b")
 public interface DemoBClient {
 
+	class TaskRecord {
+		public long taskId;
+		public String operation;
+	}
+
 	@PostMapping("/task_record/{taskId}")
 	void record(@PathVariable(name = "taskId") long taskId,
 		   @RequestParam(name = "operation") String operation);

@@ -58,11 +58,11 @@ public class RegistryController {
                 permission.appSvr = appSvr;
                 permissionRepository.save(permission);
             } else {
-                if (!Objects.equals(permission.appSvr.code, appSvrCode)) {
+                if (!Objects.equals(existed.appSvr.code, appSvrCode)) {
                     throw new BizException(Errors.REGISTRATION_ERROR.setMsg(
-                            "Permission %s is registered to %s", permission.code, permission.appSvr.code));
+                            "Permission %s is registered to %s", permission.code, existed.appSvr.code));
                 }
-                BeanUtil.copyFields(permission, existed);
+                BeanUtil.copyFields(permission, existed, "code", "appSvr");
                 permissionRepository.save(existed);
             }
         });
@@ -72,6 +72,12 @@ public class RegistryController {
     @GetMapping("/permissions")
     public List<Permission> listPermissions() {
         return permissionRepository.findAll();
+    }
+
+    /** 获取权限 */
+    @GetMapping("/permission/{code}")
+    public Permission getPermission(@PathVariable String code) {
+        return permissionRepository.findOne(code);
     }
 
     /** 注册siteMap */
@@ -89,11 +95,11 @@ public class RegistryController {
             if (existed == null) {
                 siteUrlRepository.save(siteUrl);
             } else {
-                if (!Objects.equals(siteUrl.permission.appSvr.code, appSvrCode)) {
+                if (!Objects.equals(existed.permission.appSvr.code, appSvrCode)) {
                     throw new BizException(Errors.REGISTRATION_ERROR.setMsg(
-                            "SiteUrl %s is registered to %s", siteUrl.url, siteUrl.permission.appSvr.code));
+                            "SiteUrl %s is registered to %s", siteUrl.url, existed.permission.appSvr.code));
                 }
-                BeanUtil.copyFields(siteUrl, existed);
+                BeanUtil.copyFields(siteUrl, existed, "url", "permission");
                 siteUrlRepository.save(existed);
             }
         });

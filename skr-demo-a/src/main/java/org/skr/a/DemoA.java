@@ -1,19 +1,19 @@
 package org.skr.a;
 
-import org.skr.a.appsvr.RegistryClient;
-import org.skr.common.util.BeanUtil;
+import lombok.extern.slf4j.Slf4j;
+import org.skr.security.appsvr.RegistryClient;
+import org.skr.security.appsvr.RegistryClient.AppSvr;
+import org.skr.security.appsvr.RegistryClient.Permission;
+import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.ApplicationListener;
-import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.PostConstruct;
-
-import static org.skr.common.util.CollectionUtils.*;
+import static org.skr.common.util.CollectionUtils.list;
 
 @SpringBootApplication(scanBasePackages = "org.skr")
+@Slf4j
 public class DemoA {
     public static void main(String[] args) {
         SpringApplication.run(DemoA.class, args);
@@ -24,42 +24,32 @@ public class DemoA {
     //*************************************************************************
 
     @Component
-    public static class OnStartUpListener {
+    public static class OnStartUpListener implements InitializingBean {
 
         @Autowired
         private RegistryClient registryClient;
 
-        @PostConstruct
-        public void onStartUp() {
-//            event.
-//            RegistryClient registryClient = event.getApplicationContext().getBean(RegistryClient.class);
+        @Override
+        public void afterPropertiesSet() throws Exception {
+            log.info("Registering AppSvr demo-a ......");
 
-            registryClient.registerAppSvr(map(
-                    entry("code", "demo-a"),
-                    entry("name", "demo-a")
-            ));
+            AppSvr appSvr =
+                    AppSvr.of("demo-a", "demo-a");
+            registryClient.registerAppSvr(appSvr);
 
             registryClient.registerPermission("demo-a", list(
-                    map(
-                        entry("appSvr", map(
-                                entry("code", "demo-a")
-                        )),
-                        entry("code", "Task.Management"),
-                        entry("name", "Task Management")
-                    ), map(
-                        entry("appSvr", map(
-                                entry("code", "demo-a")
-                        )),
-                        entry("code", "Task.Management.Create"),
-                        entry("name", "Create Task")
-                    ), map(
-                        entry("appSvr", map(
-                                entry("code", "demo-a")
-                        )),
-                        entry("code", "Task.Management.Edit"),
-                        entry("name", "Edit Task")
-                    )
+                    Permission.of("Task_Management", "任务管理"),
+                    Permission.of("Task_Management_Create", "任务管理-新建"),
+                    Permission.of("Task_Management_Edit", "任务管理-修改")
             ));
+
+            registryClient.registerSiteUrl("demo-a", list(
+                    RegistryClient.SiteUrl.of("/tasks",
+                            Permission.of("Task.Management", ""),
+                            "Demo-a,任务管理", "任务管理")
+            ));
+
+            log.info("Registering AppSvr demo-a done!");
         }
     }
 }

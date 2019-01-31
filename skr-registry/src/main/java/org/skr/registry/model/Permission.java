@@ -34,7 +34,7 @@ public class Permission extends CodeBasedEntity implements PermissionDetail {
     public int vipLevel;
 
     @Override
-    public String getKey() {
+    public String getCode() {
         return code;
     }
 

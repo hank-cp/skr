@@ -11,6 +11,13 @@ public interface JwtPrincipal {
 
     String getServiceJwtToken();
 
+    int getVipLevel();
+
     void setServiceJwtToken(String token);
 
+    long getPermissionBit1();
+
+    long getPermissionBit2();
+
+    long getPermissionBit3();
 }
