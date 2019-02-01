@@ -21,6 +21,7 @@ import java.util.Optional;
 /**
  * 带值Enum的JSON序列化
  */
+@SuppressWarnings("unchecked")
 public class RegistryDeserializer<T extends Registry> extends StdDeserializer<T> {
 
     public RegistryDeserializer() {

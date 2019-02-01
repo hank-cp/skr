@@ -1,4 +1,14 @@
-## 异常处理
+## Getting Start
+
+## Auth Service
+
+## Registry Service
+
+## Convention
+
+#### Request/Response
+
+#### Exception
 异常分为4种:
 * 认证鉴权异常
 * 业务逻辑异常
@@ -10,3 +20,4 @@
 * [lombok](https://projectlombok.org/features/all)
 * [memcached](https://github.com/memcached/memcached/wiki/Commands)
 * [GraphQL Java](https://www.graphql-java.com/documentation/master/)
+* [Tencent Cloud TSF](https://cloud.tencent.com/document/product/649)
