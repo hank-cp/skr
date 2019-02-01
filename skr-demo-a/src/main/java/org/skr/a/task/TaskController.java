@@ -1,6 +1,6 @@
 package org.skr.a.task;
 
-import org.skr.a.appsvr.DemoBClient;
+import org.skr.a.feign.DemoBClient;
 import org.skr.security.annotation.RequirePermission;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.Assert;

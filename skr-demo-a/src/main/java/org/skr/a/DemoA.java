@@ -1,9 +1,9 @@
 package org.skr.a;
 
 import lombok.extern.slf4j.Slf4j;
-import org.skr.security.appsvr.RegistryClient;
-import org.skr.security.appsvr.RegistryClient.AppSvr;
-import org.skr.security.appsvr.RegistryClient.Permission;
+import org.skr.security.feign.RegistryClient;
+import org.skr.security.feign.RegistryClient.AppSvr;
+import org.skr.security.feign.RegistryClient.Permission;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
@@ -45,7 +45,7 @@ public class DemoA {
 
             registryClient.registerSiteUrl("demo-a", list(
                     RegistryClient.SiteUrl.of("/tasks",
-                            Permission.of("Task.Management", ""),
+                            Permission.of("Task_Management", ""),
                             "Demo-a,任务管理", "任务管理")
             ));
 

@@ -10,7 +10,7 @@ import org.skr.common.exception.ConfException;
 import org.skr.common.exception.Errors;
 import org.skr.config.ApplicationContextProvider;
 import org.skr.security.annotation.RequirePermission;
-import org.skr.security.appsvr.RegistryClient;
+import org.skr.security.feign.RegistryClient;
 import org.springframework.stereotype.Component;
 
 @Component

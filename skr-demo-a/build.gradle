@@ -1,7 +1,10 @@
 ext.httpPort = demoA_httpPort
 
 dependencies {
-    compile project(':skr-common-security')
+    compile(project(':skr-common-security')) {
+        exclude group:'org.springframework.cloud'
+    }
+    compile project(':skr-cloud-tsf')
 
     runtimeOnly "org.hsqldb:hsqldb"
 }

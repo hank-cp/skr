@@ -14,7 +14,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 
 import java.util.Optional;
 
-import static org.apache.commons.lang.exception.ExceptionUtils.getStackTrace;
+import static org.apache.commons.lang3.exception.ExceptionUtils.getStackTrace;
 
 @Order(Ordered.HIGHEST_PRECEDENCE)
 @ControllerAdvice

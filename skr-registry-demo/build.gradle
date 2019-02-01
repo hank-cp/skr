@@ -1,7 +1,7 @@
-ext.httpPort = demoB_httpPort
+ext.httpPort = "${registry_httpPort}"
 
 dependencies {
-    compile(project(':skr-common-security')) {
+    compile(project(':skr-registry-starter')) {
         exclude group:'org.springframework.cloud'
     }
     compile project(':skr-cloud-tsf')
@@ -13,8 +13,8 @@ dependencies {
 // App Properties
 //*************************************************************************
 
-mainClassName = 'org.skr.a.DemoB'
+mainClassName = 'org.skr.registry.RegistryApp'
 
 manifest {
-    attributes 'Main-Class': 'org.skr.a.DemoB'
+    attributes 'Main-Class': 'org.skr.registry.RegistryApp'
 }

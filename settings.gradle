@@ -1,7 +1,12 @@
-include 'skr-auth',
-        'skr-common',
+include 'skr-common',
+        'skr-auth-starter',
+        'skr-registry-starter',
         'skr-common-security',
-        'skr-registry',
+
+        'skr-cloud-tsf',
+
+        'skr-registry-demo',
+        'skr-auth-demo',
         'skr-demo-a',
         'skr-demo-b'
 

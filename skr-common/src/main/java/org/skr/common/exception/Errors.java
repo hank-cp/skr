@@ -111,5 +111,4 @@ public final class Errors {
     public static final Errors USER_DISABLED                = new Errors(1106, "User is disabled.");
     public static final Errors USER_NEED_APPROVAL           = new Errors(1107, "User need to be approved.");
     public static final Errors USER_REJECTED                = new Errors(1108, "User joining get rejected.");
-    public static final Errors ORGANIZATION_NOT_EXISTED     = new Errors(1109, "Organization is not existed.");
 }
