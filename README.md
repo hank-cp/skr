@@ -1,3 +1,7 @@
+Balabalabala......
+
+![](https://github.com/hank-cp/skr-micro-services/blob/master/diagram/Saas_Architecture_v2.png?raw=true)
+
 ## Getting Start
 
 ## Auth Service
