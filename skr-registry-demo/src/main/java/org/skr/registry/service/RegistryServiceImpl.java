@@ -46,7 +46,7 @@ public class RegistryServiceImpl implements
 
     @Override
     public AppSvr getAppSvr(String code) {
-        return appSvrRepository.findOne(code);
+        return appSvrRepository.findById(code).orElse(null);
     }
 
     @Override
@@ -61,7 +61,7 @@ public class RegistryServiceImpl implements
 
     @Override
     public Permission getPermission(String code) {
-        return permissionRepository.findOne(code);
+        return permissionRepository.findById(code).orElse(null);
     }
 
     @Override
@@ -76,7 +76,7 @@ public class RegistryServiceImpl implements
 
     @Override
     public SiteUrl getSiteUrl(String url) {
-        return siteUrlRepository.findOne(url);
+        return siteUrlRepository.findById(url).orElse(null);
     }
 
     @Override

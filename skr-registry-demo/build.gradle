@@ -1,10 +1,7 @@
 ext.httpPort = "${registry_httpPort}"
 
 dependencies {
-    compile(project(':skr-registry-starter')) {
-        exclude group:'org.springframework.cloud'
-    }
-    compile project(':skr-cloud-tsf')
+    compile project(':skr-registry-starter')
 
     runtimeOnly "org.hsqldb:hsqldb"
 }

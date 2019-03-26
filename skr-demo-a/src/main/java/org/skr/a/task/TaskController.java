@@ -33,12 +33,12 @@ public class TaskController {
     @GetMapping("/{id}")
     public Task getTask(@PathVariable long id) {
         demoBClient.welcomeToHell();
-        return taskRepository.findOne(id);
+        return taskRepository.findById(id).orElse(null);
     }
 
     @PutMapping("/{id}")
     public void editTask(@PathVariable long id, @RequestBody Task task) {
-        Task existingTask = taskRepository.findOne(id);
+        Task existingTask = taskRepository.findById(id).orElse(null);
         Assert.notNull(existingTask, "Task not found");
         existingTask.description = task.description;
         taskRepository.save(existingTask);
@@ -46,6 +46,6 @@ public class TaskController {
 
     @DeleteMapping("/{id}")
     public void deleteTask(@PathVariable long id) {
-        taskRepository.delete(id);
+        taskRepository.deleteById(id);
     }
 }

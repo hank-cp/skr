@@ -1,10 +1,7 @@
 ext.httpPort = "${auth_httpPort}"
 
 dependencies {
-    compile(project(':skr-auth-starter')) {
-        exclude group:'org.springframework.cloud'
-    }
-    compile project(':skr-cloud-tsf')
+    compile project(':skr-auth-starter')
 
     runtimeOnly "org.hsqldb:hsqldb"
 }

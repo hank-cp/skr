@@ -10,6 +10,8 @@ import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 
+import java.util.Optional;
+
 @Configuration
 @EnableJpaAuditing
 class DataAuditorConfig {
@@ -21,17 +23,17 @@ class DataAuditorConfig {
 
     static class DataAuditorAware implements AuditorAware<String> {
 
-        public String getCurrentAuditor() {
+        public Optional<String> getCurrentAuditor() {
 
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
             if (authentication == null) {
-                return "∆anonymous∆";
+                return Optional.of("∆anonymous∆");
             }
 
             if (authentication.getPrincipal() instanceof JwtPrincipal) {
                 JwtPrincipal principal = (JwtPrincipal) authentication.getPrincipal();
-                return principal.getUsername();
+                return Optional.of(principal.getUsername());
 
             } else {
                 throw new ConfException(Errors.INTERNAL_SERVER_ERROR);

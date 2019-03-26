@@ -1,16 +1,15 @@
-def tsfVersion = '1.10.0-RELEASE'
-def tsfSpringCloudVersion = '1.10.0.TSF-RELEASE'
+def tsfSpringCloudVersion = '1.12.1-Finchley-RELEASE'
 
 dependencies {
     compile project(':skr-common')
 
-    compile "org.springframework.cloud:spring-cloud-starter-consul-discovery:${tsfSpringCloudVersion}"
-    compile "org.springframework.cloud:spring-cloud-starter-consul-config:${tsfSpringCloudVersion}"
+    compile "com.tencent.tsf:spring-cloud-tsf-consul-config:${tsfSpringCloudVersion}"
+    compile "com.tencent.tsf:spring-cloud-tsf-consul-discovery:${tsfSpringCloudVersion}"
+    compile "com.tencent.tsf:spring-cloud-tsf-sleuth:${tsfSpringCloudVersion}"
+    compile "com.tencent.tsf:spring-cloud-tsf-auth:${tsfSpringCloudVersion}"
+    compile "com.tencent.tsf:spring-cloud-tsf-ratelimit:${tsfSpringCloudVersion}"
+    compile "com.tencent.tsf:spring-cloud-tsf-route:${tsfSpringCloudVersion}"
+    compile "com.tencent.tsf:spring-cloud-tsf-logger:${tsfSpringCloudVersion}"
+    compile "com.tencent.tsf:spring-cloud-tsf-swagger:${tsfSpringCloudVersion}"
 
-    compile "com.tencent.tsf:spring-cloud-tsf-sleuth:${tsfVersion}"
-    compile "com.tencent.tsf:spring-cloud-tsf-auth:${tsfVersion}"
-    compile "com.tencent.tsf:spring-cloud-tsf-route:${tsfVersion}"
-    compile "com.tencent.tsf:spring-cloud-tsf-swagger:${tsfVersion}"
-    compile "com.tencent.tsf:spring-cloud-tsf-ratelimit:${tsfVersion}"
-    compile "com.tencent.tsf:spring-cloud-tsf-encrypt:${tsfVersion}"
 }

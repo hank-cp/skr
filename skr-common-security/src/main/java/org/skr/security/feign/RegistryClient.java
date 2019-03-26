@@ -5,7 +5,7 @@ import lombok.*;
 import org.skr.common.Constants;
 import org.skr.security.PermissionDetail;
 import org.springframework.cache.annotation.Cacheable;
-import org.springframework.cloud.netflix.feign.FeignClient;
+import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -59,7 +59,7 @@ public interface RegistryClient {
 	@GetMapping("/registry/permission/{code}")
     @Cacheable(value = Constants.CACHE_NAME_DEFAULT,
             keyGenerator = "cacheKeyGenerator")
-    PermissionDetail getPermission(@PathVariable(name = "code") String code);
+    Permission getPermission(@PathVariable(name = "code") String code);
 
 	@PostMapping("/registry/site-url/{appSvrCode}")
 	void registerSiteUrl(@PathVariable(name = "appSvrCode") String appSvrCode,
