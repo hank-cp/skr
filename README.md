@@ -4,6 +4,10 @@ Balabalabala......
 
 ## Getting Start
 
+```
+-Dserver.port=8001 -Dtsf_consul_ip=192.168.1.120 -Dtsf_consul_port=8500 -Dtsf_application_id=auth -Dtsf_group_id=skr
+```
+
 ## Auth Service
 
 ## Registry Service

@@ -1,8 +1,6 @@
 def tsfSpringCloudVersion = '1.12.1-Finchley-RELEASE'
 
 dependencies {
-    compile project(':skr-common')
-
     compile "com.tencent.tsf:spring-cloud-tsf-consul-config:${tsfSpringCloudVersion}"
     compile "com.tencent.tsf:spring-cloud-tsf-consul-discovery:${tsfSpringCloudVersion}"
     compile "com.tencent.tsf:spring-cloud-tsf-sleuth:${tsfSpringCloudVersion}"
@@ -11,5 +9,4 @@ dependencies {
     compile "com.tencent.tsf:spring-cloud-tsf-route:${tsfSpringCloudVersion}"
     compile "com.tencent.tsf:spring-cloud-tsf-logger:${tsfSpringCloudVersion}"
     compile "com.tencent.tsf:spring-cloud-tsf-swagger:${tsfSpringCloudVersion}"
-
 }

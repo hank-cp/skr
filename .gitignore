@@ -6,3 +6,4 @@
 # Ignore Gradle build output directory
 out
 build
+logs/

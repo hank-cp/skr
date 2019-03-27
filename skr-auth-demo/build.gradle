@@ -2,6 +2,7 @@ ext.httpPort = "${auth_httpPort}"
 
 dependencies {
     compile project(':skr-auth-starter')
+    compile project(':skr-cloud-tsf')
 
     runtimeOnly "org.hsqldb:hsqldb"
 }

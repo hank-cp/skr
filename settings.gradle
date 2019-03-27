@@ -4,6 +4,7 @@ include 'skr-common',
         'skr-common-security',
 
         'skr-cloud-tsf',
+        'skr-cloud-spring',
 
         'skr-registry-demo',
         'skr-auth-demo',

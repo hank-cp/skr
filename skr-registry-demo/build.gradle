@@ -2,6 +2,7 @@ ext.httpPort = "${registry_httpPort}"
 
 dependencies {
     compile project(':skr-registry-starter')
+    compile project(':skr-cloud-tsf')
 
     runtimeOnly "org.hsqldb:hsqldb"
 }
