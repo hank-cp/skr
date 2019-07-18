@@ -36,8 +36,8 @@ public class PermissionCheckingAspect {
             case Constants.PERMISSION_GRANTED: return joinPoint.proceed();
             case Constants.PERMISSION_DENIED:
                 throw new AuthException(Errors.PERMISSION_DENIED);
-            case Constants.PERMISSION_NOT_PAID:
-                throw new AuthException(Errors.VIP_LEVEL_NOT_ENOUGH);
+            case Constants.PERMISSION_LIMITATION:
+                throw new AuthException(Errors.PERMISSION_LIMITED);
             default:
                 throw new ConfException(Errors.INTERNAL_SERVER_ERROR);
         }

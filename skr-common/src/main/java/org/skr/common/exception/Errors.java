@@ -97,7 +97,7 @@ public final class Errors {
     public static final Errors DUPLICATED_ENTITY        = new Errors(1007, "Duplicated entity.");
     public static final Errors AUTHENTICATION_REQUIRED  = new Errors(1008, "Authentication required.");
     public static final Errors PERMISSION_DENIED        = new Errors(1009, "Permission Denied.");
-    public static final Errors VIP_LEVEL_NOT_ENOUGH     = new Errors(1010, "Vip Level is not satisfied.");
+    public static final Errors PERMISSION_LIMITED       = new Errors(1010, "Vip Level is not satisfied.");
     public static final Errors PERMISSION_NOT_FOUND     = new Errors(1010, "Permission not found.");
     public static final Errors MODEL_DEFINITION_ERROR   = new Errors(1011, "Model definition error.");
     public static final Errors REGISTRATION_ERROR       = new Errors(1012, "Registration error.");

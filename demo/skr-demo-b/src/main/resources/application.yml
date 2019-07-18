@@ -1,0 +1,20 @@
+spring:
+  datasource:
+    url: "jdbc:hsqldb:mem:testdb;sql.syntax_pgs=true"
+  jpa:
+    show-sql: true
+  main:
+    allow-bean-definition-overriding: true
+
+logging:
+  level:
+    org.hibernate.tool.schema.internal.ExceptionHandlerLoggedImpl: ERROR
+
+tsf:
+  swagger:
+    enabled: false
+
+skr:
+  security:
+    renewRefreshToken: false
+    jwtPrincipalClazz: org.skr.security.SimpleJwtPrincipal

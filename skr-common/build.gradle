@@ -1,9 +1,9 @@
 dependencies {
     compile "org.springframework.boot:spring-boot-starter-web"
-    compile "org.springframework.boot:spring-boot-starter-data-jpa"
     compile "org.springframework.boot:spring-boot-starter-aop"
     compile "org.springframework.boot:spring-boot-configuration-processor"
     compile "org.springframework.boot:spring-boot-starter-actuator"
+    compile "org.springframework:spring-tx"
 
     compile "org.springframework.cloud:spring-cloud-commons"
     compile "org.springframework.cloud:spring-cloud-context"
@@ -17,14 +17,13 @@ dependencies {
 
     compile "javax.validation:validation-api:2.0.1.Final"
     compile "joda-time:joda-time"
-    compile "org.jadira.usertype:usertype.core:6.0.1.GA"
     compile "com.fasterxml.jackson.datatype:jackson-datatype-joda"
     compile 'com.auth0:java-jwt:3.5.0'
 
-    implementation "org.apache.commons:commons-lang3:3.8.1"
-    implementation "commons-codec:commons-codec"
-    implementation "uk.com.robust-it:cloning:1.9.11"
-    implementation 'org.yaml:snakeyaml'
+    compile "org.apache.commons:commons-lang3:3.8.1"
+    compile "commons-codec:commons-codec"
+    compile "uk.com.robust-it:cloning:1.9.11"
+    compile 'org.yaml:snakeyaml'
 
     testImplementation "org.springframework.boot:spring-boot-starter-test"
 }

@@ -1,0 +1,17 @@
+spring:
+  datasource:
+    url: "jdbc:hsqldb:mem:local;sql.syntax_pgs=true"
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    show-sql: true
+  main:
+    allow-bean-definition-overriding: true
+
+logging:
+  level:
+    org.hibernate.tool.schema.internal.ExceptionHandlerLoggedImpl: ERROR
+
+tsf:
+  swagger:
+    enabled: false

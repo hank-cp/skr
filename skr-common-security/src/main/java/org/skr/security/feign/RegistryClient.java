@@ -41,12 +41,13 @@ public interface RegistryClient {
     @ToString @EqualsAndHashCode @Getter
     @AllArgsConstructor(staticName = "of")
     @NoArgsConstructor
-    class SiteUrl implements Serializable {
-        public final String type = REGISTRY_SITEURL;
+    class EndPoint implements Serializable {
+        public final String type = REGISTRY_ENDPOINT;
         public String url;
         public Permission permission;
-        public String navPath;
+        public String breadcrumb;
         public String label;
+        public String description;
     }
 
 	@PostMapping("/registry/appsvr")
@@ -61,8 +62,8 @@ public interface RegistryClient {
             keyGenerator = "cacheKeyGenerator")
     Permission getPermission(@PathVariable(name = "code") String code);
 
-	@PostMapping("/registry/site-url/{appSvrCode}")
-	void registerSiteUrl(@PathVariable(name = "appSvrCode") String appSvrCode,
-                         @RequestBody List<SiteUrl> SiteUrls);
+	@PostMapping("/registry/endpoint/{appSvrCode}")
+	void registerEndPoint(@PathVariable(name = "appSvrCode") String appSvrCode,
+                          @RequestBody List<EndPoint> endPoints);
 
 }

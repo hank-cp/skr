@@ -11,8 +11,10 @@ def getPropertyOrElse(String propName, String alternative) {
 }
 
 buildscript {
-    ext.springBootVersion = '2.0.5.RELEASE'
-    ext.springCloudVersion = 'Finchley.RELEASE'
+    ext.springBootVersion = '2.1.6.RELEASE'
+    ext.springCloudVersion = 'Greenwich.RELEASE'
+//    ext.springBootVersion = '2.0.8.RELEASE'
+//    ext.springCloudVersion = 'Finchley.RELEASE'
 
     repositories {
         jcenter()
@@ -65,10 +67,9 @@ subprojects {
 
     Properties verProp = new Properties()
     verProp.load(project.rootProject.file('version.properties').newDataInputStream())
-    ext.mainVersion = verProp.get(("${project.name}" + '.ver').toString())
-    ext.buildNumber = verProp.get(("${project.name}" + '.build').toString())
-    ext.releaseVer = verProp.get(("${project.name}" + '.releaseVer').toString())
-    version = "${mainVersion}_${buildNumber}"
+    ext.mainVersion = (verProp.get(("${project.name}" + '.ver' ).toString()) ?: '0.0.1').toString()
+    ext.buildNumber = (verProp.get(("${project.name}" + '.build').toString()) ?: '1').toString()
+    version = "${mainVersion}"  //.${buildNumber}"
 
     task setProperties {
         doFirst {

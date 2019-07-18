@@ -3,7 +3,7 @@ package org.skr.security;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.exceptions.TokenExpiredException;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang.exception.ExceptionUtils;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.skr.common.exception.Errors;
 import org.skr.common.exception.AuthException;
 import org.skr.common.exception.ConfException;
@@ -35,6 +35,11 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request,
                                     HttpServletResponse response,
                                     FilterChain filterChain) throws IOException, ServletException {
+        if (request.getRequestURL().toString().contains("/actuator/")) {
+            filterChain.doFilter(request, response);
+            return;
+        }
+
         try {
             String accessToken = request.getHeader(
                     skrSecurityProperties.getAccessToken().getHeader());

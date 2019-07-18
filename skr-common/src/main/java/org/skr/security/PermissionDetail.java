@@ -23,7 +23,7 @@ public interface PermissionDetail {
         if (!granted) return Constants.PERMISSION_DENIED;
 
         if (principal.getVipLevel() < getVipLevel())
-            return Constants.PERMISSION_NOT_PAID;
+            return Constants.PERMISSION_LIMITATION;
 
         return Constants.PERMISSION_GRANTED;
     }

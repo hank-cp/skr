@@ -1,4 +1,4 @@
-def tsfSpringCloudVersion = '1.12.1-Finchley-RELEASE'
+def tsfSpringCloudVersion = '1.14.0-Finchley-RELEASE'
 
 dependencies {
     compile "com.tencent.tsf:spring-cloud-tsf-consul-config:${tsfSpringCloudVersion}"

@@ -1,0 +1,18 @@
+ext.httpPort = demoA_httpPort
+
+dependencies {
+    compile project(':skr-demo-common')
+    compile project(':skr-common-security')
+
+    runtimeOnly "org.hsqldb:hsqldb"
+}
+
+//*************************************************************************
+// App Properties
+//*************************************************************************
+
+mainClassName = 'org.skr.a.DemoA'
+
+manifest {
+    attributes 'Main-Class': 'org.skr.a.DemoA'
+}

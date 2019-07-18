@@ -14,6 +14,7 @@ import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Component;
@@ -21,7 +22,7 @@ import org.springframework.web.servlet.DispatcherServlet;
 
 import java.lang.reflect.Method;
 
-@SpringBootApplication(scanBasePackages = "org.skr")
+@Configuration
 @EnableDiscoveryClient
 @EnableFeignClients
 @EnableConfigurationProperties
