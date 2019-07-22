@@ -1,20 +1,11 @@
 package org.skr.common.util;
 
-import com.fasterxml.jackson.annotation.JsonAutoDetect;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.module.SimpleModule;
 import org.apache.commons.lang3.ArrayUtils;
-import org.skr.config.ApplicationContextProvider;
-import org.skr.config.json.*;
 import org.springframework.util.Assert;
 
 import java.lang.reflect.Field;
-import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.Collection;
-import java.util.stream.Stream;
 
 public class BeanUtil {
 
@@ -100,122 +91,4 @@ public class BeanUtil {
         }
     }
 
-    public static ObjectMapper getObjectMapper() {
-        ObjectMapper objectMapper = ApplicationContextProvider.getBean(ObjectMapper.class);
-        if (objectMapper == null) {
-            objectMapper = new ObjectMapper();
-            setupObjectMapper(objectMapper);
-        }
-        return objectMapper;
-    }
-
-    /** Additional Config for Jackson ObjectMapper */
-    public static void setupObjectMapper(ObjectMapper objectMapper) {
-        objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
-        SimpleModule module = new SimpleModule();
-        module.addSerializer(IntValuedEnum.class, new IntValuedEnumSerializer());
-        module.addSerializer(StringValuedEnum.class, new StringValuedEnumSerializer());
-        module.addSerializer(Stream.class, new StreamSerializer());
-        objectMapper.registerModule(module);
-
-        objectMapper.setVisibility(objectMapper.getSerializationConfig()
-                .getDefaultVisibilityChecker()
-                .withFieldVisibility(JsonAutoDetect.Visibility.PUBLIC_ONLY)
-                .withIsGetterVisibility(JsonAutoDetect.Visibility.PUBLIC_ONLY)
-                .withGetterVisibility(JsonAutoDetect.Visibility.PUBLIC_ONLY)
-                .withSetterVisibility(JsonAutoDetect.Visibility.PUBLIC_ONLY));
-    }
-
-    @SuppressWarnings("unchecked")
-    public static <T> T fromJSON(final Class<?> type,
-                                 final String json) {
-        try {
-            return (T) getObjectMapper().readValue(json, type);
-        } catch (Exception e) {
-            throw new RuntimeException("Deserialize json text failed. "+json, e);
-        }
-    }
-
-    public static <T> T fromJSON(final TypeReference<T> type,
-                                 final String json) {
-        try {
-            return getObjectMapper().readValue(json, type);
-        } catch (Exception e) {
-            throw new RuntimeException("Deserialize json text failed. "+json, e);
-        }
-    }
-
-    public static String toJSON(Object obj, Class<?> jsonViewClazz) {
-        try {
-            return getObjectMapper().writerWithView(jsonViewClazz).writeValueAsString(obj);
-        } catch (Exception e) {
-            throw new RuntimeException("Serialize object<"+obj.getClass().getName()+"> to json failed.", e);
-        }
-    }
-
-    public static String toJSON(Object obj) {
-        try {
-            return getObjectMapper().writeValueAsString(obj);
-        } catch (Exception e) {
-            throw new RuntimeException("Serialize object<"+obj.getClass().getName()+"> to json failed.", e);
-        }
-    }
-
-    public static Class getFieldClass(Object target,String fieldName) {
-        try {
-            return target.getClass().getDeclaredField(fieldName).getType();
-        } catch (Exception e) {
-            throw new RuntimeException("Get Field class"+fieldName+" failed.", e);
-        }
-    }
-
-    @SuppressWarnings("unchecked")
-    public static <T> T getFieldValue(Object target, String fieldName) {
-        return (T) getFieldValue(target, target.getClass(), fieldName);
-    }
-
-    private static Object getFieldValue(Object target, Class clazz, String fieldName) {
-        try {
-            Field field = clazz.getDeclaredField(fieldName);
-            field.setAccessible(true);
-            return field.get(target);
-        } catch (NoSuchFieldException nsfe) {
-            if (clazz.getSuperclass() != null) {
-                return getFieldValue(target, clazz.getSuperclass(), fieldName);
-            } else {
-                return null;
-            }
-        } catch (Exception e) {
-            return null;
-        }
-    }
-
-    public static void setFieldValue(Object target, String fieldName, Object value) {
-        setFieldValue(target, target.getClass(), fieldName, value);
-    }
-
-    private static void setFieldValue(Object target, Class clazz, String fieldName, Object value) {
-        try {
-            Field field = target.getClass().getDeclaredField(fieldName);
-            field.setAccessible(true);
-            field.set(target, value);
-        } catch (NoSuchFieldException nsfe) {
-            if (clazz.getSuperclass() != null) {
-                setFieldValue(target, clazz.getSuperclass(), fieldName, value);
-            } else {
-                throw new RuntimeException("Set Private Field "+fieldName+" failed.", nsfe);
-            }
-        } catch (Exception e) {
-            throw new RuntimeException("Set Private Field "+fieldName+" failed.", e);
-        }
-    }
-
-    public static Method getMethodSafe(Class<?> clazz, String methodName, Class... parameterTypes) {
-        try {
-            if (parameterTypes.length > 0) return clazz.getMethod(methodName, parameterTypes);
-            else return clazz.getMethod(methodName);
-        } catch (NoSuchMethodException e) {
-            return null;
-        }
-    }
 }

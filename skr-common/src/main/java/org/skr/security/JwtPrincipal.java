@@ -9,15 +9,7 @@ public interface JwtPrincipal {
 
     Boolean isRobot();
 
-    String getServiceJwtToken();
+    String getApiTrainJwtToken();
 
-    int getVipLevel();
-
-    void setServiceJwtToken(String token);
-
-    long getPermissionBit1();
-
-    long getPermissionBit2();
-
-    long getPermissionBit3();
+    void setApiTrainJwtToken(String token);
 }

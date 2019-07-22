@@ -1,0 +1,18 @@
+ext.httpPort = "${registry_httpPort}"
+
+dependencies {
+    compile project(':skr-demo-common')
+    compile project(':skr-registry-starter')
+
+    runtimeOnly "org.hsqldb:hsqldb"
+}
+
+//*************************************************************************
+// App Properties
+//*************************************************************************
+
+mainClassName = 'org.skr.registry.RegistryApp'
+
+manifest {
+    attributes 'Main-Class': 'org.skr.registry.RegistryApp'
+}

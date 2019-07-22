@@ -1,0 +1,19 @@
+spring:
+  mvc:
+    throw-exception-if-no-handler-found: true
+  resources:
+    add-mappings: false
+feign:
+  client:
+    config:
+      default:
+        errorDecoder: org.skr.security.SkrErrorDecoder
+        requestInterceptors:
+          - org.skr.security.JwtFeignInterceptor
+        connectTimeout: 60000
+        readTimeout: 60000
+# https://cloud.spring.io/spring-cloud-netflix/multi/multi_spring-cloud-feign.html
+memcached.cache:
+  servers: 192.168.1.120:11211
+  mode: static
+  expirations: 86400, cache_name1:3600, cache_name2:108000

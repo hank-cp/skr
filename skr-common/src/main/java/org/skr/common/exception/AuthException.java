@@ -1,6 +1,8 @@
 package org.skr.common.exception;
 
-public class AuthException extends BaseException {
+import org.springframework.security.core.AuthenticationException;
+
+public class AuthException extends AuthenticationException {
 
     private Errors errors;
 
@@ -14,7 +16,6 @@ public class AuthException extends BaseException {
         this.errors = errors;
     }
 
-    @Override
     public Errors getErrors() {
         return errors;
     }

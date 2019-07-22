@@ -18,4 +18,4 @@ tsf:
 
 skr:
   security:
-    jwtPrincipalClazz: org.skr.security.SimpleJwtPrincipal
+    jwtPrincipalClazz: demo.skr.SimpleJwtPrincipal

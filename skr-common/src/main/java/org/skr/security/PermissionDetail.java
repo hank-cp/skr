@@ -1,31 +1,37 @@
 package org.skr.security;
 
-import org.skr.common.Constants;
+import org.apache.commons.lang3.NotImplementedException;
+import org.skr.config.json.IntValuedEnum;
 
 public interface PermissionDetail {
 
+    enum PermissionResult implements IntValuedEnum {
+        PERMISSION_GRANTED(0), PERMISSION_DENIED(1), PERMISSION_LIMITATION(2);
+
+        private final int value;
+
+        PermissionResult(int value) {
+            this.value = value;
+        }
+
+        @Override
+        public int value() {
+            return value;
+        }
+
+        public static PermissionResult parse(int value) {
+            for (PermissionResult item : PermissionResult.values()) {
+                if (item.value() != value) continue;
+                return item;
+            }
+            return PERMISSION_DENIED;
+        }
+    }
+
     String getCode();
 
-    String getName();
-
-    long getBit1();
-
-    long getBit2();
-
-    long getBit3();
-
-    int getVipLevel();
-
-    default int checkAuthorization(JwtPrincipal principal) {
-        boolean granted = (principal.getPermissionBit1() & getBit1()) != 0
-                && (principal.getPermissionBit2() & getBit2()) != 0
-                && (principal.getPermissionBit3() & getBit3()) != 0;
-        if (!granted) return Constants.PERMISSION_DENIED;
-
-        if (principal.getVipLevel() < getVipLevel())
-            return Constants.PERMISSION_LIMITATION;
-
-        return Constants.PERMISSION_GRANTED;
+    default PermissionResult checkAuthorization(JwtPrincipal principal) {
+        throw new NotImplementedException("not implemented yet");
     }
 
 }

@@ -1,5 +1,0 @@
-dependencies {
-    compile project(':skr-common')
-
-    compile "org.springframework.boot:spring-boot-starter-security"
-}

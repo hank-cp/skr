@@ -1,0 +1,24 @@
+spring:
+  datasource:
+    url: "jdbc:hsqldb:mem:local;sql.syntax_pgs=true"
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+    show-sql: true
+    properties:
+      javax:
+        persistence:
+          validation:
+            mode: none
+  main:
+    allow-bean-definition-overriding: true
+
+logging:
+  level:
+    org.hibernate.tool.schema.internal.ExceptionHandlerLoggedImpl: ERROR
+
+tsf:
+  swagger:
+    enabled: false

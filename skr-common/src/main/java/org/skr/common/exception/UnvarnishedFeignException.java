@@ -2,7 +2,7 @@ package org.skr.common.exception;
 
 import feign.Response;
 import feign.Util;
-import org.skr.common.util.BeanUtil;
+import org.skr.common.util.JsonUtil;
 import org.skr.common.util.Checker;
 
 public class UnvarnishedFeignException extends BaseException {
@@ -27,7 +27,7 @@ public class UnvarnishedFeignException extends BaseException {
         try {
             if (response.body() != null) {
                 String errorJson = Util.toString(response.body().asReader());
-                errors = BeanUtil.fromJSON(Errors.class, errorJson);
+                errors = JsonUtil.fromJSON(Errors.class, errorJson);
                 if (Checker.isEmpty(errors.failedRpc)) {
                     // take methodKey if it hasn't not set in Exception handling chain.
                     errors.failedRpc = methodKey;

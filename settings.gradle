@@ -1,19 +1,20 @@
 include 'skr-common',
-        'skr-auth-api',
+        'skr-auth-starter',
         'skr-registry-api',
-        'skr-common-security',
+        'skr-registry-starter',
+        'skr-security-app-starter',
 
         'skr-cloud-tsf',
         'skr-cloud-spring',
 
         'skr-demo-common',
-        'skr-registry-demo',
-        'skr-auth-demo',
+        'skr-demo-registry',
+        'skr-demo-auth',
         'skr-demo-a',
         'skr-demo-b'
 
 project(":skr-demo-common").projectDir = file("demo/skr-demo-common")
-project(":skr-registry-demo").projectDir = file("demo/skr-registry-demo")
-project(":skr-auth-demo").projectDir = file("demo/skr-auth-demo")
+project(":skr-demo-registry").projectDir = file("demo/skr-demo-registry")
+project(":skr-demo-auth").projectDir = file("demo/skr-demo-auth")
 project(":skr-demo-a").projectDir = file("demo/skr-demo-a")
 project(":skr-demo-b").projectDir = file("demo/skr-demo-b")

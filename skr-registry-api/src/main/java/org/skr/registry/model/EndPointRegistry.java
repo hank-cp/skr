@@ -7,6 +7,8 @@ public interface EndPointRegistry extends Registry {
     @NotNull
     String getUrl();
 
+    AppSvrRegistry getAppSvr();
+
     @NotNull
     PermissionRegistry getPermission();
 

@@ -1,7 +1,11 @@
 dependencies {
     compile project(':skr-common')
+    compile project(':skr-registry-api')
 //    compile project(':skr-cloud-tsf')
     compile project(':skr-cloud-spring')
     compile "org.springframework.boot:spring-boot-starter-data-jpa"
     compile "org.jadira.usertype:usertype.core:6.0.1.GA"
+
+    // https://github.com/sixhours-team/memcached-spring-boot
+    compile 'io.sixhours:memcached-spring-boot-starter:1.3.1'
 }

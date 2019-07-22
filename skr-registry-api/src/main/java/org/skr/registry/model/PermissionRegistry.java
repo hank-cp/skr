@@ -6,6 +6,5 @@ public interface PermissionRegistry extends PermissionDetail, Registry {
 
     AppSvrRegistry getAppSvr();
 
-    void setAppSvr(AppSvrRegistry appSvr);
-
+    void beforeRegister(AppSvrRegistry appSvr);
 }

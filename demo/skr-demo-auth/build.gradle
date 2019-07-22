@@ -1,0 +1,18 @@
+ext.httpPort = "${auth_httpPort}"
+
+dependencies {
+    compile project(':skr-demo-common')
+    compile project(':skr-auth-starter')
+
+    runtimeOnly "org.hsqldb:hsqldb"
+}
+
+//*************************************************************************
+// App Properties
+//*************************************************************************
+
+mainClassName = 'org.skr.auth.AuthApp'
+
+manifest {
+    attributes 'Main-Class': 'org.skr.auth.AuthApp'
+}

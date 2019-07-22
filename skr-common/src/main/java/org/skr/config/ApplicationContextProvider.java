@@ -9,11 +9,13 @@ import org.springframework.context.NoSuchMessageException;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Component;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 
 import javax.validation.Validator;
 import java.util.Optional;
 
+@Component
 public class ApplicationContextProvider implements ApplicationContextAware {
 
     private static ApplicationContext ctx = null;
