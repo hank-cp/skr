@@ -4,8 +4,6 @@ spring:
   jpa:
     hibernate:
       ddl-auto: create-drop
-      naming:
-        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
     show-sql: true
     properties:
       javax:
@@ -24,6 +22,10 @@ spring:
 logging:
   level:
     org.hibernate.tool.schema.internal.ExceptionHandlerLoggedImpl: ERROR
+
+demo:
+  skr:
+    registry-manager: true
 
 tsf:
   swagger:

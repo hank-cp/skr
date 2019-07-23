@@ -30,9 +30,9 @@ public class RegistryServiceImpl implements
         Permission permission = permissionRepository.findMaxBitPermission();
         if (permission == null) return new Tuple3<>(1L, 1L, 1L);
 
-        long bit1 = permission.bit1 << 1;
-        long bit2 = permission.bit2;
-        long bit3 = permission.bit3;
+        long bit1 = permission.getBit1() << 1;
+        long bit2 = permission.getBit2();
+        long bit3 = permission.getBit3();
         if (bit1 > 0) return new Tuple3<>(bit1, bit2, bit3);
 
         // carry bit1 to bit2

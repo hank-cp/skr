@@ -4,7 +4,7 @@ dependencies {
     compile project(':skr-demo-common')
     compile project(':skr-registry-starter')
 
-    runtimeOnly "org.hsqldb:hsqldb"
+    compile "org.hsqldb:hsqldb"
 }
 
 //*************************************************************************

@@ -101,6 +101,7 @@ public final class Errors {
     public static final Errors PERMISSION_NOT_FOUND     = new Errors(1010, "Permission not found.");
     public static final Errors MODEL_DEFINITION_ERROR   = new Errors(1011, "Model definition error.");
     public static final Errors REGISTRATION_ERROR       = new Errors(1012, "Registration error.");
+    public static final Errors CLASS_NOT_FOUND          = new Errors(1003, "Class not found.");
 
     public static final Errors NOT_AUTHENTICATED            = new Errors(1100, "Account is not authenticated.");
     public static final Errors ACCESS_TOKEN_EXPIRED         = new Errors(1101, "Access token is expired.");

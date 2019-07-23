@@ -2,6 +2,7 @@ ext.httpPort = demoB_httpPort
 
 dependencies {
     compile project(':skr-demo-common')
+    compile project(':skr-registry-app-starter')
     compile project(':skr-security-app-starter')
 
     runtimeOnly "org.hsqldb:hsqldb"

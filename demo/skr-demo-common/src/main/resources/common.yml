@@ -3,16 +3,10 @@ spring:
     throw-exception-if-no-handler-found: true
   resources:
     add-mappings: false
-feign:
-  client:
-    config:
-      default:
-        errorDecoder: org.skr.security.SkrErrorDecoder
-        requestInterceptors:
-          - org.skr.security.JwtFeignInterceptor
-        connectTimeout: 60000
-        readTimeout: 60000
-# https://cloud.spring.io/spring-cloud-netflix/multi/multi_spring-cloud-feign.html
+  skr:
+    security:
+      renewRefreshToken: false
+      jwtPrincipalClazz: demo.skr.SimpleJwtPrincipal
 memcached.cache:
   servers: 192.168.1.120:11211
   mode: static

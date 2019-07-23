@@ -10,6 +10,7 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.cache.interceptor.KeyGenerator;
 import org.springframework.cache.interceptor.SimpleKeyGenerator;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -25,6 +26,9 @@ import java.lang.reflect.Method;
 @EnableConfigurationProperties
 @Import({SkrSecurityProperties.class, ApplicationContextProvider.class})
 public class SkrConfig {
+
+    @Autowired
+    private ApplicationContext applicationContext;
 
     @Bean
     @ConditionalOnMissingBean

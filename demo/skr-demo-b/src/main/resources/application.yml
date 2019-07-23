@@ -13,8 +13,3 @@ logging:
 tsf:
   swagger:
     enabled: false
-
-skr:
-  security:
-    renewRefreshToken: false
-    jwtPrincipalClazz: demo.skr.SimpleJwtPrincipal

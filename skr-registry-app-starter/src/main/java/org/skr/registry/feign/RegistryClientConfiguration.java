@@ -13,9 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package org.skr.registry.feign;
 
 import org.skr.config.YamlPropertyLoaderFactory;
-import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 
@@ -23,9 +23,7 @@ import org.springframework.context.annotation.PropertySource;
  * @author <a href="https://github.com/hank-cp">Hank CP</a>
  */
 @Configuration
-@EnableCaching
-@PropertySource(value = "classpath:common.yml",
+@PropertySource(value = "classpath:registry-client.yml",
         factory = YamlPropertyLoaderFactory.class)
-public class CommonConfiguration {
-
+public class RegistryClientConfiguration {
 }

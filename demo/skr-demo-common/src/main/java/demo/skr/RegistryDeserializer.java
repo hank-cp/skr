@@ -1,4 +1,4 @@
-package demo.skr.registry;
+package demo.skr;
 
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationContext;

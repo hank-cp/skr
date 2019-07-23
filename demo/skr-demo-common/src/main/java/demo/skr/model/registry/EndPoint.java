@@ -6,9 +6,9 @@ import org.skr.registry.model.AppSvrRegistry;
 import org.skr.registry.model.EndPointRegistry;
 import org.skr.registry.model.PermissionRegistry;
 
-import javax.persistence.Column;
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
+import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 
 @MappedSuperclass
@@ -22,11 +22,11 @@ public class EndPoint extends BaseEntity implements EndPointRegistry {
     public String url;
 
     @NotNull
-    @Column(updatable = false)
+    @Transient
     public String appSvrCode;
 
     @NotNull
-    @Column(updatable = false)
+    @Transient
     public String permissionCode;
 
     @NotNull

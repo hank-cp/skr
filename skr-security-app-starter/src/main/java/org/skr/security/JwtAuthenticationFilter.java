@@ -6,15 +6,15 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.skr.common.exception.AuthException;
 import org.skr.common.exception.Errors;
-import org.skr.common.util.JsonUtil;
 import org.skr.common.util.Checker;
+import org.skr.common.util.JsonUtil;
 import org.skr.common.util.JwtUtil;
 import org.skr.common.util.tuple.Tuple2;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
 import org.springframework.stereotype.Component;
 
@@ -31,17 +31,17 @@ import java.util.Optional;
  * @author <a href="https://github.com/hank-cp">Hank CP</a>
  */
 @Slf4j
-@Component
 public class JwtAuthenticationFilter extends AbstractAuthenticationProcessingFilter {
 
-    @Autowired
     private SkrSecurityProperties skrSecurityProperties;
 
-    @Autowired
     private ApplicationContext applicationContext;
 
-    public JwtAuthenticationFilter() {
-        super("/*");
+    public JwtAuthenticationFilter(SkrSecurityProperties skrSecurityProperties,
+                                   ApplicationContext applicationContext) {
+        super("/**");
+        this.skrSecurityProperties = skrSecurityProperties;
+        this.applicationContext = applicationContext;
     }
 
     @Override
@@ -72,7 +72,8 @@ public class JwtAuthenticationFilter extends AbstractAuthenticationProcessingFil
                                             HttpServletResponse response,
                                             FilterChain chain,
                                             Authentication authResult) throws IOException, ServletException {
-        super.successfulAuthentication(request, response, chain, authResult);
+//        super.successfulAuthentication(request, response, chain, authResult);
+        SecurityContextHolder.getContext().setAuthentication(authResult);
         chain.doFilter(request, response);
     }
 

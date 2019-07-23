@@ -18,5 +18,5 @@ spring:
         prefix: Robot-
         username: ∆coreRobot∆
       trainToken:
-        secret: sKrRrRrRrRrRrRrRrGhost
-        prefix: Ghost-
+        secret: sKrRrRrRrRrRrRrRrTrain
+        prefix: Train-
