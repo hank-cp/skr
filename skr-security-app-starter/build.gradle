@@ -1,6 +1,6 @@
 dependencies {
     compile project(':skr-common')
-    compile project(':skr-registry-api')
+    compile project(':skr-registry-app-starter')
 
     compile "org.springframework.boot:spring-boot-starter-security"
 }

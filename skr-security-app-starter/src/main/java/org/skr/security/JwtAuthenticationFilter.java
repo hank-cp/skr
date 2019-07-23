@@ -13,10 +13,8 @@ import org.skr.common.util.tuple.Tuple2;
 import org.springframework.context.ApplicationContext;
 import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
-import org.springframework.stereotype.Component;
+import org.springframework.web.filter.OncePerRequestFilter;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -31,7 +29,7 @@ import java.util.Optional;
  * @author <a href="https://github.com/hank-cp">Hank CP</a>
  */
 @Slf4j
-public class JwtAuthenticationFilter extends AbstractAuthenticationProcessingFilter {
+public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private SkrSecurityProperties skrSecurityProperties;
 
@@ -39,24 +37,22 @@ public class JwtAuthenticationFilter extends AbstractAuthenticationProcessingFil
 
     public JwtAuthenticationFilter(SkrSecurityProperties skrSecurityProperties,
                                    ApplicationContext applicationContext) {
-        super("/**");
         this.skrSecurityProperties = skrSecurityProperties;
         this.applicationContext = applicationContext;
     }
 
     @Override
-    public void afterPropertiesSet() {
-        setAuthenticationManager(new JwtAuthenticationManager());
-        super.afterPropertiesSet();
-    }
-
-    @Override
-    public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException, IOException, ServletException {
-        String accessToken = request.getHeader(
-                skrSecurityProperties.getAccessToken().getHeader());
+    protected void doFilterInternal(HttpServletRequest request,
+                                    HttpServletResponse response,
+                                    FilterChain filterChain) throws IOException, ServletException {
         try {
-            // try to resolve JwtAuthentication.
-            return getAuthentication(accessToken);
+            String accessToken = request.getHeader(
+                    skrSecurityProperties.getAccessToken().getHeader());
+            Authentication authentication = getAuthentication(accessToken);
+            if (!authentication.isAuthenticated()) {
+                throw new AuthException(Errors.AUTHENTICATION_REQUIRED);
+            }
+            SecurityContextHolder.getContext().setAuthentication(authentication);
         } catch (TokenExpiredException ex) {
             throw new AuthException(Errors.ACCESS_TOKEN_EXPIRED);
         } catch (JWTVerificationException ex) {
@@ -65,16 +61,8 @@ public class JwtAuthenticationFilter extends AbstractAuthenticationProcessingFil
             log.error(ExceptionUtils.getStackTrace(ex));
             throw new AuthException(Errors.AUTHENTICATION_REQUIRED);
         }
-    }
 
-    @Override
-    protected void successfulAuthentication(HttpServletRequest request,
-                                            HttpServletResponse response,
-                                            FilterChain chain,
-                                            Authentication authResult) throws IOException, ServletException {
-//        super.successfulAuthentication(request, response, chain, authResult);
-        SecurityContextHolder.getContext().setAuthentication(authResult);
-        chain.doFilter(request, response);
+        filterChain.doFilter(request, response);
     }
 
     private Authentication getAuthentication(String accessToken) {
