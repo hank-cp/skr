@@ -1,29 +1,82 @@
 package org.skr.registry.service;
 
 import org.skr.common.util.tuple.Tuple3;
-import org.skr.registry.model.AppSvrRegistry;
 import org.skr.registry.model.EndPointRegistry;
 import org.skr.registry.model.PermissionRegistry;
+import org.skr.registry.model.RealmRegistry;
+import org.skr.registry.model.SiteEntry;
 import org.springframework.stereotype.Service;
+
+import java.util.*;
 
 @Service
 public interface RegistryService<
-        AppSvr extends AppSvrRegistry,
+        Realm extends RealmRegistry,
         Permission extends PermissionRegistry,
         EndPoint extends EndPointRegistry> {
 
     Tuple3<Long, Long, Long> generatePermissionBits();
 
-    AppSvr getAppSvr(String code);
+    List<Realm> listRealms();
 
-    AppSvr saveAppSvr(AppSvr saving, AppSvr existed);
+    Realm getRealm(String code);
 
-    Permission getPermission(String code);
+    Realm saveRealm(Realm saving);
 
-    Permission savePermission(Permission saving, Permission existed);
+    List<Permission> listPermissions(Realm realm);
 
-    EndPoint getEndPoint(String url);
+    Permission getPermission(String permissionCode);
 
-    EndPoint saveEndPoint(EndPoint saving, EndPoint existed);
+    Permission savePermission(Realm realm, Permission saving);
 
+    EndPoint saveEndPoint(Realm realm, EndPoint saving);
+
+    /**
+     * Build SiteMap by given endPoints. EndPoints could be filtered by permission
+     * in advance.
+     */
+    default List<SiteEntry> buildSiteMap(List<EndPoint> endPoints) {
+        List<SiteEntry> siteMap = new ArrayList<>();
+        endPoints.sort(Comparator.comparing(EndPointRegistry::getBreadcrumb));
+        endPoints.forEach(endPoint -> {
+            String[] breadcrumbPath = endPoint.getBreadcrumb().split(EndPoint.BREADCRUMB_SEPARATOR);
+            // find match siteEntry
+            List<SiteEntry> matchingLevel = siteMap;
+            SiteEntry[] matchedSiteEntries = new SiteEntry[breadcrumbPath.length];
+            for (int i=0; i<breadcrumbPath.length; i++) {
+                String pathNode = breadcrumbPath[i];
+                Optional<SiteEntry> matchedSiteEntry = matchingLevel.stream()
+                        .filter(siteEntry -> Objects.equals(siteEntry.breadcrumb, pathNode))
+                        .findAny();
+                if (matchedSiteEntry.isPresent()) {
+                    // find matched
+                    matchedSiteEntries[i] = matchedSiteEntry.get();
+                    matchingLevel = matchedSiteEntry.get().siteEntries;
+                } else {
+                    // no matched SiteEntry, clean rest
+                    for (int j=i; j<breadcrumbPath.length; j++) {
+                        matchedSiteEntries[j] = null;
+                    }
+                    break;
+                }
+            }
+
+            for (int k=0; k<breadcrumbPath.length; k++) {
+                if (matchedSiteEntries[k] != null) continue;
+                // slot is empty, means new entry in siteMap.
+                SiteEntry newSiteEntry = new SiteEntry();
+                newSiteEntry.breadcrumb = breadcrumbPath[k];
+                // if last node, set endPoint
+                if (k == breadcrumbPath.length-1) newSiteEntry.endPoint = endPoint;
+                matchedSiteEntries[k] = newSiteEntry;
+                // add to siteMap
+                if (k == 0) {
+                    siteMap.add(newSiteEntry);
+                } else {
+                    matchedSiteEntries[k-1].siteEntries.add(newSiteEntry);
+                }
+            }
+        });
+        return siteMap;
+    }
 }

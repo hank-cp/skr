@@ -1,8 +1,8 @@
 package demo.skr.a;
 
-import demo.skr.model.registry.AppSvr;
 import demo.skr.model.registry.EndPoint;
 import demo.skr.model.registry.Permission;
+import demo.skr.model.registry.Realm;
 import lombok.extern.slf4j.Slf4j;
 import org.skr.registry.feign.RegistryClient;
 import org.springframework.beans.factory.InitializingBean;
@@ -34,12 +34,12 @@ public class DemoA {
 
         @Override
         public void afterPropertiesSet() throws Exception {
-            log.info("Registering AppSvr demo-a ......");
+            log.info("Registering Realm demo-a ......");
 
-            AppSvr appSvr = new AppSvr();
-            appSvr.name = "demo-a";
-            appSvr.code = "demo-a";
-            registryClient.registerAppSvr(appSvr);
+            Realm realm = new Realm();
+            realm.name = "demo-a";
+            realm.code = "demo-a";
+            registryClient.registerRealm(realm);
 
             registryClient.registerPermission("demo-a", list(
                     Permission.of("Task_Management", "Task Management"),
@@ -48,13 +48,12 @@ public class DemoA {
             ));
 
             registryClient.registerEndPoint("demo-a", list(
-                    EndPoint.of("demo-a",
-                            "Task_Management",
+                    EndPoint.of("Task_Management",
                             "/tasks",
                             "Demo-a.Task Management")
             ));
 
-            log.info("Registering AppSvr demo-a done!");
+            log.info("Registering realm demo-a done!");
         }
     }
 }

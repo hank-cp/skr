@@ -5,8 +5,8 @@ import demo.skr.model.CodeBasedEntity;
 import lombok.Getter;
 import org.skr.common.exception.ConfException;
 import org.skr.common.exception.Errors;
-import org.skr.registry.model.AppSvrRegistry;
 import org.skr.registry.model.PermissionRegistry;
+import org.skr.registry.model.RealmRegistry;
 import org.skr.security.JwtPrincipal;
 
 import javax.persistence.Column;
@@ -20,7 +20,7 @@ public class Permission extends CodeBasedEntity implements PermissionRegistry {
 
     @NotNull
     @Transient
-    public String appSvrCode;
+    public String realmCode;
 
     @NotNull
     public String name;
@@ -28,13 +28,13 @@ public class Permission extends CodeBasedEntity implements PermissionRegistry {
     public int vipLevel;
 
     @Column(updatable = false)
-    protected long bit1 = 1;
+    public long bit1 = 1;
 
     @Column(updatable = false)
-    protected long bit2 = 1;
+    public long bit2 = 1;
 
     @Column(updatable = false)
-    protected long bit3 = 1;
+    public long bit3 = 1;
 
     @Override
     public String getCode() {
@@ -42,14 +42,10 @@ public class Permission extends CodeBasedEntity implements PermissionRegistry {
     }
 
     @Override
-    public AppSvrRegistry getAppSvr() {
-        AppSvr appSvr = new AppSvr();
-        appSvr.code = appSvrCode;
-        return appSvr;
-    }
-
-    @Override
-    public void beforeRegister(AppSvrRegistry appSvr) {
+    public RealmRegistry getRealm() {
+        Realm realm = new Realm();
+        realm.code = realmCode;
+        return realm;
     }
 
     public static Permission of(@NotNull String code,

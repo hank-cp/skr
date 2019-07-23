@@ -7,5 +7,7 @@ dependencies {
     compile "org.jadira.usertype:usertype.core:6.0.1.GA"
 
     // https://github.com/sixhours-team/memcached-spring-boot
-    compile 'io.sixhours:memcached-spring-boot-starter:1.3.1'
+    compileOnly 'io.sixhours:memcached-spring-boot-starter:1.3.1'
+
+    testImplementation "org.springframework.boot:spring-boot-starter-test"
 }

@@ -2,7 +2,7 @@ package org.skr.registry.model;
 
 import javax.validation.constraints.NotNull;
 
-public interface AppSvrRegistry extends Registry {
+public interface RealmRegistry extends Registry {
 
     @NotNull
     String getCode();

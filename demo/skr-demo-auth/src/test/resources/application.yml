@@ -1,12 +1,11 @@
 server:
-  port: 8002
+  port: 8001
 spring:
   datasource:
     url: "jdbc:hsqldb:mem:local;sql.syntax_pgs=true"
   jpa:
     hibernate:
       ddl-auto: create-drop
-    show-sql: true
     properties:
       javax:
         persistence:
@@ -14,11 +13,11 @@ spring:
             mode: none
   main:
     allow-bean-definition-overriding: true
+  cloud:
+    consul:
+      discovery:
+        enabled: false
 
 logging:
   level:
     org.hibernate.tool.schema.internal.ExceptionHandlerLoggedImpl: ERROR
-
-tsf:
-  swagger:
-    enabled: false

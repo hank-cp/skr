@@ -2,7 +2,7 @@ package demo.skr.model.registry;
 
 import demo.skr.model.CodeBasedEntity;
 import lombok.Getter;
-import org.skr.registry.model.AppSvrRegistry;
+import org.skr.registry.model.RealmRegistry;
 
 import javax.persistence.Column;
 import javax.persistence.MappedSuperclass;
@@ -10,9 +10,7 @@ import javax.validation.constraints.NotNull;
 
 @MappedSuperclass
 @Getter
-public class AppSvr extends CodeBasedEntity implements AppSvrRegistry {
-
-    public static final String REGISTRY_APPSVR = "AppSvr";
+public class Realm extends CodeBasedEntity implements RealmRegistry {
 
     @NotNull
     @Column(unique = true)

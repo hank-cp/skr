@@ -14,21 +14,38 @@ public class EndPoint extends demo.skr.model.registry.EndPoint {
     @ManyToOne(optional = false)
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @JoinColumn(foreignKey = @ForeignKey(name="none", value = ConstraintMode.NO_CONSTRAINT))
-    public AppSvr appSvr;
+    public Realm realm;
 
-    @NotNull
-    @ManyToOne(optional = false)
+    @ManyToOne
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @JoinColumn(foreignKey = @ForeignKey(name="none", value = ConstraintMode.NO_CONSTRAINT))
     public Permission permission;
 
     @Override
-    public AppSvr getAppSvr() {
-        return appSvr;
+    public Realm getRealm() {
+        return realm;
     }
 
     @Override
     public Permission getPermission() {
         return permission;
+    }
+
+    @PostLoad
+    private void postLoad() {
+        realmCode = realm.code;
+        if (permission != null) {
+            permissionCode = permission.code;
+        }
+    }
+
+    public static EndPoint of(String permissionCode,
+                              @NotNull String url,
+                              @NotNull String breadcrumb) {
+        EndPoint endPoint = new EndPoint();
+        endPoint.url = url;
+        endPoint.permissionCode = permissionCode;
+        endPoint.breadcrumb = breadcrumb;
+        return endPoint;
     }
 }

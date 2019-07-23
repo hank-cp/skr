@@ -2,9 +2,9 @@
 package org.skr.registry.feign;
 
 import org.skr.common.Constants;
-import org.skr.registry.model.AppSvrRegistry;
 import org.skr.registry.model.EndPointRegistry;
 import org.skr.registry.model.PermissionRegistry;
+import org.skr.registry.model.RealmRegistry;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,20 +17,29 @@ import java.util.List;
 @FeignClient(name = "registry")
 public interface RegistryClient {
 
-	@PostMapping("/registry/appsvr")
-	void registerAppSvr(@RequestBody AppSvrRegistry appSvr);
+	@GetMapping("/registry/realm/{realmCode}")
+	RealmRegistry getRealm(@PathVariable(name = "realmCode") String realmCode);
 
-	@PostMapping("/registry/permission/{appSvrCode}")
-	void registerPermission(@PathVariable(name = "appSvrCode") String appSvrCode,
-                            @RequestBody List<PermissionRegistry> permissions);
+	@GetMapping("/registry/realms")
+	List<RealmRegistry> listRealms();
 
-	@GetMapping("/registry/permission/{code}")
-    @Cacheable(value = Constants.CACHE_NAME_DEFAULT,
-            keyGenerator = "cacheKeyGenerator")
-    PermissionRegistry getPermission(@PathVariable(name = "code") String code);
+	@PostMapping("/registry/realm")
+	void registerRealm(@RequestBody RealmRegistry realm);
 
-	@PostMapping("/registry/endpoint/{appSvrCode}")
-	void registerEndPoint(@PathVariable(name = "appSvrCode") String appSvrCode,
+	@GetMapping("/registry/realm/{realmCode}/permissions")
+	List<PermissionRegistry> listPermissions(@PathVariable(name = "realmCode") String realmCode);
+
+	@GetMapping("/registry/permission/{permissionCode}")
+	@Cacheable(value = Constants.CACHE_NAME_DEFAULT,
+			keyGenerator = "cacheKeyGenerator")
+	PermissionRegistry getPermission(@PathVariable(name = "permissionCode") String code);
+
+	@PostMapping("/registry/permission/{realmCode}")
+	void registerPermission(@PathVariable String realmCode,
+							@RequestBody List<PermissionRegistry> permissions);
+
+	@PostMapping("/registry/endpoint/{realmCode}")
+	void registerEndPoint(@PathVariable(name = "realmCode") String realmCode,
                           @RequestBody List<EndPointRegistry> endPoints);
 
 }

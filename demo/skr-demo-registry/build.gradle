@@ -5,6 +5,9 @@ dependencies {
     compile project(':skr-registry-starter')
 
     compile "org.hsqldb:hsqldb"
+
+    testCompile project(':skr-demo-common').sourceSets.test.output
+    testImplementation "org.springframework.boot:spring-boot-starter-test"
 }
 
 //*************************************************************************

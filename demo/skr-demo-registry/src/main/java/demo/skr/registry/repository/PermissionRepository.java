@@ -1,6 +1,7 @@
 package demo.skr.registry.repository;
 
 import demo.skr.registry.model.Permission;
+import demo.skr.registry.model.Realm;
 import org.skr.common.util.Checker;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -21,5 +22,7 @@ public interface PermissionRepository extends JpaRepository<Permission, String> 
         if (Checker.isEmpty(resultList)) return null;
         return resultList.get(0);
     }
+
+    List<Permission> findByRealm(Realm realm);
 
 }

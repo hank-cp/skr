@@ -16,11 +16,11 @@ package demo.skr;/*
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
-import demo.skr.model.registry.AppSvr;
+import demo.skr.model.registry.Realm;
 import demo.skr.model.registry.EndPoint;
 import demo.skr.model.registry.Permission;
 import org.skr.config.YamlPropertyLoaderFactory;
-import org.skr.registry.model.AppSvrRegistry;
+import org.skr.registry.model.RealmRegistry;
 import org.skr.registry.model.EndPointRegistry;
 import org.skr.registry.model.PermissionRegistry;
 import org.springframework.beans.factory.InitializingBean;
@@ -49,10 +49,11 @@ public class CommonConfiguration {
         @Autowired
         private ObjectMapper objectMapper;
 
+        @SuppressWarnings("Duplicates")
         @Override
         public void afterPropertiesSet() {
             SimpleModule module = new SimpleModule();
-            module.addDeserializer(AppSvrRegistry.class, new RegistryDeserializer<>(AppSvr.class));
+            module.addDeserializer(RealmRegistry.class, new RegistryDeserializer<>(Realm.class));
             module.addDeserializer(PermissionRegistry.class, new RegistryDeserializer<>(Permission.class));
             module.addDeserializer(EndPointRegistry.class, new RegistryDeserializer<>(EndPoint.class));
             objectMapper.registerModule(module);

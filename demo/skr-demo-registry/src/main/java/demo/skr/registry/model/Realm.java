@@ -6,6 +6,6 @@ import javax.persistence.Entity;
 
 @Entity
 @NoArgsConstructor
-public class AppSvr extends demo.skr.model.registry.AppSvr {
+public class Realm extends demo.skr.model.registry.Realm {
 
 }

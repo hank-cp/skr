@@ -4,7 +4,6 @@ import org.skr.security.PermissionDetail;
 
 public interface PermissionRegistry extends PermissionDetail, Registry {
 
-    AppSvrRegistry getAppSvr();
+    RealmRegistry getRealm();
 
-    void beforeRegister(AppSvrRegistry appSvr);
 }

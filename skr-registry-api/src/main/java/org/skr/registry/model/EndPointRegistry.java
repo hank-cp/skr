@@ -4,12 +4,14 @@ import javax.validation.constraints.NotNull;
 
 public interface EndPointRegistry extends Registry {
 
+    String BREADCRUMB_SEPARATOR = "\\.";
+
     @NotNull
     String getUrl();
 
-    AppSvrRegistry getAppSvr();
-
     @NotNull
+    RealmRegistry getRealm();
+
     PermissionRegistry getPermission();
 
     @NotNull

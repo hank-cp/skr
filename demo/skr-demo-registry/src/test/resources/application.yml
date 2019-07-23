@@ -1,5 +1,5 @@
 server:
-  port: 8002
+  port: 8001
 spring:
   datasource:
     url: "jdbc:hsqldb:mem:local;sql.syntax_pgs=true"
@@ -12,12 +12,26 @@ spring:
         persistence:
           validation:
             mode: none
+  mvc:
+    throw-exception-if-no-handler-found: true
+  resources:
+    add-mappings: false
+  sleuth:
+    enabled: false
   main:
     allow-bean-definition-overriding: true
+  cloud:
+    consul:
+      discovery:
+        enabled: false
 
 logging:
   level:
     org.hibernate.tool.schema.internal.ExceptionHandlerLoggedImpl: ERROR
+
+demo:
+  skr:
+    registry-manager: true
 
 tsf:
   swagger:

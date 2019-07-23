@@ -1,24 +1,30 @@
 package demo.skr.registry.service;
 
-import demo.skr.registry.model.AppSvr;
 import demo.skr.registry.model.EndPoint;
 import demo.skr.registry.model.Permission;
-import demo.skr.registry.repository.AppSvrRepository;
+import demo.skr.registry.model.Realm;
 import demo.skr.registry.repository.EndPointRepository;
 import demo.skr.registry.repository.PermissionRepository;
+import demo.skr.registry.repository.RealmRepository;
+import org.skr.common.exception.BizException;
+import org.skr.common.exception.Errors;
 import org.skr.common.util.BeanUtil;
-import org.skr.common.util.JsonUtil;
+import org.skr.common.util.Checker;
 import org.skr.common.util.tuple.Tuple3;
 import org.skr.registry.service.RegistryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.Objects;
 
 @Service
 public class RegistryServiceImpl implements
-        RegistryService<AppSvr, Permission, EndPoint> {
+        RegistryService<Realm, Permission, EndPoint> {
 
     @Autowired
-    private AppSvrRepository appSvrRepository;
+    private RealmRepository realmRepository;
 
     @Autowired
     private PermissionRepository permissionRepository;
@@ -47,18 +53,30 @@ public class RegistryServiceImpl implements
     }
 
     @Override
-    public AppSvr getAppSvr(String code) {
-        return appSvrRepository.findById(code).orElse(null);
+    public List<Realm> listRealms() {
+        return realmRepository.findAll();
     }
 
     @Override
-    public AppSvr saveAppSvr(AppSvr saving, AppSvr existed) {
+    public Realm getRealm(String realmCode) {
+        return realmRepository.findById(realmCode).orElse(null);
+    }
+
+    @Override
+    @Transactional
+    public Realm saveRealm(Realm saving) {
+        Realm existed = getRealm(saving.code);
         if (existed == null) {
-            return appSvrRepository.save(saving);
+            return realmRepository.save(saving);
         } else {
             BeanUtil.copyFields(saving, existed);
-            return appSvrRepository.save(existed);
+            return realmRepository.save(existed);
         }
+    }
+
+    @Override
+    public List<Permission> listPermissions(Realm realm) {
+        return permissionRepository.findByRealm(realm);
     }
 
     @Override
@@ -67,27 +85,54 @@ public class RegistryServiceImpl implements
     }
 
     @Override
-    public Permission savePermission(Permission saving, Permission existed) {
+    public Permission savePermission(Realm realm, Permission saving) {
+        Permission existed = getPermission(saving.getCode());
         if (existed == null) {
-            return permissionRepository.save(saving);
+            saving.realm = realm;
+            // generate bits before save
+            Tuple3<Long, Long, Long> bits = generatePermissionBits();
+            saving.bit1 = bits._0;
+            saving.bit2 = bits._1;
+            saving.bit3 = bits._2;
+            permissionRepository.save(saving);
+            return saving;
         } else {
-            BeanUtil.copyFields(saving, existed, "code", "appSvr");
-            return permissionRepository.save(existed);
+            if (!Objects.equals(existed.getRealm().getCode(), realm.code)) {
+                throw new BizException(Errors.REGISTRATION_ERROR.setMsg(
+                        "Permission %s is registered to %s",
+                        existed.code, existed.getRealm().getCode()));
+            }
+            BeanUtil.copyFields(saving, existed, "code", "realm");
+            permissionRepository.save(existed);
+            return existed;
         }
     }
 
-    @Override
     public EndPoint getEndPoint(String url) {
         return endPointRepository.findById(url).orElse(null);
     }
 
     @Override
-    public EndPoint saveEndPoint(EndPoint saving, EndPoint existed) {
+    @Transactional
+    public EndPoint saveEndPoint(Realm realm, EndPoint saving) {
+        EndPoint existed = getEndPoint(saving.getUrl());
         if (existed == null) {
-            return endPointRepository.save(saving);
+            saving.realm = realm;
+            if (!Checker.isEmpty(saving.permissionCode)) {
+                saving.permission = new Permission();
+                saving.permission.code = saving.permissionCode;
+            }
+            endPointRepository.save(saving);
+            return saving;
         } else {
+            if (!Objects.equals(existed.getRealm().getCode(), realm.code)) {
+                throw new BizException(Errors.REGISTRATION_ERROR.setMsg(
+                        "EndPoint %s has been registered to %s",
+                        saving.getUrl(), existed.getRealm().getCode()));
+            }
             BeanUtil.copyFields(saving, existed, "url", "permission");
-            return endPointRepository.save(existed);
+            endPointRepository.save(existed);
+            return existed;
         }
     }
 }

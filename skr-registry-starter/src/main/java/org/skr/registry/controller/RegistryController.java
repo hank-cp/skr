@@ -2,16 +2,15 @@ package org.skr.registry.controller;
 
 import org.skr.common.exception.BizException;
 import org.skr.common.exception.Errors;
-import org.skr.registry.model.AppSvrRegistry;
 import org.skr.registry.model.EndPointRegistry;
 import org.skr.registry.model.PermissionRegistry;
+import org.skr.registry.model.RealmRegistry;
 import org.skr.registry.service.RegistryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Objects;
 
 @SuppressWarnings("unchecked")
 @RestController
@@ -21,68 +20,63 @@ public class RegistryController {
     @Autowired
     private RegistryService registryService;
 
-    /** Register app service */
-    @PostMapping("/appsvr")
-    @Transactional
-    public void registerAppSvr(@RequestBody AppSvrRegistry appSvr) {
-        AppSvrRegistry existed = registryService.getAppSvr(appSvr.getCode());
-        registryService.saveAppSvr(appSvr, existed);
+    @GetMapping("/realm/{realmCode}")
+    public RealmRegistry getRealm(@PathVariable String realmCode) {
+        return registryService.getRealm(realmCode);
     }
 
-    /** Register permission */
-    @PostMapping("/permission/{appSvrCode}")
-    @Transactional
-    public void registerPermission(@PathVariable String appSvrCode,
-                                   @RequestBody List<PermissionRegistry> permissions) {
-        AppSvrRegistry appSvr = registryService.getAppSvr(appSvrCode);
-        if (appSvr == null) {
-            throw new BizException(Errors.REGISTRATION_ERROR.setMsg("AppSvr code %s", appSvrCode));
-        }
+    @GetMapping("/realms")
+    public List<RealmRegistry> listRealms() {
+        return registryService.listRealms();
+    }
 
-        permissions.forEach(permission -> {
-            PermissionRegistry existed = registryService.getPermission(permission.getCode());
-            if (existed == null) {
-                permission.beforeRegister(appSvr);
-                registryService.savePermission(permission, null);
-            } else {
-                if (!Objects.equals(existed.getAppSvr().getCode(), appSvrCode)) {
-                    throw new BizException(Errors.REGISTRATION_ERROR.setMsg(
-                            "Permission %s is registered to %s",
-                            permission.getCode(), existed.getAppSvr().getCode()));
-                }
-                registryService.savePermission(permission, existed);
-            }
-        });
+    /** Register app service */
+    @PostMapping("/realm")
+    @Transactional
+    public void registerRealm(@RequestBody RealmRegistry realm) {
+        registryService.saveRealm(realm);
     }
 
     /** Get Permission */
-    @GetMapping("/permission/{code}")
-    public PermissionRegistry getPermission(@PathVariable String code) {
-        return registryService.getPermission(code);
+    @GetMapping("/realm/{realmCode}/permissions")
+    public List<PermissionRegistry> listPermissions(@PathVariable String realmCode) {
+        RealmRegistry realm = registryService.getRealm(realmCode);
+        return registryService.listPermissions(realm);
+    }
+
+    /** Get Permission */
+    @GetMapping("/permission/{permissionCode}")
+    public PermissionRegistry getPermission(@PathVariable String permissionCode) {
+        return registryService.getPermission(permissionCode);
+    }
+
+    /** Register permission */
+    @PostMapping("/permission/{realmCode}")
+    @Transactional
+    public void registerPermission(@PathVariable String realmCode,
+                                   @RequestBody List<PermissionRegistry> permissions) {
+        RealmRegistry realm = registryService.getRealm(realmCode);
+        if (realm == null) {
+            throw new BizException(Errors.REGISTRATION_ERROR.setMsg("Realm %s is not registered yet.", realmCode));
+        }
+
+        permissions.forEach(permission -> {
+            registryService.savePermission(realm, permission);
+        });
     }
 
     /** Register EndPoint */
-    @PostMapping("/endpoint/{appSvrCode}")
+    @PostMapping("/endpoint/{realmCode}")
     @Transactional
-    public void registerEndPoint(@PathVariable String appSvrCode,
+    public void registerEndPoint(@PathVariable String realmCode,
                                  @RequestBody List<EndPointRegistry> endPoints) {
-        AppSvrRegistry appSvr = registryService.getAppSvr(appSvrCode);
-        if (appSvr == null) {
-            throw new BizException(Errors.REGISTRATION_ERROR.setMsg("AppSvr code %s", appSvrCode));
+        RealmRegistry realm = registryService.getRealm(realmCode);
+        if (realm == null) {
+            throw new BizException(Errors.REGISTRATION_ERROR.setMsg("Realm %s is not registered yet.", realmCode));
         }
 
         endPoints.forEach(endpoint -> {
-            EndPointRegistry existed = registryService.getEndPoint(endpoint.getUrl());
-            if (existed == null) {
-                registryService.saveEndPoint(endpoint, null);
-            } else {
-                if (!Objects.equals(existed.getAppSvr().getCode(), appSvrCode)) {
-                    throw new BizException(Errors.REGISTRATION_ERROR.setMsg(
-                            "EndPoint %s has been registered to %s",
-                            endpoint.getUrl(), existed.getAppSvr().getCode()));
-                }
-                registryService.saveEndPoint(endpoint, existed);
-            }
+            registryService.saveEndPoint(realm, endpoint);
         });
     }
 

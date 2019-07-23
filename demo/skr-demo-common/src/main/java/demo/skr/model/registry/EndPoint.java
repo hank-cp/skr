@@ -2,9 +2,10 @@ package demo.skr.model.registry;
 
 import demo.skr.model.BaseEntity;
 import lombok.Getter;
-import org.skr.registry.model.AppSvrRegistry;
+import org.skr.common.util.Checker;
 import org.skr.registry.model.EndPointRegistry;
 import org.skr.registry.model.PermissionRegistry;
+import org.skr.registry.model.RealmRegistry;
 
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
@@ -23,9 +24,8 @@ public class EndPoint extends BaseEntity implements EndPointRegistry {
 
     @NotNull
     @Transient
-    public String appSvrCode;
+    public String realmCode;
 
-    @NotNull
     @Transient
     public String permissionCode;
 
@@ -37,26 +37,25 @@ public class EndPoint extends BaseEntity implements EndPointRegistry {
     public String description;
 
     @Override
-    public AppSvrRegistry getAppSvr() {
-        AppSvr appSvr = new AppSvr();
-        appSvr.code = appSvrCode;
-        return appSvr;
+    public RealmRegistry getRealm() {
+        Realm realm = new Realm();
+        realm.code = realmCode;
+        return realm;
     }
 
     @Override
     public @NotNull PermissionRegistry getPermission() {
+        if (Checker.isEmpty(permissionCode)) return null;
         Permission permission = new Permission();
         permission.code = permissionCode;
         return permission;
     }
 
-    public static EndPoint of(@NotNull String appSvrCode,
-                              @NotNull String permissionCode,
+    public static EndPoint of(String permissionCode,
                               @NotNull String url,
                               @NotNull String breadcrumb) {
         EndPoint endPoint = new EndPoint();
         endPoint.url = url;
-        endPoint.appSvrCode = appSvrCode;
         endPoint.permissionCode = permissionCode;
         endPoint.breadcrumb = breadcrumb;
         return endPoint;
