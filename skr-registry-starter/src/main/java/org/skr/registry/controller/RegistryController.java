@@ -1,10 +1,9 @@
 package org.skr.registry.controller;
 
-import org.skr.common.exception.BizException;
-import org.skr.common.exception.Errors;
-import org.skr.registry.model.EndPointRegistry;
-import org.skr.registry.model.PermissionRegistry;
-import org.skr.registry.model.RealmRegistry;
+import org.skr.registry.EndPointRegistry;
+import org.skr.registry.PermissionRegistry;
+import org.skr.registry.RealmRegistry;
+import org.skr.registry.RegisterBatch;
 import org.skr.registry.service.RegistryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
@@ -30,13 +29,6 @@ public class RegistryController {
         return registryService.listRealms();
     }
 
-    /** Register app service */
-    @PostMapping("/realm")
-    @Transactional
-    public void registerRealm(@RequestBody RealmRegistry realm) {
-        registryService.saveRealm(realm);
-    }
-
     /** Get Permission */
     @GetMapping("/realm/{realmCode}/permissions")
     public List<PermissionRegistry> listPermissions(@PathVariable String realmCode) {
@@ -50,34 +42,32 @@ public class RegistryController {
         return registryService.getPermission(permissionCode);
     }
 
-    /** Register permission */
-    @PostMapping("/permission/{realmCode}")
-    @Transactional
-    public void registerPermission(@PathVariable String realmCode,
-                                   @RequestBody List<PermissionRegistry> permissions) {
+    /** Get EndPoints */
+    @GetMapping("/realm/{realmCode}/end-points")
+    public List<EndPointRegistry> listEndPoints(@PathVariable String realmCode) {
         RealmRegistry realm = registryService.getRealm(realmCode);
-        if (realm == null) {
-            throw new BizException(Errors.REGISTRATION_ERROR.setMsg("Realm %s is not registered yet.", realmCode));
-        }
-
-        permissions.forEach(permission -> {
-            registryService.savePermission(realm, permission);
-        });
+        return registryService.listEndPoints(realm);
     }
 
-    /** Register EndPoint */
-    @PostMapping("/endpoint/{realmCode}")
-    @Transactional
-    public void registerEndPoint(@PathVariable String realmCode,
-                                 @RequestBody List<EndPointRegistry> endPoints) {
-        RealmRegistry realm = registryService.getRealm(realmCode);
-        if (realm == null) {
-            throw new BizException(Errors.REGISTRATION_ERROR.setMsg("Realm %s is not registered yet.", realmCode));
-        }
+    /** Get Permission */
+    @GetMapping("/end-point/{url}")
+    public EndPointRegistry getEndPoint(@PathVariable String url) {
+        return registryService.getEndPoint(url);
+    }
 
-        endPoints.forEach(endpoint -> {
-            registryService.saveEndPoint(realm, endpoint);
-        });
+    /** Register app service */
+    @PostMapping("/realm/register")
+    @Transactional
+    public void registerRealm(@RequestBody RegisterBatch realmBatch) {
+        registryService.registerRealm(realmBatch.realm, realmBatch.permissions, realmBatch.endPoints);
+    }
+
+    /** Register app service */
+    @PostMapping("/realm/unregister/{realmCode}")
+    @Transactional
+    public void unregisterRealm(@PathVariable String realmCode) {
+        RealmRegistry realm = registryService.getRealm(realmCode);
+        registryService.unregisterRealm(realm);
     }
 
 }

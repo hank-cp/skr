@@ -3,9 +3,9 @@ package demo.skr.model.registry;
 import demo.skr.model.BaseEntity;
 import lombok.Getter;
 import org.skr.common.util.Checker;
-import org.skr.registry.model.EndPointRegistry;
-import org.skr.registry.model.PermissionRegistry;
-import org.skr.registry.model.RealmRegistry;
+import org.skr.registry.EndPointRegistry;
+import org.skr.registry.PermissionRegistry;
+import org.skr.registry.RealmRegistry;
 
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;

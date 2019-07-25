@@ -4,13 +4,14 @@ import demo.skr.registry.model.EndPoint;
 import demo.skr.registry.model.Permission;
 import demo.skr.registry.model.Realm;
 import demo.skr.registry.repository.PermissionRepository;
+import demo.skr.registry.repository.RealmRepository;
 import demo.skr.registry.service.RegistryServiceImpl;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.skr.common.exception.BizException;
 import org.skr.common.util.tuple.Tuple3;
-import org.skr.registry.model.SiteEntry;
+import org.skr.registry.SiteEntry;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Rollback;
@@ -28,11 +29,13 @@ import static org.hamcrest.Matchers.*;
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = RegistryApp.class)
 @Rollback
-@Transactional
 public class RegistryIntegrationTest {
 
     @Autowired
     private RegistryServiceImpl registryService;
+
+    @Autowired
+    private RealmRepository realmRepository;
 
     @Autowired
     private PermissionRepository permissionRepository;
@@ -47,10 +50,11 @@ public class RegistryIntegrationTest {
         testRealm = new Realm();
         testRealm.code = "test";
         testRealm.name = "test";
-        registryService.saveRealm(testRealm);
+        realmRepository.save(testRealm);
     }
 
     @Test
+    @Transactional
     public void testGeneratePermissionBits() {
         Tuple3<Long, Long, Long> bits = registryService.generatePermissionBits();
         assertThat(bits._0, equalTo(1L));
@@ -92,51 +96,54 @@ public class RegistryIntegrationTest {
     }
 
     @Test
+    @Transactional
     public void testRegisterPermission() {
         Permission permission = new Permission();
         permission.realm = testRealm;
         permission.code = "test";
         permission.name = "test";
-        registryService.savePermission(testRealm, permission);
+        registryService.registerPermission(testRealm, permission);
         assertThat(permission.bit1, equalTo(1L));
-        assertThat(permission.bit1, equalTo(1L));
-        assertThat(permission.bit1, equalTo(1L));
+        assertThat(permission.bit2, equalTo(1L));
+        assertThat(permission.bit3, equalTo(1L));
         assertThat(registryService.listPermissions(testRealm), hasSize(1));
 
         // test save failed by define permission on another realm
         Realm testRealm2 = new Realm();
         testRealm2.code = "test2";
         testRealm2.name = "test2";
-        registryService.saveRealm(testRealm2);
+        realmRepository.save(testRealm2);
 
         Permission permission2 = new Permission();
         permission2.code = "test";
         permission2.name = "test";
-        assertThat(exceptionOf(() -> registryService.savePermission(testRealm2, permission2)),
+        assertThat(exceptionOf(() -> registryService.registerPermission(testRealm2, permission2)),
                 instanceOf(BizException.class));
     }
 
     @Test
+    @Transactional
     public void testRegisterEndPoint() {
         EndPoint endPoint = new EndPoint();
         endPoint.realm = testRealm;
         endPoint.url = "/test/url";
-        registryService.saveEndPoint(testRealm, endPoint);
+        registryService.registerEndPoint(testRealm, endPoint);
         assertThat(registryService.getEndPoint("/test/url"), notNullValue());
 
         // test save failed by define endPoint on another realm
         Realm testRealm2 = new Realm();
         testRealm2.code = "test2";
         testRealm2.name = "test2";
-        registryService.saveRealm(testRealm2);
+        realmRepository.save(testRealm2);
 
         EndPoint endPoint2 = new EndPoint();
         endPoint2.url = "/test/url";
-        assertThat(exceptionOf(() -> registryService.saveEndPoint(testRealm2, endPoint2)),
+        assertThat(exceptionOf(() -> registryService.registerEndPoint(testRealm2, endPoint2)),
                 instanceOf(BizException.class));
     }
 
     @Test
+    @Transactional
     public void testBuildSiteMap() {
         // 1
         //   -- a

@@ -5,8 +5,8 @@ import demo.skr.model.CodeBasedEntity;
 import lombok.Getter;
 import org.skr.common.exception.ConfException;
 import org.skr.common.exception.Errors;
-import org.skr.registry.model.PermissionRegistry;
-import org.skr.registry.model.RealmRegistry;
+import org.skr.registry.PermissionRegistry;
+import org.skr.registry.RealmRegistry;
 import org.skr.security.JwtPrincipal;
 
 import javax.persistence.Column;

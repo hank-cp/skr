@@ -7,7 +7,7 @@ import org.skr.common.exception.AuthException;
 import org.skr.common.exception.ConfException;
 import org.skr.common.exception.Errors;
 import org.skr.config.ApplicationContextProvider;
-import org.skr.registry.feign.RegistryClient;
+import org.skr.registry.proxy.RegistryProxy;
 import org.skr.security.annotation.RequirePermission;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -17,13 +17,13 @@ import org.springframework.stereotype.Component;
 public class PermissionCheckingAspect {
 
     @Autowired
-    private RegistryClient registryClient;
+    private RegistryProxy registryProxy;
 
     @Around("@annotation(permission)")
     public Object check(ProceedingJoinPoint joinPoint, RequirePermission permission) throws Throwable {
         String permissionCode = permission.value();
         JwtPrincipal jwtPrincipal = ApplicationContextProvider.getCurrentPrincipal();
-        PermissionDetail permissionDetail = registryClient.getPermission(permissionCode);
+        PermissionDetail permissionDetail = registryProxy.getPermission(permissionCode);
 
         if (permissionDetail == null) {
             throw new ConfException(Errors.PERMISSION_NOT_FOUND

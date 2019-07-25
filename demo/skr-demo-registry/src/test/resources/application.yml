@@ -12,8 +12,6 @@ spring:
         persistence:
           validation:
             mode: none
-  mvc:
-    throw-exception-if-no-handler-found: true
   resources:
     add-mappings: false
   sleuth:
@@ -22,8 +20,7 @@ spring:
     allow-bean-definition-overriding: true
   cloud:
     consul:
-      discovery:
-        enabled: false
+      enabled: false
 
 logging:
   level:

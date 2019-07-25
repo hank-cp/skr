@@ -106,11 +106,12 @@ public final class Errors {
     public static final Errors NOT_AUTHENTICATED            = new Errors(1100, "Account is not authenticated.");
     public static final Errors ACCESS_TOKEN_EXPIRED         = new Errors(1101, "Access token is expired.");
     public static final Errors ACCESS_TOKEN_BROKEN          = new Errors(1102, "Access token is broken.");
-    public static final Errors REFRESH_TOKEN_EXPIRED        = new Errors(1103, "Refresh token is expired.");
-    public static final Errors REFRESH_TOKEN_BROKEN         = new Errors(1104, "Refresh token is broken.");
-    public static final Errors ACCOUNT_NOT_BELONG_TO_ORG    = new Errors(1105, "Account does not belong to org.");
-    public static final Errors USER_DISABLED                = new Errors(1106, "User is disabled.");
-    public static final Errors USER_NEED_APPROVAL           = new Errors(1107, "User need to be approved.");
-    public static final Errors USER_REJECTED                = new Errors(1108, "User joining get rejected.");
-    public static final Errors NOT_SUPPORT_AUTH_PRINCIPAL   = new Errors(1109, "Not support auth principal.");
+    public static final Errors ACCESS_TOKEN_NOT_PROVIDED    = new Errors(1103, "Access token is provided.");
+    public static final Errors REFRESH_TOKEN_EXPIRED        = new Errors(1104, "Refresh token is expired.");
+    public static final Errors REFRESH_TOKEN_BROKEN         = new Errors(1105, "Refresh token is broken.");
+    public static final Errors ACCOUNT_NOT_BELONG_TO_ORG    = new Errors(1106, "Account does not belong to org.");
+    public static final Errors USER_DISABLED                = new Errors(1107, "User is disabled.");
+    public static final Errors USER_NEED_APPROVAL           = new Errors(1108, "User need to be approved.");
+    public static final Errors USER_REJECTED                = new Errors(1109, "User joining get rejected.");
+    public static final Errors NOT_SUPPORT_AUTH_PRINCIPAL   = new Errors(1110, "Not support auth principal.");
 }

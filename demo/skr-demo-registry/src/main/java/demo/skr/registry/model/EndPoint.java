@@ -21,6 +21,8 @@ public class EndPoint extends demo.skr.model.registry.EndPoint {
     @JoinColumn(foreignKey = @ForeignKey(name="none", value = ConstraintMode.NO_CONSTRAINT))
     public Permission permission;
 
+    public boolean enabled;
+
     @Override
     public Realm getRealm() {
         return realm;

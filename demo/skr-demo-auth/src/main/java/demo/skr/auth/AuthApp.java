@@ -1,17 +1,11 @@
 package demo.skr.auth;
 
-import org.hsqldb.util.DatabaseManagerSwing;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-
-import javax.annotation.PostConstruct;
-import javax.sql.DataSource;
+import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 
 @SpringBootApplication(scanBasePackages = "demo.skr")
-@EnableWebSecurity
+@EnableDiscoveryClient
 public class AuthApp {
     public static void main(String[] args) {
         SpringApplication.run(AuthApp.class, args);

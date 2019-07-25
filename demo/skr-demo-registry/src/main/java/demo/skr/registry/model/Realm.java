@@ -8,4 +8,5 @@ import javax.persistence.Entity;
 @NoArgsConstructor
 public class Realm extends demo.skr.model.registry.Realm {
 
+    public boolean enabled;
 }

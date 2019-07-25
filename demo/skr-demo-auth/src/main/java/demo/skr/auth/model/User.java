@@ -39,6 +39,5 @@ public class User extends IdBasedEntity {
         return SimpleJwtPrincipal.of(
                 account.username, permissionBit1, permissionBit2, permissionBit3,
                 nickName, status, null, false, tenent.vipLevel);
-
     }
 }

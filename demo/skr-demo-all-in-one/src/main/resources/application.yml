@@ -1,0 +1,24 @@
+server:
+  port: 8080
+spring:
+  datasource:
+    url: "jdbc:hsqldb:mem:aio;sql.syntax_pgs=true"
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    show-sql: true
+    properties:
+      javax:
+        persistence:
+          validation:
+            mode: none
+  main:
+    allow-bean-definition-overriding: true
+  cloud:
+    consul:
+      discovery:
+        enabled: false
+
+demo:
+  skr:
+    registry-manager: true

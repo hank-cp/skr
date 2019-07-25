@@ -6,7 +6,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 import org.skr.config.ApplicationContextProvider;
-import org.skr.registry.model.Registry;
+import org.skr.registry.Registry;
 
 import java.io.IOException;
 

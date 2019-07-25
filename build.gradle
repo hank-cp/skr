@@ -1,4 +1,3 @@
-
 def checkProperty(String propName) {
     if (!project.hasProperty(propName)) return false
     String prop = project.property(propName)

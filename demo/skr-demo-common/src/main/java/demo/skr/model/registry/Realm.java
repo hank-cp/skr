@@ -2,7 +2,7 @@ package demo.skr.model.registry;
 
 import demo.skr.model.CodeBasedEntity;
 import lombok.Getter;
-import org.skr.registry.model.RealmRegistry;
+import org.skr.registry.RealmRegistry;
 
 import javax.persistence.Column;
 import javax.persistence.MappedSuperclass;

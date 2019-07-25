@@ -7,6 +7,8 @@ import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+
 @Component
 @PropertySource(value = "classpath:security.yml",
         factory = YamlPropertyLoaderFactory.class)
@@ -16,10 +18,13 @@ import org.springframework.stereotype.Component;
 public class SkrSecurityProperties {
 
     /** renew refresh token together every time refresh access token */
-    private boolean renewRefreshToken;
+    private boolean renewRefreshToken = false;
 
     /** principal class name to deserialize the JWT token content */
-    private String jwtPrincipalClazz;
+    private Class jwtPrincipalClass;
+
+    /** URLs no need to go through security checks */
+    private List<String> skipUrls;
 
     /** Token setting for user request */
     private Token accessToken = new Token();
@@ -35,7 +40,7 @@ public class SkrSecurityProperties {
 
     @Data
     public static class Token {
-        private String secret;
+        private String secret = "skr";
 
         /** token expiration time in minutes */
         private long expiration = 0;

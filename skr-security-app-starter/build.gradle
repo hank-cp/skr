@@ -3,4 +3,8 @@ dependencies {
     compile project(':skr-registry-app-starter')
 
     compile "org.springframework.boot:spring-boot-starter-security"
+
+    compile "org.springframework.cloud:spring-cloud-commons"
+    compile "org.springframework.cloud:spring-cloud-context"
+    compile "org.springframework.cloud:spring-cloud-starter-openfeign"
 }

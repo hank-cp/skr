@@ -13,10 +13,6 @@ spring:
             mode: none
   main:
     allow-bean-definition-overriding: true
-  cloud:
-    consul:
-      discovery:
-        enabled: false
 
 logging:
   level:

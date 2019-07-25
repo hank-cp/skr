@@ -1,5 +1,25 @@
+plugins {
+    id 'java-library'
+    id 'maven'
+}
+
+task sourcesJar(type: Jar, dependsOn: classes) {
+    archiveClassifier = 'sources'
+    from sourceSets.main.allSource
+}
+
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    archiveClassifier = 'javadoc'
+    from javadoc.destinationDir
+}
+
+artifacts {
+    archives sourcesJar
+    archives javadocJar
+}
+
+group = 'org.pf4j.spring.boot'
+
 dependencies {
     compile project(':skr-common')
-
-    compile "org.springframework.boot:spring-boot-starter-security"
 }

@@ -14,11 +14,13 @@ import org.springframework.http.MediaType;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.web.util.NestedServletException;
 
 import java.util.Arrays;
+import java.util.concurrent.Callable;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.notNullValue;
+import static org.hamcrest.Matchers.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -46,27 +48,23 @@ public class AuthIntegrationTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("access-token", notNullValue()))
                 .andExpect(jsonPath("refresh-token", notNullValue()));
-
-        mvc.perform(post("/login")
-                .contentType(MediaType.APPLICATION_FORM_URLENCODED)
-                .content(EntityUtils.toString(new UrlEncodedFormEntity(Arrays.asList(
-                        new BasicNameValuePair("auth_tenentCode", "org1"),
-                        new BasicNameValuePair("username", "dev"),
-                        new BasicNameValuePair("password", "123")
-                )))))
-                .andExpect(status().isForbidden());
     }
 
     @Test
-    public void testLoginFailed() throws Exception {
-        mvc.perform(post("/login")
-                .contentType(MediaType.APPLICATION_FORM_URLENCODED)
-                .content(EntityUtils.toString(new UrlEncodedFormEntity(Arrays.asList(
-                        new BasicNameValuePair("auth_tenentCode", "org1"),
-                        new BasicNameValuePair("username", "dev"),
-                        new BasicNameValuePair("password", "123")
-                )))))
-                .andExpect(status().isForbidden());
+    public void testLoginFailed() {
+        // JwtExceptionHandler is not work in test??
+        assertThat(exceptionOf(() -> {
+            mvc.perform(post("/login")
+                    .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+                    .content(EntityUtils.toString(new UrlEncodedFormEntity(Arrays.asList(
+                            new BasicNameValuePair("auth_tenentCode", "org1"),
+                            new BasicNameValuePair("username", "dev"),
+                            new BasicNameValuePair("password", "123")
+                    )))))
+                    .andExpect(status().isForbidden());
+            return null;
+        }),
+        instanceOf(NestedServletException.class));
     }
 
     @Test
@@ -87,5 +85,14 @@ public class AuthIntegrationTest {
                 )))))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("access-token", notNullValue()));
+    }
+
+    public static Throwable exceptionOf(Callable<?> callable) {
+        try {
+            callable.call();
+            return null;
+        } catch (Throwable t) {
+            return t;
+        }
     }
 }

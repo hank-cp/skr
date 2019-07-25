@@ -12,8 +12,8 @@ dependencies {
 // App Properties
 //*************************************************************************
 
-mainClassName = 'org.skr.a.DemoA'
+mainClassName = 'demo.skr.a.DemoA'
 
 manifest {
-    attributes 'Main-Class': 'org.skr.a.DemoA'
+    attributes 'Main-Class': 'demo.skr.a.DemoA'
 }

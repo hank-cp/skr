@@ -1,13 +1,23 @@
-Balabalabala......
+Skr project is a Spring Boot/Cloud project skeleton that define abstraction 
+of security and modular registration, as well as built-in integration.
+Project based on skr skeleton could define its own implementation 
 
-![](docs/Saas_Architecture_v2.png?raw=true)
+## Feature
+* JWT based Security Abstraction
+* Modular Registration Abstraction
 
-## Getting Start
-
-
+## Getting Start with Spring Cloud
+* Install consul
+* Start consul 
+    ```
+    consul agent -dev
+    ```
+* Start 
 ```
 -Dserver.port=8001 -Dtsf_consul_ip=192.168.1.120 -Dtsf_consul_port=8500 -Dtsf_application_id=auth -Dtsf_group_id=skr
 ```
+
+## Getting Start with Spring Boot (all in one monolithic)
 
 ## Auth Service
 
@@ -18,11 +28,9 @@ Balabalabala......
 #### Request/Response
 
 #### Exception
-异常分为4种:
-* 认证鉴权异常
-* 业务逻辑异常
-* Spring异常
-* 未捕获异常
+* [AuthException](skr-common/src/main/java/org/skr/common/exception/AuthException.java)
+* [BizException](skr-common/src/main/java/org/skr/common/exception/BizException.java)
+* [ConfigurationException](skr-common/src/main/java/org/skr/common/exception/ConfException.java)
 
 ## 参考文档
 * [Spring Cloud Feign](https://cloud.spring.io/spring-cloud-netflix/multi/multi_spring-cloud-feign.html)

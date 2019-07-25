@@ -1,0 +1,15 @@
+dependencies {
+    compile(project(':skr-demo-common')) {
+        exclude module: "skr-cloud-spring"
+        exclude module: "skr-cloud-tsf"
+    }
+
+    compile project(':skr-demo-auth')
+    compile project(':skr-demo-registry')
+    compile project(":skr-registry-app-starter")
+    compile project(':skr-security-app-starter')
+
+    runtimeOnly "org.hsqldb:hsqldb"
+    
+    testImplementation "org.springframework.boot:spring-boot-starter-test"
+}

@@ -5,6 +5,7 @@ import com.auth0.jwt.exceptions.TokenExpiredException;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.skr.common.exception.AuthException;
+import org.skr.common.exception.ConfException;
 import org.skr.common.exception.Errors;
 import org.skr.common.util.Checker;
 import org.skr.common.util.JsonUtil;
@@ -48,6 +49,11 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         try {
             String accessToken = request.getHeader(
                     skrSecurityProperties.getAccessToken().getHeader());
+
+            if (Checker.isEmpty(accessToken)) {
+                throw new AuthException(Errors.ACCESS_TOKEN_NOT_PROVIDED);
+            }
+
             Authentication authentication = getAuthentication(accessToken);
             if (!authentication.isAuthenticated()) {
                 throw new AuthException(Errors.AUTHENTICATION_REQUIRED);
@@ -81,35 +87,30 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             throw new AuthException(Errors.AUTHENTICATION_REQUIRED);
         }
 
-        try {
-            if (Checker.isEmpty(skrSecurityProperties.getJwtPrincipalClazz())) {
-                throw new InternalAuthenticationServiceException(
-                        "spring.skr.security.jwtPrincipalClazz is not specified.");
-            }
-
-            Class<?> principalClazz = applicationContext.getClassLoader()
-                    .loadClass(skrSecurityProperties.getJwtPrincipalClazz());
-            return Optional.of(accessToken)
-                    .map(token -> token.replace(prefix, ""))
-                    .map(token -> new Tuple2<>(JwtUtil.decode(token, secret), token))
-                    .map(decodedTuple -> {
-                        JwtPrincipal principal = JsonUtil.fromJSON(principalClazz, decodedTuple._0);
-                        if (Checker.isTrue(principal.isRobot())) {
-                            principal.setApiTrainJwtToken(accessToken);
-                        } else {
-                            principal.setApiTrainJwtToken(
-                                    skrSecurityProperties.getTrainToken().getPrefix() +
-                                            JwtUtil.encode(JsonUtil.toJSON(principal),
-                                                    skrSecurityProperties.getTrainToken().getExpiration(),
-                                                    skrSecurityProperties.getTrainToken().getSecret()));
-                        }
-
-                        return new JwtAuthenticationToken(principal);
-                    })
-                    .orElse(null);
-        } catch (ClassNotFoundException ex) {
-            throw new InternalAuthenticationServiceException(ex.getMessage(), ex);
+        if (skrSecurityProperties.getJwtPrincipalClass() == null) {
+            throw new ConfException(Errors.CLASS_NOT_FOUND
+                    .setMsg("spring.skr.security.jwtPrincipalClass is not specified."));
         }
+
+        return Optional.of(accessToken)
+                .map(token -> token.replace(prefix, ""))
+                .map(token -> new Tuple2<>(JwtUtil.decode(token, secret), token))
+                .map(decodedTuple -> {
+                    JwtPrincipal principal = JsonUtil.fromJSON(
+                            skrSecurityProperties.getJwtPrincipalClass(), decodedTuple._0);
+                    if (Checker.isTrue(principal.isRobot())) {
+                        principal.setApiTrainJwtToken(accessToken);
+                    } else {
+                        principal.setApiTrainJwtToken(
+                                skrSecurityProperties.getTrainToken().getPrefix() +
+                                        JwtUtil.encode(JsonUtil.toJSON(principal),
+                                                skrSecurityProperties.getTrainToken().getExpiration(),
+                                                skrSecurityProperties.getTrainToken().getSecret()));
+                    }
+
+                    return new JwtAuthenticationToken(principal);
+                })
+                .orElse(null);
     }
 
 }
