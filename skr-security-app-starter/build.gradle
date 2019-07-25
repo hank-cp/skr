@@ -1,3 +1,5 @@
+group = 'org.skr.security.app.starter'
+
 dependencies {
     compile project(':skr-common')
     compile project(':skr-registry-app-starter')

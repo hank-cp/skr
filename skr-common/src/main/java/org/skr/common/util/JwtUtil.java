@@ -16,7 +16,7 @@ public class JwtUtil {
      * @param subject content to encode to JWT token
      * @param expiration expiration time in minutes, if 0 never expired.
      * @param secret used to encode token
-     * @return
+     * @return encoded string
      */
     public static String encode(String subject, long expiration, String secret) {
         JWTCreator.Builder builder = JWT.create()
@@ -33,7 +33,7 @@ public class JwtUtil {
      *
      * @param token JWT token to decode
      * @param secret used to decode token
-     * @return
+     * @return decoded content
      */
     public static String decode(String token, String secret) {
         DecodedJWT decoded = JWT.require(HMAC512(secret.getBytes()))

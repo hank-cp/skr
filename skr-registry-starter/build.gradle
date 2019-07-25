@@ -1,3 +1,5 @@
+group = 'org.skr.registry.starter'
+
 dependencies {
     compile project(':skr-common')
 }
