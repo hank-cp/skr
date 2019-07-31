@@ -198,6 +198,8 @@ subprojects {
             archives sourcesJar
             archives javadocJar
         }
+
+        group = 'org.laxture.skr'
     }
 
 }

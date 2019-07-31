@@ -1,5 +1,3 @@
-group = 'org.skr.auth.starter'
-
 dependencies {
     compile project(':skr-common')
 }

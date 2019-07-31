@@ -1,5 +1,3 @@
-group = 'org.skr.cloud.tsf'
-
 def tsfSpringCloudVersion = '1.14.0-Finchley-RELEASE'
 
 dependencies {

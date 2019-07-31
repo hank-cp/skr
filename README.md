@@ -5,6 +5,7 @@ Project based on skr skeleton could define its own implementation
 ## Feature
 * JWT based Security Abstraction
 * Modular Registration Abstraction
+* Spring Boot starter 
 
 ## Getting Start with Spring Cloud
 * Install consul
@@ -25,16 +26,16 @@ Project based on skr skeleton could define its own implementation
 
 ## Convention
 
-#### Request/Response
-
 #### Exception
 * [AuthException](skr-common/src/main/java/org/skr/common/exception/AuthException.java)
 * [BizException](skr-common/src/main/java/org/skr/common/exception/BizException.java)
 * [ConfigurationException](skr-common/src/main/java/org/skr/common/exception/ConfException.java)
 
-## 参考文档
+<!--
+## Reference
 * [Spring Cloud Feign](https://cloud.spring.io/spring-cloud-netflix/multi/multi_spring-cloud-feign.html)
 * [lombok](https://projectlombok.org/features/all)
 * [memcached](https://github.com/memcached/memcached/wiki/Commands)
 * [GraphQL Java](https://www.graphql-java.com/documentation/master/)
 * [Tencent Cloud TSF](https://cloud.tencent.com/document/product/649)
+-->
