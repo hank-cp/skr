@@ -1,11 +1,18 @@
 package org.skr;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.module.SimpleModule;
+import org.skr.common.exception.ErrorInfo;
 import org.skr.common.util.JsonUtil;
 import org.skr.config.ApplicationContextProvider;
+import org.skr.config.GeneralExceptionHandler;
+import org.skr.config.json.CustomDeserializer;
 import org.skr.security.SkrSecurityProperties;
+import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.boot.autoconfigure.jackson.JacksonAutoConfiguration;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.cache.interceptor.KeyGenerator;
 import org.springframework.cache.interceptor.SimpleKey;
@@ -22,7 +29,9 @@ import java.util.stream.Collectors;
 
 @Configuration
 @EnableConfigurationProperties
-@Import({SkrSecurityProperties.class, ApplicationContextProvider.class})
+@Import({SkrSecurityProperties.class,
+        ApplicationContextProvider.class,
+        GeneralExceptionHandler.class})
 public class SkrConfig {
 
     @Bean
@@ -44,23 +53,20 @@ public class SkrConfig {
         };
     }
 
-    //*************************************************************************
-    // Application Startup Listener
-    //*************************************************************************
-
-    @Component
-    public static class ApplicationEventListener implements ApplicationListener<ContextRefreshedEvent> {
+    @Configuration
+    @AutoConfigureAfter(JacksonAutoConfiguration.class)
+    public static class JacksonConfigurer implements InitializingBean {
 
         @Autowired
         private ObjectMapper objectMapper;
 
-        @Autowired
-        private DispatcherServlet dispatcherServlet;
-
+        @SuppressWarnings("Duplicates")
         @Override
-        public void onApplicationEvent(ContextRefreshedEvent event) {
+        public void afterPropertiesSet() {
+            SimpleModule module = new SimpleModule();
             JsonUtil.setupObjectMapper(objectMapper);
-            dispatcherServlet.setThrowExceptionIfNoHandlerFound(true);
+            module.addDeserializer(ErrorInfo.class, new CustomDeserializer<>(ErrorInfo.ErrorInfoImpl.class));
+            objectMapper.registerModule(module);
         }
     }
 

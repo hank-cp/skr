@@ -2,6 +2,7 @@ package org.skr.config;
 
 import lombok.extern.slf4j.Slf4j;
 import org.skr.common.exception.*;
+import org.skr.common.exception.ErrorInfo;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpHeaders;
@@ -27,14 +28,14 @@ public class GeneralExceptionHandler extends ResponseEntityExceptionHandler {
                                                              HttpStatus status,
                                                              WebRequest request) {
         Object standerBody = Optional.ofNullable(body)
-                .orElse(Errors.INTERNAL_SERVER_ERROR.setMsg(ex.getMessage()));
+                .orElse(ErrorInfo.INTERNAL_SERVER_ERROR_INFO.setMsg(ex.getMessage()));
         return super.handleExceptionInternal(ex, standerBody, headers, status, request);
     }
 
     @ExceptionHandler(BizException.class)
     public ResponseEntity<Object> handleException(BizException ex, WebRequest request) {
         return handleExceptionInternal(ex,
-                ex.getErrors(),
+                ex.getErrorInfo(),
                 new HttpHeaders(),
                 HttpStatus.UNPROCESSABLE_ENTITY,
                 request);
@@ -43,7 +44,7 @@ public class GeneralExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(AuthException.class)
     public ResponseEntity<Object> handleException(AuthException ex, WebRequest request) {
         return handleExceptionInternal(ex,
-                ex.getErrors(),
+                ex.getErrorInfo(),
                 new HttpHeaders(),
                 HttpStatus.FORBIDDEN,
                 request);
@@ -52,7 +53,7 @@ public class GeneralExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(UnvarnishedFeignException.class)
     public ResponseEntity<Object> handleException(UnvarnishedFeignException ex, WebRequest request) {
         return handleExceptionInternal(ex,
-                ex.getErrors(),
+                ex.getErrorInfo(),
                 new HttpHeaders(),
                 HttpStatus.valueOf(ex.getResponseStatus()),
                 request);
@@ -62,7 +63,7 @@ public class GeneralExceptionHandler extends ResponseEntityExceptionHandler {
     public ResponseEntity<Object> handleUncaughtException(Exception ex, WebRequest request) {
         log.error(getStackTrace(ex));
         return handleExceptionInternal(ex,
-                Errors.INTERNAL_SERVER_ERROR
+                ErrorInfo.INTERNAL_SERVER_ERROR_INFO
                         .setMsg(ex.getMessage())
                         .setExceptionDetail(BaseException.summaryTopStack(ex)),
                 new HttpHeaders(),

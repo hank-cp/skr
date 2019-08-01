@@ -1,4 +1,4 @@
-package demo.skr;
+package org.skr.config.json;
 
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationContext;
@@ -14,9 +14,9 @@ import java.io.IOException;
  *
  */
 @SuppressWarnings("unchecked")
-public class RegistryDeserializer<T extends Registry> extends StdDeserializer<T> {
+public class CustomDeserializer<T> extends StdDeserializer<T> {
 
-    public RegistryDeserializer(Class<T> t) {
+    public CustomDeserializer(Class<T> t) {
         super(t);
     }
 

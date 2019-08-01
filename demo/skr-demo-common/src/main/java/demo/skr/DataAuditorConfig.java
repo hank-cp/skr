@@ -1,7 +1,7 @@
 package demo.skr;
 
 import org.skr.common.exception.ConfException;
-import org.skr.common.exception.Errors;
+import org.skr.common.exception.ErrorInfo;
 import org.skr.security.JwtPrincipal;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -36,7 +36,7 @@ class DataAuditorConfig {
                 return Optional.of(principal.getUsername());
 
             } else {
-                throw new ConfException(Errors.INTERNAL_SERVER_ERROR);
+                throw new ConfException(ErrorInfo.INTERNAL_SERVER_ERROR_INFO);
             }
         }
     }

@@ -6,13 +6,12 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.skr.common.exception.AuthException;
 import org.skr.common.exception.ConfException;
-import org.skr.common.exception.Errors;
+import org.skr.common.exception.ErrorInfo;
 import org.skr.common.util.Checker;
 import org.skr.common.util.JsonUtil;
 import org.skr.common.util.JwtUtil;
 import org.skr.common.util.tuple.Tuple2;
 import org.springframework.context.ApplicationContext;
-import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -51,21 +50,21 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                     skrSecurityProperties.getAccessToken().getHeader());
 
             if (Checker.isEmpty(accessToken)) {
-                throw new AuthException(Errors.ACCESS_TOKEN_NOT_PROVIDED);
+                throw new AuthException(ErrorInfo.ACCESS_TOKEN_NOT_PROVIDED);
             }
 
             Authentication authentication = getAuthentication(accessToken);
             if (!authentication.isAuthenticated()) {
-                throw new AuthException(Errors.AUTHENTICATION_REQUIRED);
+                throw new AuthException(ErrorInfo.AUTHENTICATION_REQUIRED);
             }
             SecurityContextHolder.getContext().setAuthentication(authentication);
         } catch (TokenExpiredException ex) {
-            throw new AuthException(Errors.ACCESS_TOKEN_EXPIRED);
+            throw new AuthException(ErrorInfo.ACCESS_TOKEN_EXPIRED);
         } catch (JWTVerificationException ex) {
-            throw new AuthException(Errors.ACCESS_TOKEN_BROKEN);
+            throw new AuthException(ErrorInfo.ACCESS_TOKEN_BROKEN);
         } catch (Exception ex) {
             log.error(ExceptionUtils.getStackTrace(ex));
-            throw new AuthException(Errors.AUTHENTICATION_REQUIRED);
+            throw new AuthException(ErrorInfo.AUTHENTICATION_REQUIRED);
         }
 
         filterChain.doFilter(request, response);
@@ -84,11 +83,11 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             prefix = skrSecurityProperties.getTrainToken().getPrefix();
             secret = skrSecurityProperties.getTrainToken().getSecret();
         } else {
-            throw new AuthException(Errors.AUTHENTICATION_REQUIRED);
+            throw new AuthException(ErrorInfo.AUTHENTICATION_REQUIRED);
         }
 
         if (skrSecurityProperties.getJwtPrincipalClass() == null) {
-            throw new ConfException(Errors.CLASS_NOT_FOUND
+            throw new ConfException(ErrorInfo.CLASS_NOT_FOUND
                     .setMsg("spring.skr.security.jwtPrincipalClass is not specified."));
         }
 

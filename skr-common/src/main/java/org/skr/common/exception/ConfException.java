@@ -4,21 +4,21 @@ import javax.validation.constraints.NotNull;
 
 public class ConfException extends BaseException {
 
-    private Errors errors;
+    private ErrorInfo errorInfo;
 
-    public ConfException(@NotNull Errors errors) {
-        super(errors.msg);
-        this.errors = errors;
+    public ConfException(@NotNull ErrorInfo errorInfo) {
+        super(errorInfo.getMsg());
+        this.errorInfo = errorInfo;
     }
 
-    public ConfException(@NotNull Errors errors, Throwable e) {
-        super(errors.msg + ": " + e.getMessage(), e);
-        this.errors = errors;
+    public ConfException(@NotNull ErrorInfo errorInfo, Throwable e) {
+        super(errorInfo.getMsg() + ": " + e.getMessage(), e);
+        this.errorInfo = errorInfo;
     }
 
     @Override
-    public Errors getErrors() {
-        return errors;
+    public ErrorInfo getErrorInfo() {
+        return errorInfo;
     }
 }
 

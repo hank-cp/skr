@@ -8,7 +8,7 @@ import demo.skr.registry.repository.PermissionRepository;
 import demo.skr.registry.repository.RealmRepository;
 import org.skr.common.exception.BizException;
 import org.skr.common.exception.ConfException;
-import org.skr.common.exception.Errors;
+import org.skr.common.exception.ErrorInfo;
 import org.skr.common.util.BeanUtil;
 import org.skr.common.util.Checker;
 import org.skr.common.util.tuple.Tuple3;
@@ -141,7 +141,7 @@ public class RegistryServiceImpl implements
             return permission;
         } else {
             if (!Objects.equals(existed.getRealm().getCode(), realm.code)) {
-                throw new BizException(Errors.REGISTRATION_ERROR.setMsg(
+                throw new BizException(ErrorInfo.REGISTRATION_ERROR.setMsg(
                         "Permission %s is registered to %s",
                         existed.code, existed.getRealm().getCode()));
             }
@@ -156,7 +156,7 @@ public class RegistryServiceImpl implements
         Permission permission = getPermission(permissionCode);
         if (permission == null) return;
         if (permission.enabled) {
-            throw new ConfException(Errors.REGISTRATION_ERROR.setMsg(
+            throw new ConfException(ErrorInfo.REGISTRATION_ERROR.setMsg(
                     "Permission %s is enabled in realm %s. You have to re-register this" +
                             "realm excluding this permission to disable it."));
         }
@@ -177,7 +177,7 @@ public class RegistryServiceImpl implements
             return endPoint;
         } else {
             if (!Objects.equals(existed.getRealm().getCode(), realm.code)) {
-                throw new BizException(Errors.REGISTRATION_ERROR.setMsg(
+                throw new BizException(ErrorInfo.REGISTRATION_ERROR.setMsg(
                         "EndPoint %s has been registered to %s",
                         endPoint.getUrl(), existed.getRealm().getCode()));
             }

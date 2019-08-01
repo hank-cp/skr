@@ -7,7 +7,7 @@ import org.skr.common.util.Checker;
 
 public class UnvarnishedFeignException extends BaseException {
 
-    private Errors errors;
+    private ErrorInfo errorInfo;
     private int responseStatus;
 
     private UnvarnishedFeignException() {}
@@ -22,24 +22,24 @@ public class UnvarnishedFeignException extends BaseException {
 
     public static UnvarnishedFeignException build(String methodKey, Response response) {
         int responseStatus = response.status();
-        Errors errors = null;
+        ErrorInfo errorInfo = null;
         UnvarnishedFeignException exception;
         try {
             if (response.body() != null) {
                 String errorJson = Util.toString(response.body().asReader());
-                errors = JsonUtil.fromJSON(Errors.class, errorJson);
-                if (Checker.isEmpty(errors.failedRpc)) {
+                errorInfo = JsonUtil.fromJSON(ErrorInfo.class, errorJson);
+                if (Checker.isEmpty(errorInfo.getFailedRpc())) {
                     // take methodKey if it hasn't not set in Exception handling chain.
-                    errors.failedRpc = methodKey;
+                    errorInfo.setFailedRpc(methodKey);
                 }
             }
-            exception = new UnvarnishedFeignException(errors.msg);
+            exception = new UnvarnishedFeignException(errorInfo.getMsg());
         } catch (Exception ex) {
-            errors = Errors.INTERNAL_SERVER_ERROR.setMsg(ex.getMessage());
-            exception = new UnvarnishedFeignException(errors.msg, ex);
+            errorInfo = ErrorInfo.INTERNAL_SERVER_ERROR_INFO.setMsg(ex.getMessage());
+            exception = new UnvarnishedFeignException(errorInfo.getMsg(), ex);
         }
         exception.responseStatus = responseStatus;
-        exception.errors = errors;
+        exception.errorInfo = errorInfo;
         return exception;
     }
 
@@ -48,8 +48,8 @@ public class UnvarnishedFeignException extends BaseException {
     }
 
     @Override
-    public Errors getErrors() {
-        return errors;
+    public ErrorInfo getErrorInfo() {
+        return errorInfo;
     }
 }
 

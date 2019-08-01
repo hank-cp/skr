@@ -1,7 +1,7 @@
 package org.skr.common.util;
 
 import org.joda.time.DateTime;
-import org.skr.common.exception.Errors;
+import org.skr.common.exception.ErrorInfo;
 
 import javax.validation.ConstraintViolation;
 import java.io.File;
@@ -113,13 +113,13 @@ public final class Checker {
         return bool != null && bool.isPresent() && bool.get();
     }
 
-    public static <T> List<Errors> convertViolationsToErrors(Set<ConstraintViolation<T>> violations) {
+    public static <T> List<ErrorInfo> convertViolationsToErrorInfo(Set<ConstraintViolation<T>> violations) {
         if (Checker.isEmpty(violations)) return new ArrayList<>();
         return violations.stream().map(
-                violation -> Errors.INVALID_SUBMITTED_DATA
+                violation -> ErrorInfo.INVALID_SUBMITTED_DATA
                         .setPath(violation.getPropertyPath().toString())
                         .setMsg(violation.getMessage())
-                        .setLevel(Errors.ErrorLevel.ERROR)
+                        .setLevel(ErrorInfo.ErrorLevel.ERROR)
         ).collect(Collectors.toList());
     }
 }

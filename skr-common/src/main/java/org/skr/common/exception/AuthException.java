@@ -4,20 +4,20 @@ import org.springframework.security.core.AuthenticationException;
 
 public class AuthException extends AuthenticationException {
 
-    private Errors errors;
+    private ErrorInfo errorInfo;
 
-    public AuthException(Errors errors) {
-        super(errors.msg);
-        this.errors = errors;
+    public AuthException(ErrorInfo errorInfo) {
+        super(errorInfo.getMsg());
+        this.errorInfo = errorInfo;
     }
 
-    public AuthException(Errors errors, Throwable e) {
-        super(errors.msg + ": " + e.getMessage(), e);
-        this.errors = errors;
+    public AuthException(ErrorInfo errorInfo, Throwable e) {
+        super(errorInfo.getMsg() + ": " + e.getMessage(), e);
+        this.errorInfo = errorInfo;
     }
 
-    public Errors getErrors() {
-        return errors;
+    public ErrorInfo getErrorInfo() {
+        return errorInfo;
     }
 }
 

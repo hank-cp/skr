@@ -4,7 +4,7 @@ import demo.skr.SimpleJwtPrincipal;
 import demo.skr.model.CodeBasedEntity;
 import lombok.Getter;
 import org.skr.common.exception.ConfException;
-import org.skr.common.exception.Errors;
+import org.skr.common.exception.ErrorInfo;
 import org.skr.registry.PermissionRegistry;
 import org.skr.registry.RealmRegistry;
 import org.skr.security.JwtPrincipal;
@@ -66,7 +66,7 @@ public class Permission extends CodeBasedEntity implements PermissionRegistry {
         if (principal instanceof SimpleJwtPrincipal) {
             jwtPrincipal = (SimpleJwtPrincipal) principal;
         } else {
-            throw new ConfException(Errors.NOT_SUPPORT_AUTH_PRINCIPAL
+            throw new ConfException(ErrorInfo.NOT_SUPPORT_AUTH_PRINCIPAL
                     .setMsg("Not support auth principal %s", principal.getClass().getName()));
         }
         boolean granted = (jwtPrincipal.getPermissionBit1() & bit1) != 0

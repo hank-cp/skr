@@ -4,7 +4,7 @@ import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.exceptions.TokenExpiredException;
 import org.skr.auth.service.JwtPrincipalProvider;
 import org.skr.common.exception.AuthException;
-import org.skr.common.exception.Errors;
+import org.skr.common.exception.ErrorInfo;
 import org.skr.common.util.JsonUtil;
 import org.skr.common.util.JwtUtil;
 import org.skr.security.JwtPrincipal;
@@ -50,10 +50,10 @@ public class AuthController {
             auth = authenticationManager
                     .authenticate(new UsernamePasswordAuthenticationToken(username, password));
         } catch (BadCredentialsException ex) {
-            throw new AuthException(Errors.NOT_AUTHENTICATED);
+            throw new AuthException(ErrorInfo.NOT_AUTHENTICATED);
         }
         if (!auth.isAuthenticated()) {
-            throw new AuthException(Errors.NOT_AUTHENTICATED);
+            throw new AuthException(ErrorInfo.NOT_AUTHENTICATED);
         }
 
         JwtPrincipal principal = jwtPrincipalProvider.loadJwtPrincipal(
@@ -87,15 +87,15 @@ public class AuthController {
                     .map(token -> JwtUtil.decode(token, refreshSecret))
                     .orElse(null);
         } catch (TokenExpiredException ex) {
-            throw new AuthException(Errors.REFRESH_TOKEN_EXPIRED);
+            throw new AuthException(ErrorInfo.REFRESH_TOKEN_EXPIRED);
         } catch (JWTVerificationException ex) {
-            throw new AuthException(Errors.REFRESH_TOKEN_BROKEN);
+            throw new AuthException(ErrorInfo.REFRESH_TOKEN_BROKEN);
         } catch (Exception ex) {
-            throw new AuthException(Errors.AUTHENTICATION_REQUIRED);
+            throw new AuthException(ErrorInfo.AUTHENTICATION_REQUIRED);
         }
 
         if (username == null) {
-            throw new AuthException(Errors.AUTHENTICATION_REQUIRED);
+            throw new AuthException(ErrorInfo.AUTHENTICATION_REQUIRED);
         }
 
         JwtPrincipal principal = jwtPrincipalProvider.loadJwtPrincipal(

@@ -2,7 +2,7 @@ package demo.skr.registry;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
-import demo.skr.RegistryDeserializer;
+import org.skr.config.json.CustomDeserializer;
 import demo.skr.registry.model.Realm;
 import demo.skr.registry.model.EndPoint;
 import demo.skr.registry.model.Permission;
@@ -33,7 +33,7 @@ public class RegistryApp implements Constants {
 
     @Configuration
     @AutoConfigureAfter(JacksonAutoConfiguration.class)
-    public static class OnStartUpListener implements InitializingBean {
+    public static class JacksonConfigure implements InitializingBean {
 
         @Autowired
         private ObjectMapper objectMapper;
@@ -42,9 +42,9 @@ public class RegistryApp implements Constants {
         @Override
         public void afterPropertiesSet() {
             SimpleModule module = new SimpleModule();
-            module.addDeserializer(RealmRegistry.class, new RegistryDeserializer<>(Realm.class));
-            module.addDeserializer(PermissionRegistry.class, new RegistryDeserializer<>(Permission.class));
-            module.addDeserializer(EndPointRegistry.class, new RegistryDeserializer<>(EndPoint.class));
+            module.addDeserializer(RealmRegistry.class, new CustomDeserializer<>(Realm.class));
+            module.addDeserializer(PermissionRegistry.class, new CustomDeserializer<>(Permission.class));
+            module.addDeserializer(EndPointRegistry.class, new CustomDeserializer<>(EndPoint.class));
             objectMapper.registerModule(module);
         }
     }

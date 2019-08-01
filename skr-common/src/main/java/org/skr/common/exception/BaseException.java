@@ -25,8 +25,8 @@ public abstract class BaseException extends RuntimeException {
         super(message, cause);
     }
 
-    public Errors getErrors() {
-        return Errors.INTERNAL_SERVER_ERROR;
+    public ErrorInfo getErrorInfo() {
+        return ErrorInfo.INTERNAL_SERVER_ERROR_INFO;
     }
 
     public String getSource() {

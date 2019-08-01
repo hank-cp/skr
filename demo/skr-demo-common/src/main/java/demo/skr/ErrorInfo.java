@@ -15,15 +15,13 @@
  */
 package demo.skr;
 
-import org.skr.common.exception.Errors;
-
 /**
  * @author <a href="https://github.com/hank-cp">Hank CP</a>
  */
-public class DemoErrors {
+public interface ErrorInfo extends org.skr.common.exception.ErrorInfo {
 
-    public static final Errors ACCOUNT_NOT_BELONG_TO_ORG    = new Errors(1106, "Account does not belong to org.");
-    public static final Errors USER_DISABLED                = new Errors(1107, "User is disabled.");
-    public static final Errors USER_NEED_APPROVAL           = new Errors(1108, "User need to be approved.");
-    public static final Errors USER_REJECTED                = new Errors(1109, "User joining get rejected.");
+    org.skr.common.exception.ErrorInfo ACCOUNT_NOT_BELONG_TO_ORG    = new ErrorInfoImpl(1107, "Account does not belong to org.");
+    org.skr.common.exception.ErrorInfo USER_DISABLED                = new ErrorInfoImpl(1108, "User is disabled.");
+    org.skr.common.exception.ErrorInfo USER_NEED_APPROVAL           = new ErrorInfoImpl(1109, "User need to be approved.");
+    org.skr.common.exception.ErrorInfo USER_REJECTED                = new ErrorInfoImpl(1110, "User joining get rejected.");
 }
