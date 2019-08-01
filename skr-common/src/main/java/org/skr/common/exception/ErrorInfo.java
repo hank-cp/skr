@@ -119,7 +119,7 @@ public interface ErrorInfo {
     //*************************************************************************
 
     ErrorInfo OK = new ErrorInfoImpl(0, null);
-    ErrorInfo INTERNAL_SERVER_ERROR_INFO = new ErrorInfoImpl(1001, "Internal server error.");
+    ErrorInfo INTERNAL_SERVER_ERROR    = new ErrorInfoImpl(1001, "Internal server error.");
     ErrorInfo ENTITY_NOT_FOUND         = new ErrorInfoImpl(1002, "Entity not found.").setLevel(ErrorLevel.ERROR);
     ErrorInfo DELETION_RESTRICTED      = new ErrorInfoImpl(1003, "Deletion restricted.").setLevel(ErrorLevel.ERROR);
     ErrorInfo INVALID_SUBMITTED_DATA   = new ErrorInfoImpl(1004, "Invalid submitted data.").setLevel(ErrorLevel.ERROR);

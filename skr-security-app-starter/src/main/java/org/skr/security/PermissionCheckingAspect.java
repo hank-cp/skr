@@ -37,7 +37,7 @@ public class PermissionCheckingAspect {
             case PERMISSION_LIMITATION:
                 throw new AuthException(ErrorInfo.PERMISSION_LIMITED);
             default:
-                throw new ConfException(ErrorInfo.INTERNAL_SERVER_ERROR_INFO);
+                throw new ConfException(ErrorInfo.INTERNAL_SERVER_ERROR);
         }
     }
 }

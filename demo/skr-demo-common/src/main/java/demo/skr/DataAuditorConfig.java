@@ -36,7 +36,7 @@ class DataAuditorConfig {
                 return Optional.of(principal.getUsername());
 
             } else {
-                throw new ConfException(ErrorInfo.INTERNAL_SERVER_ERROR_INFO);
+                throw new ConfException(ErrorInfo.INTERNAL_SERVER_ERROR);
             }
         }
     }

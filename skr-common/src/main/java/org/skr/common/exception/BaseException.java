@@ -26,7 +26,7 @@ public abstract class BaseException extends RuntimeException {
     }
 
     public ErrorInfo getErrorInfo() {
-        return ErrorInfo.INTERNAL_SERVER_ERROR_INFO;
+        return ErrorInfo.INTERNAL_SERVER_ERROR;
     }
 
     public String getSource() {

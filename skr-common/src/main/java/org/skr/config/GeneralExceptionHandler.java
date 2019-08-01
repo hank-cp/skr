@@ -28,7 +28,7 @@ public class GeneralExceptionHandler extends ResponseEntityExceptionHandler {
                                                              HttpStatus status,
                                                              WebRequest request) {
         Object standerBody = Optional.ofNullable(body)
-                .orElse(ErrorInfo.INTERNAL_SERVER_ERROR_INFO.setMsg(ex.getMessage()));
+                .orElse(ErrorInfo.INTERNAL_SERVER_ERROR.setMsg(ex.getMessage()));
         return super.handleExceptionInternal(ex, standerBody, headers, status, request);
     }
 
@@ -63,7 +63,7 @@ public class GeneralExceptionHandler extends ResponseEntityExceptionHandler {
     public ResponseEntity<Object> handleUncaughtException(Exception ex, WebRequest request) {
         log.error(getStackTrace(ex));
         return handleExceptionInternal(ex,
-                ErrorInfo.INTERNAL_SERVER_ERROR_INFO
+                ErrorInfo.INTERNAL_SERVER_ERROR
                         .setMsg(ex.getMessage())
                         .setExceptionDetail(BaseException.summaryTopStack(ex)),
                 new HttpHeaders(),

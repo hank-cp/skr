@@ -35,7 +35,7 @@ public class UnvarnishedFeignException extends BaseException {
             }
             exception = new UnvarnishedFeignException(errorInfo.getMsg());
         } catch (Exception ex) {
-            errorInfo = ErrorInfo.INTERNAL_SERVER_ERROR_INFO.setMsg(ex.getMessage());
+            errorInfo = ErrorInfo.INTERNAL_SERVER_ERROR.setMsg(ex.getMessage());
             exception = new UnvarnishedFeignException(errorInfo.getMsg(), ex);
         }
         exception.responseStatus = responseStatus;
