@@ -14,6 +14,10 @@ def isApplicationProject(String projectName) {
         && projectName != 'skr-demo-common'
 }
 
+def isLibraryProject(String projectName) {
+    return !projectName.startsWith('skr-demo')
+}
+
 buildscript {
     ext.springBootVersion = '2.1.6.RELEASE'
     ext.springCloudVersion = 'Greenwich.RELEASE'
@@ -178,7 +182,7 @@ subprojects {
 
         applicationDistribution.exclude('**/spring-boot-devtools*.jar')
 
-    } else {
+    } else if (isLibraryProject(name)) {
 
 //*************************************************************************
 // Maven

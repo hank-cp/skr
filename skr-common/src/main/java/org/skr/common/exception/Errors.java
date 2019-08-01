@@ -7,7 +7,7 @@ import org.skr.config.json.StringValuedEnum;
 
 import java.util.Objects;
 
-public final class Errors {
+public class Errors {
 
     public enum ErrorLevel implements StringValuedEnum {
         WARNING("warn"), // client should prompt user with warning message
@@ -89,19 +89,18 @@ public final class Errors {
 
     public static final Errors OK = new Errors(0, null);
     public static final Errors INTERNAL_SERVER_ERROR    = new Errors(1001, "Internal server error.");
-    public static final Errors ENTITY_NOT_FOUND         = new Errors(1002, "Entity not found.");
-    public static final Errors DELETION_RESTRICTED      = new Errors(1003, "Deletion restricted.");
-    public static final Errors INVALID_SUBMITTED_DATA   = new Errors(1004, "Invalid submitted data.");
+    public static final Errors ENTITY_NOT_FOUND         = new Errors(1002, "Entity not found.").setLevel(ErrorLevel.ERROR);
+    public static final Errors DELETION_RESTRICTED      = new Errors(1003, "Deletion restricted.").setLevel(ErrorLevel.ERROR);
+    public static final Errors INVALID_SUBMITTED_DATA   = new Errors(1004, "Invalid submitted data.").setLevel(ErrorLevel.ERROR);
     public static final Errors INVALID_SERVER_DATA      = new Errors(1005, "Invalid server data.");
     public static final Errors SAVE_DATA_FAILED         = new Errors(1006, "Save data failed.");
-    public static final Errors DUPLICATED_ENTITY        = new Errors(1007, "Duplicated entity.");
-    public static final Errors AUTHENTICATION_REQUIRED  = new Errors(1008, "Authentication required.");
-    public static final Errors PERMISSION_DENIED        = new Errors(1009, "Permission Denied.");
-    public static final Errors PERMISSION_LIMITED       = new Errors(1010, "Vip Level is not satisfied.");
+    public static final Errors DUPLICATED_ENTITY        = new Errors(1007, "Duplicated entity.").setLevel(ErrorLevel.ERROR);
+    public static final Errors AUTHENTICATION_REQUIRED  = new Errors(1008, "Authentication required.").setLevel(ErrorLevel.ERROR);
+    public static final Errors PERMISSION_DENIED        = new Errors(1009, "Permission Denied.").setLevel(ErrorLevel.ERROR);
+    public static final Errors PERMISSION_LIMITED       = new Errors(1010, "Vip Level is not satisfied.").setLevel(ErrorLevel.ERROR);
     public static final Errors PERMISSION_NOT_FOUND     = new Errors(1010, "Permission not found.");
-    public static final Errors MODEL_DEFINITION_ERROR   = new Errors(1011, "Model definition error.");
-    public static final Errors REGISTRATION_ERROR       = new Errors(1012, "Registration error.");
-    public static final Errors CLASS_NOT_FOUND          = new Errors(1003, "Class not found.");
+    public static final Errors REGISTRATION_ERROR       = new Errors(1011, "Registration error.");
+    public static final Errors CLASS_NOT_FOUND          = new Errors(1012, "Class not found.");
 
     public static final Errors NOT_AUTHENTICATED            = new Errors(1100, "Account is not authenticated.");
     public static final Errors ACCESS_TOKEN_EXPIRED         = new Errors(1101, "Access token is expired.");

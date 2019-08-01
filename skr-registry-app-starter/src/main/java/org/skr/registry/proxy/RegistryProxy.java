@@ -43,4 +43,8 @@ public interface RegistryProxy {
 	@PostMapping("/registry/realm/unregister/{realmCode}")
 	void unregisterRealm(@PathVariable(name = "realmCode") String realmCode);
 
+	/** Revoke a disabled permission in order to reuse permissionCode. */
+	@PostMapping("/permission/{permissionCode}/revoke")
+	void revokePermission(@PathVariable(name = "permissionCode") String permissionCode);
+
 }

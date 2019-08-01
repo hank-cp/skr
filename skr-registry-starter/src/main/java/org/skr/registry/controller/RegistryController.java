@@ -70,4 +70,11 @@ public class RegistryController {
         registryService.unregisterRealm(realm);
     }
 
+    /** Revoke a disabled permission in order to reuse permissionCode. */
+    @PostMapping("/permission/{permissionCode}/revoke")
+    @Transactional
+    public void revokePermission(@PathVariable String permissionCode) {
+        registryService.revokePermission(permissionCode);
+    }
+
 }

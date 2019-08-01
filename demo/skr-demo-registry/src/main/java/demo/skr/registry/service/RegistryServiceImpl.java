@@ -7,6 +7,7 @@ import demo.skr.registry.repository.EndPointRepository;
 import demo.skr.registry.repository.PermissionRepository;
 import demo.skr.registry.repository.RealmRepository;
 import org.skr.common.exception.BizException;
+import org.skr.common.exception.ConfException;
 import org.skr.common.exception.Errors;
 import org.skr.common.util.BeanUtil;
 import org.skr.common.util.Checker;
@@ -148,6 +149,18 @@ public class RegistryServiceImpl implements
             permissionRepository.save(existed);
             return existed;
         }
+    }
+
+    @Override
+    public void revokePermission(String permissionCode) {
+        Permission permission = getPermission(permissionCode);
+        if (permission == null) return;
+        if (permission.enabled) {
+            throw new ConfException(Errors.REGISTRATION_ERROR.setMsg(
+                    "Permission %s is enabled in realm %s. You have to re-register this" +
+                            "realm excluding this permission to disable it."));
+        }
+        permissionRepository.delete(permission);
     }
 
     @Transactional

@@ -25,6 +25,9 @@ public interface RegistryService<
 
     void unregisterRealm(Realm realm);
 
+    /** Revoke a disabled permission in order to reuse permissionCode. */
+    void revokePermission(String permissionCode);
+
     List<Permission> listPermissions(Realm realm);
 
     Permission getPermission(String permissionCode);

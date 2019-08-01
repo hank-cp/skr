@@ -10,6 +10,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.skr.common.exception.BizException;
+import org.skr.common.exception.ConfException;
 import org.skr.common.util.tuple.Tuple3;
 import org.skr.registry.SiteEntry;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -144,6 +145,30 @@ public class RegistryIntegrationTest {
 
     @Test
     @Transactional
+    public void testRevokePermission() {
+        Permission permission = new Permission();
+        permission.realm = testRealm;
+        permission.code = "test";
+        permission.name = "test";
+        registryService.registerPermission(testRealm, permission);
+        assertThat(permission.bit1, equalTo(1L));
+        assertThat(permission.bit2, equalTo(1L));
+        assertThat(permission.bit3, equalTo(1L));
+        assertThat(registryService.listPermissions(testRealm), hasSize(1));
+
+        // deletion failed because permission is enabled.
+        assertThat(exceptionOf(() -> registryService.revokePermission("test")),
+                instanceOf(ConfException.class));
+
+        // set disabled and delete again
+        permission.enabled = false;
+        permissionRepository.save(permission);
+        registryService.revokePermission("test");
+        assertThat(registryService.getPermission("test"), nullValue());
+    }
+
+    @Test
+    @Transactional
     public void testBuildSiteMap() {
         // 1
         //   -- a
@@ -188,6 +213,15 @@ public class RegistryIntegrationTest {
     public static Throwable exceptionOf(Callable<?> callable) {
         try {
             callable.call();
+            return null;
+        } catch (Throwable t) {
+            return t;
+        }
+    }
+
+    public static Throwable exceptionOf(Runnable runnable) {
+        try {
+            runnable.run();
             return null;
         } catch (Throwable t) {
             return t;

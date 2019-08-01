@@ -58,4 +58,9 @@ public class RegistryLocalProxy implements RegistryProxy {
         RealmRegistry realm = getRealm(realmCode);
         registryService.unregisterRealm(realm);
     }
+
+    @Override
+    public void revokePermission(String permissionCode) {
+        registryService.revokePermission(permissionCode);
+    }
 }
