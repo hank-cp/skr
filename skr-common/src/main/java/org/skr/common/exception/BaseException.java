@@ -21,6 +21,8 @@ import java.util.stream.Collectors;
 
 /**
  * The super class for exceptions
+ *
+ * @author <a href="https://github.com/hank-cp">Hank CP</a>
  */
 public abstract class BaseException extends RuntimeException {
 

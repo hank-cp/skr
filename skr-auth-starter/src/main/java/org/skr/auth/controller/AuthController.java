@@ -42,6 +42,9 @@ import java.util.Optional;
 
 import static org.skr.common.util.CollectionUtils.*;
 
+/**
+ * @author <a href="https://github.com/hank-cp">Hank CP</a>
+ */
 @RestController
 public class AuthController {
 

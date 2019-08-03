@@ -27,6 +27,9 @@ import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 import javax.validation.Validator;
 import java.util.Optional;
 
+/**
+ * @author <a href="https://github.com/hank-cp">Hank CP</a>
+ */
 @Component
 public class ApplicationContextProvider implements ApplicationContextAware {
 

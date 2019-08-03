@@ -19,6 +19,9 @@ import org.skr.security.JwtPrincipal;
 
 import java.util.Map;
 
+/**
+ * @author <a href="https://github.com/hank-cp">Hank CP</a>
+ */
 public interface JwtPrincipalProvider {
 
     JwtPrincipal loadJwtPrincipal(String username, Map<String, Object> params);

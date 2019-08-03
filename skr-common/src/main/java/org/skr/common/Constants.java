@@ -15,6 +15,9 @@
  */
 package org.skr.common;
 
+/**
+ * @author <a href="https://github.com/hank-cp">Hank CP</a>
+ */
 public interface Constants {
 
     byte ENABLED = 0;

@@ -23,6 +23,8 @@ import java.io.IOException;
 
 /**
  * JSON Serialization for String value Enum
+ *
+ * @author <a href="https://github.com/hank-cp">Hank CP</a>
  */
 public class StringValuedEnumSerializer extends StdSerializer<StringValuedEnum> {
 

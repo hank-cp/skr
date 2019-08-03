@@ -15,6 +15,9 @@
  */
 package org.skr.config.json;
 
+/**
+ * @author <a href="https://github.com/hank-cp">Hank CP</a>
+ */
 public interface IntValuedEnum {
 
     int value();

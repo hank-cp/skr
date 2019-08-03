@@ -17,6 +17,8 @@ package org.skr.common.util.tuple;
 
 /**
  * Scala style Tuple for Java
+ *
+ * @author <a href="https://github.com/hank-cp">Hank CP</a>
  */
 public class Tuple4<T0, T1, T2, T3> {
 

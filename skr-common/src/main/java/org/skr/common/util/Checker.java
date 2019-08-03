@@ -23,6 +23,9 @@ import java.io.File;
 import java.util.*;
 import java.util.stream.Collectors;
 
+/**
+ * @author <a href="https://github.com/hank-cp">Hank CP</a>
+ */
 public final class Checker {
 
     private Checker() {}

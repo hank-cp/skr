@@ -17,7 +17,6 @@ package org.skr.config;
 
 import lombok.extern.slf4j.Slf4j;
 import org.skr.common.exception.*;
-import org.skr.common.exception.ErrorInfo;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpHeaders;
@@ -32,6 +31,9 @@ import java.util.Optional;
 
 import static org.apache.commons.lang3.exception.ExceptionUtils.getStackTrace;
 
+/**
+ * @author <a href="https://github.com/hank-cp">Hank CP</a>
+ */
 @Order(Ordered.HIGHEST_PRECEDENCE)
 @ControllerAdvice
 @Slf4j

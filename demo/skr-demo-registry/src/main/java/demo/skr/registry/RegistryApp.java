@@ -2,14 +2,14 @@ package demo.skr.registry;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
-import org.skr.config.json.CustomDeserializer;
-import demo.skr.registry.model.Realm;
 import demo.skr.registry.model.EndPoint;
 import demo.skr.registry.model.Permission;
+import demo.skr.registry.model.Realm;
 import org.skr.common.Constants;
-import org.skr.registry.RealmRegistry;
+import org.skr.config.json.CustomDeserializer;
 import org.skr.registry.EndPointRegistry;
 import org.skr.registry.PermissionRegistry;
+import org.skr.registry.RealmRegistry;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
@@ -19,6 +19,9 @@ import org.springframework.boot.autoconfigure.jackson.JacksonAutoConfiguration;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.context.annotation.Configuration;
 
+/**
+ * @author <a href="https://github.com/hank-cp">Hank CP</a>
+ */
 @SpringBootApplication(scanBasePackages = "demo.skr")
 @EnableDiscoveryClient
 public class RegistryApp implements Constants {

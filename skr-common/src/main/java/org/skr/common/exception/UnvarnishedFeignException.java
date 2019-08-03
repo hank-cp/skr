@@ -17,9 +17,12 @@ package org.skr.common.exception;
 
 import feign.Response;
 import feign.Util;
-import org.skr.common.util.JsonUtil;
 import org.skr.common.util.Checker;
+import org.skr.common.util.JsonUtil;
 
+/**
+ * @author <a href="https://github.com/hank-cp">Hank CP</a>
+ */
 public class UnvarnishedFeignException extends BaseException {
 
     private ErrorInfo errorInfo;

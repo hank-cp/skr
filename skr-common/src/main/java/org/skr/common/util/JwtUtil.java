@@ -23,6 +23,9 @@ import java.util.Date;
 
 import static com.auth0.jwt.algorithms.Algorithm.HMAC512;
 
+/**
+ * @author <a href="https://github.com/hank-cp">Hank CP</a>
+ */
 public class JwtUtil {
 
     /**

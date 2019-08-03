@@ -22,7 +22,6 @@ import org.springframework.context.annotation.Import;
 /**
  * @author <a href="https://github.com/hank-cp">Hank CP</a>
  */
-
 @Configuration
 @Import(RegistryController.class)
 public class    RegistryConfiguration {

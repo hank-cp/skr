@@ -17,6 +17,9 @@ package org.skr.common.exception;
 
 import javax.validation.constraints.NotNull;
 
+/**
+ * @author <a href="https://github.com/hank-cp">Hank CP</a>
+ */
 public class BizException extends BaseException {
 
     private ErrorInfo errorInfo;

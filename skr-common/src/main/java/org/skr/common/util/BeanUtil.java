@@ -22,6 +22,9 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.Collection;
 
+/**
+ * @author <a href="https://github.com/hank-cp">Hank CP</a>
+ */
 public class BeanUtil {
 
     /**

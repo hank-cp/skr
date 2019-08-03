@@ -24,6 +24,9 @@ import org.springframework.core.io.support.PropertySourceFactory;
 import java.io.IOException;
 import java.util.List;
 
+/**
+ * @author <a href="https://github.com/hank-cp">Hank CP</a>
+ */
 public class YamlPropertyLoaderFactory implements PropertySourceFactory {
 
     @Override

@@ -25,6 +25,8 @@ import java.util.stream.Stream;
 
 /**
  * Lazy JSON Serialization for Stream
+ *
+ * @author <a href="https://github.com/hank-cp">Hank CP</a>
  */
 public class StreamSerializer extends StdSerializer<Stream> {
 

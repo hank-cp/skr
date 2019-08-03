@@ -33,6 +33,9 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import java.util.Collections;
 
+/**
+ * @author <a href="https://github.com/hank-cp">Hank CP</a>
+ */
 @Configuration
 @Import(AuthController.class)
 public class AuthConfiguration {

@@ -25,6 +25,9 @@ import org.skr.config.json.*;
 
 import java.util.stream.Stream;
 
+/**
+ * @author <a href="https://github.com/hank-cp">Hank CP</a>
+ */
 public class JsonUtil {
 
     public static ObjectMapper getObjectMapper() {

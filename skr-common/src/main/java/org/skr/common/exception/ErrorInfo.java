@@ -23,6 +23,9 @@ import org.skr.config.json.StringValuedEnum;
 
 import java.util.Objects;
 
+/**
+ * @author <a href="https://github.com/hank-cp">Hank CP</a>
+ */
 public interface ErrorInfo {
 
     enum ErrorLevel implements StringValuedEnum {

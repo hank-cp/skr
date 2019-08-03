@@ -25,7 +25,7 @@ import org.skr.common.util.JsonUtil;
 import java.io.IOException;
 
 /**
- *
+ * @author <a href="https://github.com/hank-cp">Hank CP</a>
  */
 @SuppressWarnings("unchecked")
 public class CustomDeserializer<T> extends StdDeserializer<T> {

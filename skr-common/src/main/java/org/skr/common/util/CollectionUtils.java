@@ -24,6 +24,9 @@ import java.util.*;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
+/**
+ * @author <a href="https://github.com/hank-cp">Hank CP</a>
+ */
 @SuppressWarnings("unchecked")
 public class CollectionUtils {
 

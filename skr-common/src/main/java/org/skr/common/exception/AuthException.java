@@ -17,6 +17,9 @@ package org.skr.common.exception;
 
 import org.springframework.security.core.AuthenticationException;
 
+/**
+ * @author <a href="https://github.com/hank-cp">Hank CP</a>
+ */
 public class AuthException extends AuthenticationException {
 
     private ErrorInfo errorInfo;
