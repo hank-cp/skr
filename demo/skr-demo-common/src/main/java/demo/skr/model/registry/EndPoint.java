@@ -7,16 +7,16 @@ import org.skr.registry.EndPointRegistry;
 import org.skr.registry.PermissionRegistry;
 import org.skr.registry.RealmRegistry;
 
+import javax.persistence.ElementCollection;
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
 import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
+import java.util.List;
 
 @MappedSuperclass
 @Getter
 public class EndPoint extends BaseEntity implements EndPointRegistry {
-
-    public static final String REGISTRY_ENDPOINT = "EndPoint";
 
     @Id
     @NotNull
@@ -35,6 +35,9 @@ public class EndPoint extends BaseEntity implements EndPointRegistry {
     public String label;
 
     public String description;
+
+    @ElementCollection
+    public List<String> relatedPermissionCodes;
 
     @Override
     public RealmRegistry getRealm() {

@@ -103,7 +103,7 @@ public class RegistryIntegrationTest {
         assertThat(permission.bit1, equalTo(8L));
         assertThat(permission.bit2, equalTo(1L));
         assertThat(permission.bit3, equalTo(1L));
-        assertThat(registryService.listPermissions(testRealm), hasSize(4));
+        assertThat(registryService.listPermissions(), hasSize(4));
 
         // test save failed by define permission on another realm
         Realm testRealm2 = new Realm();

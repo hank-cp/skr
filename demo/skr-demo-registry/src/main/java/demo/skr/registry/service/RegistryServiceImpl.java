@@ -54,7 +54,6 @@ public class RegistryServiceImpl implements
         return new Tuple3<>(bit1, bit2, bit3);
     }
 
-    @Override
     public List<Realm> listRealms() {
         return realmRepository.findAll();
     }
@@ -64,19 +63,17 @@ public class RegistryServiceImpl implements
         return realmRepository.findById(realmCode).orElse(null);
     }
 
-    @Override
-    public List<Permission> listPermissions(Realm realm) {
-        return permissionRepository.findEnabledPermission(realm);
+    public List<Permission> listPermissions() {
+        return permissionRepository.findEnabledPermissions();
     }
 
     @Override
-    public Permission getPermission(String code) {
-        return permissionRepository.findById(code).orElse(null);
+    public Permission getPermission(String permissionCode) {
+        return permissionRepository.findById(permissionCode).orElse(null);
     }
 
-    @Override
-    public List<EndPoint> listEndPoints(Realm realm) {
-        return endPointRepository.findEnabledEndPoint(realm);
+    public List<EndPoint> listEndPoints() {
+        return endPointRepository.findEnabledEndPoints();
     }
 
     @Override
@@ -151,18 +148,6 @@ public class RegistryServiceImpl implements
         }
     }
 
-    @Override
-    public void revokePermission(String permissionCode) {
-        Permission permission = getPermission(permissionCode);
-        if (permission == null) return;
-        if (permission.enabled) {
-            throw new ConfException(ErrorInfo.REGISTRATION_ERROR.setMsg(
-                    "Permission %s is enabled in realm %s. You have to re-register this" +
-                            "realm excluding this permission to disable it."));
-        }
-        permissionRepository.delete(permission);
-    }
-
     @Transactional
     public EndPoint registerEndPoint(Realm realm, EndPoint endPoint) {
         EndPoint existed = getEndPoint(endPoint.getUrl());
@@ -203,5 +188,29 @@ public class RegistryServiceImpl implements
             endPoint.enabled = false;
             endPointRepository.save(endPoint);
         });
+    }
+
+    @Override
+    public void revokePermission(String permissionCode) {
+        Permission permission = getPermission(permissionCode);
+        if (permission == null) return;
+        if (permission.enabled) {
+            throw new ConfException(ErrorInfo.REGISTRATION_ERROR.setMsg(
+                    "Permission %s is enabled in realm %s. You have to re-register this" +
+                            "realm excluding this permission to disable it.", permissionCode, permission.realm.code));
+        }
+        permissionRepository.delete(permission);
+    }
+
+    @Override
+    public void revokeEndPoint(String url) {
+        EndPoint endPoint = getEndPoint(url);
+        if (endPoint == null) return;
+        if (endPoint.enabled) {
+            throw new ConfException(ErrorInfo.REGISTRATION_ERROR.setMsg(
+                    "EndPoint %s is enabled in realm %s. You have to re-register this" +
+                            "realm excluding this permission to disable it.", url, endPoint.realm.code));
+        }
+        endPointRepository.delete(endPoint);
     }
 }

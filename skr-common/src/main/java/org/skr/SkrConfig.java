@@ -4,7 +4,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import org.skr.common.exception.ErrorInfo;
 import org.skr.common.util.JsonUtil;
-import org.skr.config.ApplicationContextProvider;
 import org.skr.config.GeneralExceptionHandler;
 import org.skr.config.json.CustomDeserializer;
 import org.skr.security.SkrSecurityProperties;
@@ -16,22 +15,16 @@ import org.springframework.boot.autoconfigure.jackson.JacksonAutoConfiguration;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.cache.interceptor.KeyGenerator;
 import org.springframework.cache.interceptor.SimpleKey;
-import org.springframework.context.ApplicationListener;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
-import org.springframework.context.event.ContextRefreshedEvent;
-import org.springframework.stereotype.Component;
-import org.springframework.web.servlet.DispatcherServlet;
 
 import java.util.Arrays;
 import java.util.stream.Collectors;
 
 @Configuration
 @EnableConfigurationProperties
-@Import({SkrSecurityProperties.class,
-        ApplicationContextProvider.class,
-        GeneralExceptionHandler.class})
+@Import({SkrSecurityProperties.class, GeneralExceptionHandler.class})
 public class SkrConfig {
 
     @Bean

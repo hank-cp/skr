@@ -14,5 +14,5 @@ public interface EndPointRepository extends JpaRepository<EndPoint, String> {
     List<EndPoint> findByRealm(Realm realm);
 
     @Query("SELECT e FROM EndPoint e WHERE e.enabled = true")
-    List<EndPoint> findEnabledEndPoint(Realm realm);
+    List<EndPoint> findEnabledEndPoints();
 }

@@ -8,8 +8,6 @@ import org.skr.registry.RegisterBatch;
 import org.skr.registry.service.RegistryService;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.List;
-
 @SuppressWarnings("unchecked")
 public class RegistryLocalProxy implements RegistryProxy {
 
@@ -17,30 +15,8 @@ public class RegistryLocalProxy implements RegistryProxy {
     private RegistryService registryService;
 
     @Override
-    public RealmRegistry getRealm(String realmCode) {
-        return registryService.getRealm(realmCode);
-    }
-
-    @Override
-    public List<RealmRegistry> listRealms() {
-        return registryService.listRealms();
-    }
-
-    @Override
-    public List<PermissionRegistry> listPermissions(String realmCode) {
-        RealmRegistry realm = getRealm(realmCode);
-        return registryService.listPermissions(realm);
-    }
-
-    @Override
     public PermissionRegistry getPermission(String code) {
         return registryService.getPermission(code);
-    }
-
-    @Override
-    public List<EndPointRegistry> listEndPoints(String realmCode) {
-        RealmRegistry realm = getRealm(realmCode);
-        return registryService.listPermissions(realm);
     }
 
     @Override
@@ -55,12 +31,17 @@ public class RegistryLocalProxy implements RegistryProxy {
 
     @Override
     public void unregisterRealm(String realmCode) {
-        RealmRegistry realm = getRealm(realmCode);
+        RealmRegistry realm = registryService.getRealm(realmCode);
         registryService.unregisterRealm(realm);
     }
 
     @Override
     public void revokePermission(String permissionCode) {
         registryService.revokePermission(permissionCode);
+    }
+
+    @Override
+    public void revokeEndPoint(String url) {
+        registryService.revokeEndPoint(url);
     }
 }

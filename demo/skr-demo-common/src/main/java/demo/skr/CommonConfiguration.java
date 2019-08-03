@@ -20,8 +20,9 @@ import com.fasterxml.jackson.databind.module.SimpleModule;
 import demo.skr.model.registry.EndPoint;
 import demo.skr.model.registry.Permission;
 import demo.skr.model.registry.Realm;
-import org.skr.config.json.CustomDeserializer;
+import org.skr.config.ApplicationContextProvider;
 import org.skr.config.YamlPropertyLoaderFactory;
+import org.skr.config.json.CustomDeserializer;
 import org.skr.registry.EndPointRegistry;
 import org.skr.registry.PermissionRegistry;
 import org.skr.registry.RealmRegistry;
@@ -30,6 +31,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.jackson.JacksonAutoConfiguration;
 import org.springframework.cache.annotation.EnableCaching;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 
@@ -41,6 +43,11 @@ import org.springframework.context.annotation.PropertySource;
 @PropertySource(value = "classpath:common.yml",
         factory = YamlPropertyLoaderFactory.class)
 public class CommonConfiguration {
+
+    @Bean
+    public ApplicationContextProvider applicationContextProvider() {
+        return new ApplicationContextProvider();
+    }
 
     @Configuration
     @AutoConfigureAfter(JacksonAutoConfiguration.class)

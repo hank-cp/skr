@@ -6,30 +6,16 @@ import org.skr.registry.PermissionRegistry;
 import org.skr.registry.RealmRegistry;
 import org.skr.registry.RegisterBatch;
 import org.springframework.cloud.openfeign.FeignClient;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @FeignClient(name = "registry")
 public interface RegistryProxy {
 
-	@GetMapping("/registry/realm/{realmCode}")
-	RealmRegistry getRealm(@PathVariable(name = "realmCode") String realmCode);
-
-	@GetMapping("/registry/realms")
-	List<RealmRegistry> listRealms();
-
-	@GetMapping("/registry/realm/{realmCode}/permissions")
-	List<PermissionRegistry> listPermissions(@PathVariable(name = "realmCode") String realmCode);
-
 	@GetMapping("/registry/permission/{permissionCode}")
 	PermissionRegistry getPermission(@PathVariable(name = "permissionCode") String code);
-
-	@GetMapping("/registry/realm/{realmCode}/end-points")
-	List<EndPointRegistry> listEndPoints(@PathVariable(name = "realmCode") String realmCode);
 
 	/** Get Permission */
 	@GetMapping("/registry/end-point/{url}")
@@ -47,4 +33,8 @@ public interface RegistryProxy {
 	@PostMapping("/permission/{permissionCode}/revoke")
 	void revokePermission(@PathVariable(name = "permissionCode") String permissionCode);
 
+	/** Revoke a disabled EndPoint in order to reuse url. */
+	@PostMapping("/end-point/revoke")
+	@Transactional
+	void revokeEndPoint(@RequestParam(name = "url") String url);
 }

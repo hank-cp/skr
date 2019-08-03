@@ -25,5 +25,5 @@ import org.springframework.context.annotation.Import;
 
 @Configuration
 @Import(RegistryController.class)
-public class RegistryConfiguration {
+public class    RegistryConfiguration {
 }

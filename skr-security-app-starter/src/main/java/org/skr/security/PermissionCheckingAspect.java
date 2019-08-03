@@ -22,7 +22,7 @@ public class PermissionCheckingAspect {
     @Around("@annotation(permission)")
     public Object check(ProceedingJoinPoint joinPoint, RequirePermission permission) throws Throwable {
         String permissionCode = permission.value();
-        JwtPrincipal jwtPrincipal = ApplicationContextProvider.getCurrentPrincipal();
+        JwtPrincipal jwtPrincipal = JwtPrincipal.getCurrentPrincipal();
         PermissionDetail permissionDetail = registryProxy.getPermission(permissionCode);
 
         if (permissionDetail == null) {

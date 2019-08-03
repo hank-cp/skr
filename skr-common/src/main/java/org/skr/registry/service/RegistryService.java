@@ -15,8 +15,6 @@ public interface RegistryService<
         Permission extends PermissionRegistry,
         EndPoint extends EndPointRegistry> {
 
-    List<Realm> listRealms();
-
     Realm getRealm(String code);
 
     Realm registerRealm(@NotNull Realm realm,
@@ -25,16 +23,15 @@ public interface RegistryService<
 
     void unregisterRealm(Realm realm);
 
+    Permission getPermission(String permissionCode);
+
+    EndPoint getEndPoint(String url);
+
     /** Revoke a disabled permission in order to reuse permissionCode. */
     void revokePermission(String permissionCode);
 
-    List<Permission> listPermissions(Realm realm);
-
-    Permission getPermission(String permissionCode);
-
-    List<EndPoint> listEndPoints(Realm realm);
-
-    EndPoint getEndPoint(String url);
+    /** Revoke a disabled endPoint in order to reuse permissionCode. */
+    void revokeEndPoint(String url);
 
     /**
      * Build SiteMap by given endPoints. EndPoints could be filtered by permission

@@ -26,6 +26,6 @@ public interface PermissionRepository extends JpaRepository<Permission, String> 
     List<Permission> findByRealm(Realm realm);
 
     @Query("SELECT p FROM Permission p WHERE p.enabled = true")
-    List<Permission> findEnabledPermission(Realm realm);
+    List<Permission> findEnabledPermissions();
 
 }

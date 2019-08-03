@@ -107,7 +107,7 @@ public class RegistryIntegrationTest {
         assertThat(permission.bit1, equalTo(1L));
         assertThat(permission.bit2, equalTo(1L));
         assertThat(permission.bit3, equalTo(1L));
-        assertThat(registryService.listPermissions(testRealm), hasSize(1));
+        assertThat(registryService.listPermissions(), hasSize(1));
 
         // test save failed by define permission on another realm
         Realm testRealm2 = new Realm();
@@ -154,7 +154,7 @@ public class RegistryIntegrationTest {
         assertThat(permission.bit1, equalTo(1L));
         assertThat(permission.bit2, equalTo(1L));
         assertThat(permission.bit3, equalTo(1L));
-        assertThat(registryService.listPermissions(testRealm), hasSize(1));
+        assertThat(registryService.listPermissions(), hasSize(1));
 
         // deletion failed because permission is enabled.
         assertThat(exceptionOf(() -> registryService.revokePermission("test")),

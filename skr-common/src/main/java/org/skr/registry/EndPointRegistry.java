@@ -1,6 +1,7 @@
 package org.skr.registry;
 
 import javax.validation.constraints.NotNull;
+import java.util.List;
 
 public interface EndPointRegistry extends Registry {
 
@@ -13,6 +14,8 @@ public interface EndPointRegistry extends Registry {
     RealmRegistry getRealm();
 
     PermissionRegistry getPermission();
+
+    List<String> getRelatedPermissionCodes();
 
     @NotNull
     String getBreadcrumb();

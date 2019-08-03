@@ -31,7 +31,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private JwtAuthExceptionFilter jwtAuthExceptionFilter;
 
     @Override
-    public void configure(WebSecurity web) throws Exception {
+    public void configure(WebSecurity web) {
         Set<String> skipUrls = new HashSet<>(skrSecurityProperties.getSkipUrls());
         web.ignoring().antMatchers(skipUrls.toArray(new String[] {}));
     }

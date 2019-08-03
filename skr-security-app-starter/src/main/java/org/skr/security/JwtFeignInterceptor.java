@@ -12,7 +12,7 @@ public class JwtFeignInterceptor implements RequestInterceptor {
 
     @Override
     public void apply(RequestTemplate template) {
-        JwtPrincipal jwtPrincipal = ApplicationContextProvider.getCurrentPrincipal();
+        JwtPrincipal jwtPrincipal = JwtPrincipal.getCurrentPrincipal();
         if (jwtPrincipal == null) return;
         template.header(skrSecurityProperties.getAccessToken().getHeader(),
                 jwtPrincipal.getApiTrainJwtToken());
