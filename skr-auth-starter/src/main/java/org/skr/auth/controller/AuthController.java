@@ -87,7 +87,8 @@ public class AuthController {
             entry(skrSecurityProperties.getAccessToken().getHeader(),
                     skrSecurityProperties.getAccessToken().getPrefix() + accessToken),
             entry(skrSecurityProperties.getRefreshToken().getHeader(),
-                    skrSecurityProperties.getRefreshToken().getPrefix() + refreshToken)
+                    skrSecurityProperties.getRefreshToken().getPrefix() + refreshToken),
+            entry("principal", principal)
         );
     }
 

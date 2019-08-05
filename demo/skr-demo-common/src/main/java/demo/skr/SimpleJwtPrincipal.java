@@ -15,6 +15,7 @@
  */
 package demo.skr;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import org.skr.security.JwtPrincipal;
 
@@ -30,17 +31,20 @@ public class SimpleJwtPrincipal implements JwtPrincipal {
 
     private String username;
 
+    @JsonIgnore
     private long permissionBit1;
 
+    @JsonIgnore
     private long permissionBit2;
 
+    @JsonIgnore
     private long permissionBit3;
 
     private String nickName;
 
     private byte status;
 
-    @Getter @Setter
+    @Setter
     private String apiTrainJwtToken;
 
     private Boolean robot;

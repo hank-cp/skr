@@ -15,6 +15,7 @@
  */
 package org.skr.security;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 
@@ -30,6 +31,7 @@ public interface JwtPrincipal {
 
     Boolean isRobot();
 
+    @JsonIgnore
     String getApiTrainJwtToken();
 
     void setApiTrainJwtToken(String token);
