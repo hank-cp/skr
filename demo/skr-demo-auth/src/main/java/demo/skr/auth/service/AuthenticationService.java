@@ -65,6 +65,8 @@ public class AuthenticationService implements UserDetailsService, JwtPrincipalPr
             throw new AuthException(ErrorInfo.USER_NEED_APPROVAL);
         if (user.status == User.USER_STATUS_JOINING_REJECT)
             throw new AuthException(ErrorInfo.USER_REJECTED);
+        if (user.account.status == Constants.DISABLED)
+            throw new AuthException(ErrorInfo.USER_DISABLED);
 
         return user.buildJwtPrincipal();
     }

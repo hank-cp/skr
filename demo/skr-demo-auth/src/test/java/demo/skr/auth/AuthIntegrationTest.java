@@ -22,6 +22,8 @@ import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.skr.common.util.JwtUtil;
+import org.skr.security.SkrSecurityProperties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -52,6 +54,9 @@ public class AuthIntegrationTest {
     @Autowired
     private ObjectMapper objectMapper;
 
+    @Autowired
+    private SkrSecurityProperties skrSecurityProperties;
+
     @Test
     public void testLogin() throws Exception {
         mvc.perform(post("/login")
@@ -63,7 +68,25 @@ public class AuthIntegrationTest {
                 )))))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("access-token", notNullValue()))
-                .andExpect(jsonPath("refresh-token", notNullValue()));
+                .andExpect(jsonPath("refresh-token", notNullValue()))
+                .andExpect(jsonPath("loginToken", notNullValue()))
+                .andExpect(jsonPath("principal", notNullValue()));
+    }
+
+    @Test
+    public void testLoginByToken() throws Exception {
+        mvc.perform(post("/login-by-token")
+                .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+                .content(EntityUtils.toString(new UrlEncodedFormEntity(Arrays.asList(
+                        new BasicNameValuePair("auth_tenentCode", "org1"),
+                        new BasicNameValuePair("loginToken", JwtUtil.encode("dev",
+                                skrSecurityProperties.getLoginToken().getExpiration(),
+                                skrSecurityProperties.getLoginToken().getSecret()))
+                )))))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("access-token", notNullValue()))
+                .andExpect(jsonPath("refresh-token", notNullValue()))
+                .andExpect(jsonPath("principal", notNullValue()));
     }
 
     @Test
@@ -75,7 +98,7 @@ public class AuthIntegrationTest {
                             new BasicNameValuePair("username", "dev"),
                             new BasicNameValuePair("password", "123")
                     )))))
-                    .andExpect(status().isForbidden());
+                    .andExpect(status().isUnauthorized());
     }
 
     @Test

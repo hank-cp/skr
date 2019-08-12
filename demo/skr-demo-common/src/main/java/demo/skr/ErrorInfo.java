@@ -21,7 +21,8 @@ package demo.skr;
 public interface ErrorInfo extends org.skr.common.exception.ErrorInfo {
 
     org.skr.common.exception.ErrorInfo ACCOUNT_NOT_BELONG_TO_ORG    = new ErrorInfoImpl(1107, "Account does not belong to org.");
-    org.skr.common.exception.ErrorInfo USER_DISABLED                = new ErrorInfoImpl(1108, "User is disabled.");
-    org.skr.common.exception.ErrorInfo USER_NEED_APPROVAL           = new ErrorInfoImpl(1109, "User need to be approved.");
-    org.skr.common.exception.ErrorInfo USER_REJECTED                = new ErrorInfoImpl(1110, "User joining get rejected.");
+    org.skr.common.exception.ErrorInfo ACCCOUNT_DISABLED            = new ErrorInfoImpl(1108, "Account is disabled.");
+    org.skr.common.exception.ErrorInfo USER_DISABLED                = new ErrorInfoImpl(1109, "User is disabled.");
+    org.skr.common.exception.ErrorInfo USER_NEED_APPROVAL           = new ErrorInfoImpl(1110, "User need to be approved.");
+    org.skr.common.exception.ErrorInfo USER_REJECTED                = new ErrorInfoImpl(1111, "User joining get rejected.");
 }

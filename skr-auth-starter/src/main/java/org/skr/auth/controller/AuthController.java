@@ -119,7 +119,6 @@ public class AuthController {
 
         JwtPrincipal principal = jwtPrincipalProvider.loadJwtPrincipal(
                 username, resolveAuthExtraParams(request));
-        jwtPrincipalProvider.checkJwtPrincipalValidity(principal);
 
         String accessToken = JwtUtil.encode(JsonUtil.toJSON(principal),
                 skrSecurityProperties.getAccessToken().getExpiration(),
