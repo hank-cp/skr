@@ -15,6 +15,7 @@
  */
 package org.skr.auth.service;
 
+import org.skr.common.exception.AuthException;
 import org.skr.security.JwtPrincipal;
 
 import java.util.Map;
@@ -25,5 +26,7 @@ import java.util.Map;
 public interface JwtPrincipalProvider {
 
     JwtPrincipal loadJwtPrincipal(String username, Map<String, Object> params);
+
+    void checkJwtPrincipalValidity(JwtPrincipal principal) throws AuthException;
 
 }

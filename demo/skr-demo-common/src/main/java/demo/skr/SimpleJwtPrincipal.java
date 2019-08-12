@@ -31,13 +31,10 @@ public class SimpleJwtPrincipal implements JwtPrincipal {
 
     private String username;
 
-    @JsonIgnore
     private long permissionBit1;
 
-    @JsonIgnore
     private long permissionBit2;
 
-    @JsonIgnore
     private long permissionBit3;
 
     private String nickName;

@@ -1,18 +1,17 @@
 @startuml
 title Request
-autonumber
-AppClient -> AppServer1: I want to access API <font color=blue>x</font>, \nand here is my <font color=red>authentication token</font>
-AppServer1 -> SessionCache: Is there any user recently login with this <font color=red>authentication token</font>
-SessionCache -> AppServer1: Nope.
-AppServer1 -> AuthServer: Help my to resolve this token, see who is this <font color=red>principle</font>,\nand if he has right <font color=red>permission</font> to access this API
-AuthServer -->x AppServer1: Ops...\n - principle not found\n - authentication token expired\n - no permission
-AppServer1 -->x AppClient: 401, get out
-AuthServer -> AppServer1: Ok. here is <font color=red>principle</font> information and\nhe has right <font color=red>permission</font>
-AuthServer --> SessionCache: Hold this <font color=red>authentication token</font> with this <font color=red>principle</font> for a 20 mins
-AppServer1 -> AppServer2: I want to access API <font color=blue>y</font>, \nand here is user's <font color=red>authentication token</font>
-AppServer2 -> SessionCache: Is there any user recently login with this <font color=red>authentication token</font>
-SessionCache -> AppServer2: Yes, here is <font color=red>principle</font> information and\nhe has right <font color=red>permission</font>
-AppServer2 -->x AppServer1: 200, request result
+AppClient -> AppServer1: I want to access API <font color=blue>x</font>, \nand here is my <font color=red>request token</font>
+AppServer1 -> JwtAuthenticationFilter: Decode this <font color=red>access token</font> to see who it is.
+JwtAuthenticationFilter --> AppServer1: Ops...principle not found
+AppServer1 -->x AppClient: 401, get out!
+JwtAuthenticationFilter --> AppServer1: Ops...token expired
+AppServer1 -->x AppClient: Show me your <font color=red>refresh token</font> to\nexchange a new <font color=red>access token</font>.
+JwtAuthenticationFilter -> AppServer1: The token is all right and here is the principle.
+AppServer1 -> PermissionCheckingAspect: Check if this principle has permission to access API <font color=blue>x</font>
+PermissionCheckingAspect --> AppServer1: Ops...this principle <b>HAS NO</b> permission to access this API.
+AppServer1 -->x AppClient: 403, get out!
+PermissionCheckingAspect -> AppServer1: This principle <b>HAS</b> permission to access this API.
+AppServer1 -> AppServer2: I want to access API <font color=blue>y</font>, and here is user's <font color=red>train token</font>
+AppServer2 -> AppServer1: 200, request result
 AppServer1 -->x AppClient: 200, request result
-
 @enduml

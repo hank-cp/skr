@@ -7,14 +7,17 @@ spring:
         - /login
         - /refresh-token
         - /registry/**
+      loginToken:
+        secret: sKrRrRrRrRrRrRrRrLogin
+        expiration: 10080 # default 7 days
       accessToken:
         secret: sKrRrRrRrRrRrRrRrAccess
-        expiration: 1200000
+        expiration: 10    # 5 mins
         prefix: Bearer-
         header: access-token
       refreshToken:
         secret: sKrRrRrRrRrRrRrRrRefresh
-        expiration: 3600000
+        expiration: 30    # 30 mins
         prefix: Refresh-
         header: refresh-token
       robotToken:

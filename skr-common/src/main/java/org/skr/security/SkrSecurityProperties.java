@@ -45,6 +45,9 @@ public class SkrSecurityProperties {
     private List<String> skipUrls;
 
     /** Token setting for user request */
+    private Token loginToken = new Token();
+
+    /** Token setting for user request */
     private Token accessToken = new Token();
 
     /** Token setting for refresh request */

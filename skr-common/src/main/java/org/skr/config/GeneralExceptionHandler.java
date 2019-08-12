@@ -63,7 +63,7 @@ public class GeneralExceptionHandler extends ResponseEntityExceptionHandler {
         return handleExceptionInternal(ex,
                 ex.getErrorInfo(),
                 new HttpHeaders(),
-                HttpStatus.FORBIDDEN,
+                HttpStatus.UNAUTHORIZED,
                 request);
     }
 

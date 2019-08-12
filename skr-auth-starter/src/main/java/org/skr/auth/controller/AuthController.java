@@ -82,20 +82,64 @@ public class AuthController {
         String refreshToken = JwtUtil.encode(principal.getUsername(),
                 skrSecurityProperties.getRefreshToken().getExpiration(),
                 skrSecurityProperties.getRefreshToken().getSecret());
+        String loginToken = JwtUtil.encode(principal.getUsername(),
+                skrSecurityProperties.getLoginToken().getExpiration(),
+                skrSecurityProperties.getLoginToken().getSecret());
 
         return map(
             entry(skrSecurityProperties.getAccessToken().getHeader(),
                     skrSecurityProperties.getAccessToken().getPrefix() + accessToken),
             entry(skrSecurityProperties.getRefreshToken().getHeader(),
                     skrSecurityProperties.getRefreshToken().getPrefix() + refreshToken),
+            entry("loginToken", loginToken),
             entry("principal", principal)
+        );
+    }
+
+    @PostMapping("/login-by-token")
+    public @ResponseBody Map<String, Object> loginByToken(
+            @RequestParam String loginToken, HttpServletRequest request) {
+        String username;
+        try {
+            username = Optional.of(loginToken)
+                    .map(token -> JwtUtil.decode(token,
+                            skrSecurityProperties.getLoginToken().getSecret()))
+                    .orElse(null);
+        } catch (TokenExpiredException ex) {
+            throw new AuthException(ErrorInfo.REFRESH_TOKEN_EXPIRED);
+        } catch (JWTVerificationException ex) {
+            throw new AuthException(ErrorInfo.REFRESH_TOKEN_BROKEN);
+        } catch (Exception ex) {
+            throw new AuthException(ErrorInfo.AUTHENTICATION_REQUIRED);
+        }
+
+        if (username == null) {
+            throw new AuthException(ErrorInfo.AUTHENTICATION_REQUIRED);
+        }
+
+        JwtPrincipal principal = jwtPrincipalProvider.loadJwtPrincipal(
+                username, resolveAuthExtraParams(request));
+        jwtPrincipalProvider.checkJwtPrincipalValidity(principal);
+
+        String accessToken = JwtUtil.encode(JsonUtil.toJSON(principal),
+                skrSecurityProperties.getAccessToken().getExpiration(),
+                skrSecurityProperties.getAccessToken().getSecret());
+        String refreshToken = JwtUtil.encode(principal.getUsername(),
+                skrSecurityProperties.getRefreshToken().getExpiration(),
+                skrSecurityProperties.getRefreshToken().getSecret());
+
+        return map(
+                entry(skrSecurityProperties.getAccessToken().getHeader(),
+                        skrSecurityProperties.getAccessToken().getPrefix() + accessToken),
+                entry(skrSecurityProperties.getRefreshToken().getHeader(),
+                        skrSecurityProperties.getRefreshToken().getPrefix() + refreshToken),
+                entry("principal", principal)
         );
     }
 
     @PostMapping("/refresh-token")
     public @ResponseBody Map<String, Object> refreshToken(
             @RequestParam String refreshToken, HttpServletRequest request) {
-
         String refreshPrefix = skrSecurityProperties.getRefreshToken().getPrefix();
         String refreshSecret = skrSecurityProperties.getRefreshToken().getSecret();
 
@@ -135,6 +179,7 @@ public class AuthController {
                     skrSecurityProperties.getRefreshToken().getSecret());
             result.put(skrSecurityProperties.getRefreshToken().getHeader(),
                     skrSecurityProperties.getRefreshToken().getPrefix() + newRefreshToken);
+            result.put("principal", principal);
         }
 
         return result;
