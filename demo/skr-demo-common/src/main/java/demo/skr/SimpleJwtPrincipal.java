@@ -15,7 +15,6 @@
  */
 package demo.skr;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import org.skr.security.JwtPrincipal;
 
