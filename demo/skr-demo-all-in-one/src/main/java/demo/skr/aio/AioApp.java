@@ -40,7 +40,7 @@ import static org.skr.common.util.CollectionUtils.list;
 public class AioApp implements Constants {
 
     public static void main(String[] args) {
-        SpringApplication.run(demo.skr.registry.RegistryApp.class, args);
+        SpringApplication.run(AioApp.class, args);
     }
 
     @Bean
