@@ -16,12 +16,9 @@
 package org.skr.security;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.web.servlet.FilterRegistrationBean;
-import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
-import org.springframework.core.Ordered;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
@@ -31,7 +28,6 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-import org.springframework.web.filter.CorsFilter;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -45,9 +41,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
     private SkrSecurityProperties skrSecurityProperties;
-
-    @Autowired
-    private ApplicationContext applicationContext;
 
     @Autowired
     private JwtAuthExceptionFilter jwtAuthExceptionFilter;
@@ -67,7 +60,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                     .antMatchers(skipUrls.toArray(new String[] {})).permitAll()
                     .anyRequest().authenticated()
                 .and()
-                    .addFilterBefore(new JwtAuthenticationFilter(skrSecurityProperties, applicationContext),
+                    .addFilterBefore(new JwtAuthenticationFilter(skrSecurityProperties),
                             UsernamePasswordAuthenticationFilter.class)
                     .addFilterBefore(jwtAuthExceptionFilter,
                             JwtAuthenticationFilter.class)

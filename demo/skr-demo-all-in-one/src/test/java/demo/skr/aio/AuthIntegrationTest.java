@@ -54,7 +54,7 @@ public class AuthIntegrationTest {
 
     @Test
     public void testAuth() throws Exception {
-        mvc.perform(post("/login")
+        mvc.perform(post("/auth/login")
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                 .content(EntityUtils.toString(new UrlEncodedFormEntity(Arrays.asList(
                         new BasicNameValuePair("auth_tenentCode", "org1"),
@@ -68,19 +68,19 @@ public class AuthIntegrationTest {
 
     @Test
     public void testLoginFailed() throws Exception {
-        mvc.perform(post("/login")
+        mvc.perform(post("/auth/login")
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                 .content(EntityUtils.toString(new UrlEncodedFormEntity(Arrays.asList(
                         new BasicNameValuePair("auth_tenentCode", "org1"),
                         new BasicNameValuePair("username", "dev"),
                         new BasicNameValuePair("password", "123")
                 )))))
-                .andExpect(status().isForbidden());
+                .andExpect(status().isUnauthorized());
     }
 
     @Test
     public void testRefreshToken() throws Exception {
-        JsonNode response = objectMapper.readTree(mvc.perform(post("/login")
+        JsonNode response = objectMapper.readTree(mvc.perform(post("/auth/login")
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                 .content(EntityUtils.toString(new UrlEncodedFormEntity(Arrays.asList(
                         new BasicNameValuePair("auth_tenentCode", "org1"),
@@ -88,7 +88,7 @@ public class AuthIntegrationTest {
                         new BasicNameValuePair("password", "dev")
                 ))))).andReturn().getResponse().getContentAsByteArray());
 
-        mvc.perform(post("/refresh-token")
+        mvc.perform(post("/auth/refresh-token")
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                 .content(EntityUtils.toString(new UrlEncodedFormEntity(Arrays.asList(
                         new BasicNameValuePair("auth_tenentCode", "org1"),

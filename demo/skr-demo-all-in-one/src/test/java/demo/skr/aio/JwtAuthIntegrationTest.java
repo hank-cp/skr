@@ -53,7 +53,7 @@ public class JwtAuthIntegrationTest {
 
     @Test
     public void testJwtAuth() throws Exception {
-        JsonNode response = objectMapper.readTree(mvc.perform(post("/login")
+        JsonNode response = objectMapper.readTree(mvc.perform(post("/auth/login")
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                 .content(EntityUtils.toString(new UrlEncodedFormEntity(Arrays.asList(
                         new BasicNameValuePair("auth_tenentCode", "org1"),

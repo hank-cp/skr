@@ -29,10 +29,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Enumeration;
@@ -46,6 +43,7 @@ import static org.skr.common.util.CollectionUtils.*;
  * @author <a href="https://github.com/hank-cp">Hank CP</a>
  */
 @RestController
+@RequestMapping("/auth")
 public class AuthController {
 
     public static final String EXTRA_PARAM_PREFIX = "auth_";

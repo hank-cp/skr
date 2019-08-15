@@ -16,7 +16,8 @@ spring:
     allow-bean-definition-overriding: true
   cloud:
     consul:
-      enabled: false
+      discovery:
+        enabled: false
 
 demo:
   skr:

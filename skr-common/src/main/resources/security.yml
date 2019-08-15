@@ -4,8 +4,7 @@ spring:
       renewRefreshToken: false
       skip-urls:
         - /actuator/**
-        - /login
-        - /refresh-token
+        - /auth/**
         - /registry/**
       loginToken:
         secret: sKrRrRrRrRrRrRrRrLogin

@@ -64,7 +64,7 @@ public class AuthConfiguration {
     }
 
     @Bean
-    public FilterRegistrationBean corsFilter() {
+    public FilterRegistrationBean corsFilterReg() {
         FilterRegistrationBean bean = new FilterRegistrationBean<>(
                 new CorsFilter(corsConfigurationSource()));
         bean.setOrder(Ordered.HIGHEST_PRECEDENCE);

@@ -100,10 +100,9 @@ public interface ErrorInfo {
             this.msg = msg;
         }
 
-        @SuppressWarnings("ConfusingArgumentToVarargsMethod")
         public ErrorInfo setMsg(String msg, String... args) {
             ErrorInfoImpl newInstance = Cloner.shared().shallowClone(this);
-            newInstance.msg = !Checker.isEmpty(args) ? String.format(msg, args) : msg;
+            newInstance.msg = !Checker.isEmpty(args) ? String.format(msg, (Object[])args) : msg;
             return newInstance;
         }
 

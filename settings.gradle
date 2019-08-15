@@ -4,7 +4,7 @@ include 'skr-common',
         'skr-registry-app-starter',
         'skr-security-app-starter',
 
-        'skr-cloud-tsf',
+//        'skr-cloud-tsf',
         'skr-cloud-spring',
 
         'skr-demo-common',
