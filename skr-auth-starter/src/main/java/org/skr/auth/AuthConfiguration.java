@@ -18,6 +18,7 @@ package org.skr.auth;
 import org.skr.auth.controller.AuthController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -64,6 +65,7 @@ public class AuthConfiguration {
     }
 
     @Bean
+    @ConditionalOnProperty(value = "spring.skr.security.config-cors", havingValue = "true")
     public FilterRegistrationBean corsFilterReg() {
         FilterRegistrationBean bean = new FilterRegistrationBean<>(
                 new CorsFilter(corsConfigurationSource()));
@@ -72,6 +74,7 @@ public class AuthConfiguration {
     }
 
     @Bean
+    @ConditionalOnProperty(value = "spring.skr.security.config-cors", havingValue = "true")
     CorsConfigurationSource corsConfigurationSource() {
         final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         CorsConfiguration config = new CorsConfiguration().applyPermitDefaultValues();

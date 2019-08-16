@@ -38,6 +38,8 @@ public class SkrSecurityProperties {
     /** renew refresh token together every time refresh access token */
     private boolean renewRefreshToken = false;
 
+    private boolean configCors = false;
+
     /** principal class name to deserialize the JWT token content */
     private Class jwtPrincipalClass;
 
