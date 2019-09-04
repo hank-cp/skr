@@ -153,7 +153,7 @@ public interface ErrorInfo {
     ErrorInfo NOT_AUTHENTICATED            = new ErrorInfoImpl(1100, "Account is not authenticated.");
     ErrorInfo ACCESS_TOKEN_EXPIRED         = new ErrorInfoImpl(1101, "Access token is expired.");
     ErrorInfo ACCESS_TOKEN_BROKEN          = new ErrorInfoImpl(1102, "Access token is broken.");
-    ErrorInfo ACCESS_TOKEN_NOT_PROVIDED    = new ErrorInfoImpl(1103, "Access token is provided.");
+    ErrorInfo ACCESS_TOKEN_NOT_PROVIDED    = new ErrorInfoImpl(1103, "Access token is not provided.");
     ErrorInfo REFRESH_TOKEN_EXPIRED        = new ErrorInfoImpl(1104, "Refresh token is expired.");
     ErrorInfo REFRESH_TOKEN_BROKEN         = new ErrorInfoImpl(1105, "Refresh token is broken.");
     ErrorInfo NOT_SUPPORT_AUTH_PRINCIPAL   = new ErrorInfoImpl(1106, "Not support auth principal.");

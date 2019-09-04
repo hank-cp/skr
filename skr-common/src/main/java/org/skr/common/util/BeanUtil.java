@@ -54,7 +54,7 @@ public class BeanUtil {
     /**
      * @see #copyFields(Object, Object, String...)
      *
-     * @param fields, including or excluding fields
+     * @param fields including or excluding fields
      * @param isInclude
      */
     @SuppressWarnings("unchecked")

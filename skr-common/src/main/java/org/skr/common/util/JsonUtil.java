@@ -20,7 +20,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
-import org.skr.config.ApplicationContextProvider;
+import org.laxture.spring.util.ApplicationContextProvider;
 import org.skr.config.json.*;
 
 import java.util.stream.Stream;
@@ -56,11 +56,17 @@ public class JsonUtil {
                 .withSetterVisibility(JsonAutoDetect.Visibility.PUBLIC_ONLY));
     }
 
-    @SuppressWarnings("unchecked")
     public static <T> T fromJSON(final Class<?> type,
                                  final String json) {
+        return fromJSON(getObjectMapper(), type, json);
+    }
+
+    @SuppressWarnings("unchecked")
+    public static <T> T fromJSON(ObjectMapper objectMapper,
+                                 final Class<?> type,
+                                 final String json) {
         try {
-            return (T) getObjectMapper().readValue(json, type);
+            return (T) objectMapper.readValue(json, type);
         } catch (Exception e) {
             throw new RuntimeException("Deserialize json text failed. "+json, e);
         }
@@ -68,24 +74,39 @@ public class JsonUtil {
 
     public static <T> T fromJSON(final TypeReference<T> type,
                                  final String json) {
+        return fromJSON(getObjectMapper(), type, json);
+    }
+
+    public static <T> T fromJSON(ObjectMapper objectMapper,
+                                 final TypeReference<T> type,
+                                 final String json) {
         try {
-            return getObjectMapper().readValue(json, type);
+            return objectMapper.readValue(json, type);
         } catch (Exception e) {
             throw new RuntimeException("Deserialize json text failed. "+json, e);
         }
     }
 
     public static String toJSON(Object obj, Class<?> jsonViewClazz) {
+        return toJSON(getObjectMapper(), obj, jsonViewClazz);
+    }
+
+    public static String toJSON(ObjectMapper objectMapper,
+                                Object obj, Class<?> jsonViewClazz) {
         try {
-            return getObjectMapper().writerWithView(jsonViewClazz).writeValueAsString(obj);
+            return objectMapper.writerWithView(jsonViewClazz).writeValueAsString(obj);
         } catch (Exception e) {
             throw new RuntimeException("Serialize object<"+obj.getClass().getName()+"> to json failed.", e);
         }
     }
 
     public static String toJSON(Object obj) {
+        return toJSON(getObjectMapper(), obj);
+    }
+
+    public static String toJSON(ObjectMapper objectMapper, Object obj) {
         try {
-            return getObjectMapper().writeValueAsString(obj);
+            return objectMapper.writeValueAsString(obj);
         } catch (Exception e) {
             throw new RuntimeException("Serialize object<"+obj.getClass().getName()+"> to json failed.", e);
         }

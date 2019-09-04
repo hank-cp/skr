@@ -20,7 +20,7 @@ import com.fasterxml.jackson.databind.module.SimpleModule;
 import demo.skr.model.registry.EndPoint;
 import demo.skr.model.registry.Permission;
 import demo.skr.model.registry.Realm;
-import org.skr.config.ApplicationContextProvider;
+import org.laxture.spring.util.ApplicationContextProvider;
 import org.skr.config.YamlPropertyLoaderFactory;
 import org.skr.config.json.CustomDeserializer;
 import org.skr.registry.EndPointRegistry;
@@ -31,6 +31,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.jackson.JacksonAutoConfiguration;
 import org.springframework.cache.annotation.EnableCaching;
+import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
@@ -45,8 +46,8 @@ import org.springframework.context.annotation.PropertySource;
 public class CommonConfiguration {
 
     @Bean
-    public ApplicationContextProvider applicationContextProvider() {
-        return new ApplicationContextProvider();
+    public ApplicationContextAware multiApplicationContextProviderRegister() {
+        return ApplicationContextProvider::registerApplicationContext;
     }
 
     @Configuration

@@ -16,6 +16,7 @@ dependencies {
     compile "joda-time:joda-time"
     compile "com.fasterxml.jackson.datatype:jackson-datatype-joda"
     compile 'com.auth0:java-jwt:3.5.0'
+    compile 'com.github.hank-cp:spring-static-ctx:0.1.0'
 
     compile "org.apache.commons:commons-lang3:3.8.1"
     compile "commons-codec:commons-codec"
