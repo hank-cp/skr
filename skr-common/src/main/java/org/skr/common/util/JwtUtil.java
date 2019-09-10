@@ -39,7 +39,7 @@ public class JwtUtil {
     public static String encode(String subject, long expiration, String secret) {
         JWTCreator.Builder builder = JWT.create()
                 .withSubject(subject);
-        if (expiration >= 0) {
+        if (expiration > 0) {
             builder.withExpiresAt(new Date(System.currentTimeMillis() +
                     expiration * 60 * 1000));
         }

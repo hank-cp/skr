@@ -1,5 +1,6 @@
 ### Backlog
 * [ ] Permission check for route path not in EndPoint
+* [ ] IP whitelist for robot access-token
 
 ### 0.1.0
 * [ ] Readme outline 
