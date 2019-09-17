@@ -17,10 +17,8 @@ package org.skr;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
-import org.skr.common.exception.ErrorInfo;
 import org.skr.common.util.JsonUtil;
 import org.skr.config.GeneralExceptionHandler;
-import org.skr.config.json.CustomDeserializer;
 import org.skr.security.SkrSecurityProperties;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -75,9 +73,8 @@ public class SkrConfig {
         @Override
         public void afterPropertiesSet() {
             SimpleModule module = new SimpleModule();
-            JsonUtil.setupObjectMapper(objectMapper);
-            module.addDeserializer(ErrorInfo.class, new CustomDeserializer<>(ErrorInfo.ErrorInfoImpl.class));
-            objectMapper.registerModule(module);
+            JsonUtil.setupObjectMapper(objectMapper)
+                    .registerModule(module);
         }
     }
 

@@ -156,8 +156,7 @@ public class RegistryServiceImpl implements
             return permission;
         } else {
             if (!Objects.equals(existed.getRealm().getCode(), realm.code)) {
-                throw new BizException(ErrorInfo.REGISTRATION_ERROR.setMsg(
-                        "Permission %s is registered to %s",
+                throw new BizException(ErrorInfo.PERMISSION_REGISTERED.msgArgs(
                         existed.code, existed.getRealm().getCode()));
             }
             BeanUtil.copyFields(permission, existed, "code", "realm");
@@ -180,8 +179,7 @@ public class RegistryServiceImpl implements
             return endPoint;
         } else {
             if (!Objects.equals(existed.getRealm().getCode(), realm.code)) {
-                throw new BizException(ErrorInfo.REGISTRATION_ERROR.setMsg(
-                        "EndPoint %s has been registered to %s",
+                throw new BizException(ErrorInfo.END_POINT_REGISTERED.msgArgs(
                         endPoint.getUrl(), existed.getRealm().getCode()));
             }
             BeanUtil.copyFields(endPoint, existed, "url", "permission");
@@ -213,9 +211,8 @@ public class RegistryServiceImpl implements
         Permission permission = getPermission(permissionCode);
         if (permission == null) return;
         if (permission.enabled) {
-            throw new ConfException(ErrorInfo.REGISTRATION_ERROR.setMsg(
-                    "Permission %s is enabled in realm %s. You have to re-register this" +
-                            "realm excluding this permission to disable it.", permissionCode, permission.realm.code));
+            throw new ConfException(ErrorInfo.PERMISSION_REVOKE_FAILED
+                    .msgArgs(permissionCode, permission.realm.code));
         }
         permissionRepository.delete(permission);
     }
@@ -225,9 +222,8 @@ public class RegistryServiceImpl implements
         EndPoint endPoint = getEndPoint(url);
         if (endPoint == null) return;
         if (endPoint.enabled) {
-            throw new ConfException(ErrorInfo.REGISTRATION_ERROR.setMsg(
-                    "EndPoint %s is enabled in realm %s. You have to re-register this" +
-                            "realm excluding this permission to disable it.", url, endPoint.realm.code));
+            throw new ConfException(ErrorInfo.END_POINT_REVOKE_FAILED
+                    .msgArgs(url, endPoint.realm.code));
         }
         endPointRepository.delete(endPoint);
     }

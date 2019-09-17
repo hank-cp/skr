@@ -16,7 +16,10 @@
 package org.skr.config;
 
 import lombok.extern.slf4j.Slf4j;
-import org.skr.common.exception.*;
+import org.skr.common.exception.AuthException;
+import org.skr.common.exception.BizException;
+import org.skr.common.exception.ErrorInfo;
+import org.skr.common.exception.UnvarnishedFeignException;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpHeaders;
@@ -45,7 +48,7 @@ public class GeneralExceptionHandler extends ResponseEntityExceptionHandler {
                                                              HttpStatus status,
                                                              WebRequest request) {
         Object standerBody = Optional.ofNullable(body)
-                .orElse(ErrorInfo.INTERNAL_SERVER_ERROR.setMsg(ex.getMessage()));
+                .orElse(ErrorInfo.INTERNAL_SERVER_ERROR.msgArgs(ex.getMessage()));
         return super.handleExceptionInternal(ex, standerBody, headers, status, request);
     }
 
@@ -81,8 +84,8 @@ public class GeneralExceptionHandler extends ResponseEntityExceptionHandler {
         log.error(getStackTrace(ex));
         return handleExceptionInternal(ex,
                 ErrorInfo.INTERNAL_SERVER_ERROR
-                        .setMsg(ex.getMessage())
-                        .setExceptionDetail(BaseException.summaryTopStack(ex)),
+                        .msgArgs(ex.getMessage())
+                        .exception(ex),
                 new HttpHeaders(),
                 HttpStatus.INTERNAL_SERVER_ERROR,
                 request);

@@ -66,10 +66,10 @@ public class AuthController {
             auth = authenticationManager
                     .authenticate(new UsernamePasswordAuthenticationToken(username, password));
         } catch (BadCredentialsException ex) {
-            throw new AuthException(ErrorInfo.NOT_AUTHENTICATED);
+            throw new AuthException(ErrorInfo.NOT_AUTHENTICATED.msgArgs(username));
         }
         if (!auth.isAuthenticated()) {
-            throw new AuthException(ErrorInfo.NOT_AUTHENTICATED);
+            throw new AuthException(ErrorInfo.NOT_AUTHENTICATED.msgArgs(username));
         }
 
         JwtPrincipal principal = jwtPrincipalProvider.loadJwtPrincipal(

@@ -15,14 +15,17 @@
  */
 package demo.skr;
 
+import org.skr.common.exception.ErrorInfo;
+
 /**
  * @author <a href="https://github.com/hank-cp">Hank CP</a>
  */
-public interface ErrorInfo extends org.skr.common.exception.ErrorInfo {
+public final class MyErrorInfo {
 
-    org.skr.common.exception.ErrorInfo ACCOUNT_NOT_BELONG_TO_ORG    = new ErrorInfoImpl(1107, "Account does not belong to org.");
-    org.skr.common.exception.ErrorInfo ACCCOUNT_DISABLED            = new ErrorInfoImpl(1108, "Account is disabled.");
-    org.skr.common.exception.ErrorInfo USER_DISABLED                = new ErrorInfoImpl(1109, "User is disabled.");
-    org.skr.common.exception.ErrorInfo USER_NEED_APPROVAL           = new ErrorInfoImpl(1110, "User need to be approved.");
-    org.skr.common.exception.ErrorInfo USER_REJECTED                = new ErrorInfoImpl(1111, "User joining get rejected.");
+    public static final ErrorInfo ACCOUNT_NOT_BELONG_TO_ORG    = ErrorInfo.of(11107, "Account %s does not belong to org %s.");
+    public static final ErrorInfo ACCOUNT_DISABLED             = ErrorInfo.of(11108, "Account %s is disabled.");
+    public static final ErrorInfo USER_DISABLED                = ErrorInfo.of(11109, "User %s is disabled.");
+    public static final ErrorInfo USER_NEED_APPROVAL           = ErrorInfo.of(11110, "User %s need to be approved.");
+    public static final ErrorInfo USER_REJECTED                = ErrorInfo.of(11111, "User %s joining get rejected.");
+
 }

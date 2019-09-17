@@ -40,7 +40,7 @@ public class JsonUtil {
     }
 
     /** Additional Config for Jackson ObjectMapper */
-    public static void setupObjectMapper(ObjectMapper objectMapper) {
+    public static ObjectMapper setupObjectMapper(ObjectMapper objectMapper) {
         objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
         SimpleModule module = new SimpleModule();
         module.addSerializer(IntValuedEnum.class, new IntValuedEnumSerializer());
@@ -54,6 +54,7 @@ public class JsonUtil {
                 .withIsGetterVisibility(JsonAutoDetect.Visibility.PUBLIC_ONLY)
                 .withGetterVisibility(JsonAutoDetect.Visibility.PUBLIC_ONLY)
                 .withSetterVisibility(JsonAutoDetect.Visibility.PUBLIC_ONLY));
+        return objectMapper;
     }
 
     public static <T> T fromJSON(final Class<?> type,

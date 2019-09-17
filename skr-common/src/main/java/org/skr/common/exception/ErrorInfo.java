@@ -17,7 +17,6 @@ package org.skr.common.exception;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.rits.cloning.Cloner;
-import lombok.Getter;
 import org.skr.common.util.Checker;
 import org.skr.config.json.StringValuedEnum;
 
@@ -26,9 +25,9 @@ import java.util.Objects;
 /**
  * @author <a href="https://github.com/hank-cp">Hank CP</a>
  */
-public interface ErrorInfo {
+public class ErrorInfo {
 
-    enum ErrorLevel implements StringValuedEnum {
+    public enum ErrorLevel implements StringValuedEnum {
         WARNING("warn"), // client should prompt user with warning message
         ERROR("error"),  // client should stop user operating, generally caused by error input or data restrictions
         FATAL("fatal");  // client should stop to be functional, shit happens...
@@ -53,108 +52,115 @@ public interface ErrorInfo {
         }
     }
 
-    ErrorInfo setMsg(String msg, String... args);
+    private int code;
+    private String msg;
+    private ErrorLevel level = ErrorLevel.ERROR;
 
-    ErrorInfo setPath(String path);
+    private Object[] args;
+    private String path;
+    private String failedRpc;
+    private String exception;
 
-    ErrorInfo setLevel(ErrorLevel level);
+    private ErrorInfo() {}
 
-    ErrorInfo setExceptionDetail(String exceptionDetail);
+    public static ErrorInfo of(int code, String msg) {
+        ErrorInfo errorInfo = new ErrorInfo();
+        errorInfo.code = code;
+        errorInfo.msg = msg;
+        return errorInfo;
+    }
 
-    ErrorInfo setFailedRpc(String failedRpc);
+    public static ErrorInfo of(int code, String msg, ErrorLevel level) {
+        ErrorInfo errorInfo = of(code, msg);
+        errorInfo.level = level;
+        return errorInfo;
+    }
+
+    public ErrorInfo exception(Throwable ex) {
+        ErrorInfo newInstance = Cloner.shared().shallowClone(this);
+        newInstance.exception = BaseException.toString(ex);
+        return newInstance;
+    }
+
+    public ErrorInfo msgArgs(Object... args) {
+        ErrorInfo newInstance = Cloner.shared().shallowClone(this);
+        newInstance.args = args;
+        return newInstance;
+    }
+
+    public ErrorInfo path(String path) {
+        ErrorInfo newInstance = Cloner.shared().shallowClone(this);
+        newInstance.path = path;
+        return newInstance;
+    }
+
+    public ErrorInfo failedRpc(String failedRpc) {
+        ErrorInfo newInstance = Cloner.shared().shallowClone(this);
+        newInstance.failedRpc = failedRpc;
+        return newInstance;
+    }
 
     @JsonProperty("ec")
-    int getCode();
+    public int getCode() {
+        return code;
+    }
 
     @JsonProperty("msg")
-    String getMsg();
+    public String getMsg() {
+        // TODO I18N msg
+        return !Checker.isEmpty(args) ? String.format(msg, (Object[])args) : msg;
+    }
 
     @JsonProperty("ep")
-    String getPath();
+    public String getPath() {
+        return path;
+    }
 
     @JsonProperty("elv")
-    ErrorLevel getLevel();
+    public ErrorLevel getLevel() {
+        return level;
+    }
 
-    @JsonProperty("ed")
-    String getExceptionDetail();
+    @JsonProperty("ex")
+    public String getException() {
+        return exception;
+    }
 
     @JsonProperty("rpc")
-    String getFailedRpc();
-
-    //*************************************************************************
-    // Implementation
-    //*************************************************************************
-
-    @Getter
-    class ErrorInfoImpl implements ErrorInfo {
-
-        public int code;
-        public String path;
-        public ErrorLevel level;
-        public String msg;
-        public String failedRpc;
-        public String exceptionDetail;
-
-        public ErrorInfoImpl(int code, String msg) {
-            this.code = code;
-            this.msg = msg;
-        }
-
-        public ErrorInfo setMsg(String msg, String... args) {
-            ErrorInfoImpl newInstance = Cloner.shared().shallowClone(this);
-            newInstance.msg = !Checker.isEmpty(args) ? String.format(msg, (Object[])args) : msg;
-            return newInstance;
-        }
-
-        public ErrorInfo setPath(String path) {
-            ErrorInfoImpl newInstance = Cloner.shared().shallowClone(this);
-            newInstance.path = path;
-            return newInstance;
-        }
-
-        public ErrorInfo setLevel(ErrorLevel level) {
-            ErrorInfoImpl newInstance = Cloner.shared().shallowClone(this);
-            newInstance.level = level;
-            return newInstance;
-        }
-
-        public ErrorInfo setExceptionDetail(String exceptionDetail) {
-            ErrorInfoImpl newInstance = Cloner.shared().shallowClone(this);
-            newInstance.exceptionDetail = exceptionDetail;
-            return newInstance;
-        }
-
-        public ErrorInfo setFailedRpc(String failedRpc) {
-            ErrorInfoImpl newInstance = Cloner.shared().shallowClone(this);
-            newInstance.failedRpc = failedRpc;
-            return newInstance;
-        }
+    public String getFailedRpc() {
+        return failedRpc;
     }
 
     //*************************************************************************
     // Common Errors Definition
     //*************************************************************************
 
-    ErrorInfo OK = new ErrorInfoImpl(0, null);
-    ErrorInfo INTERNAL_SERVER_ERROR    = new ErrorInfoImpl(1001, "Internal server error.");
-    ErrorInfo ENTITY_NOT_FOUND         = new ErrorInfoImpl(1002, "Entity not found.").setLevel(ErrorLevel.ERROR);
-    ErrorInfo DELETION_RESTRICTED      = new ErrorInfoImpl(1003, "Deletion restricted.").setLevel(ErrorLevel.ERROR);
-    ErrorInfo INVALID_SUBMITTED_DATA   = new ErrorInfoImpl(1004, "Invalid submitted data.").setLevel(ErrorLevel.ERROR);
-    ErrorInfo INVALID_SERVER_DATA      = new ErrorInfoImpl(1005, "Invalid server data.");
-    ErrorInfo SAVE_DATA_FAILED         = new ErrorInfoImpl(1006, "Save data failed.");
-    ErrorInfo DUPLICATED_ENTITY        = new ErrorInfoImpl(1007, "Duplicated entity.").setLevel(ErrorLevel.ERROR);
-    ErrorInfo AUTHENTICATION_REQUIRED  = new ErrorInfoImpl(1008, "Authentication required.").setLevel(ErrorLevel.ERROR);
-    ErrorInfo PERMISSION_DENIED        = new ErrorInfoImpl(1009, "Permission Denied.").setLevel(ErrorLevel.ERROR);
-    ErrorInfo PERMISSION_LIMITED       = new ErrorInfoImpl(1010, "Vip Level is not satisfied.").setLevel(ErrorLevel.ERROR);
-    ErrorInfo PERMISSION_NOT_FOUND     = new ErrorInfoImpl(1010, "Permission not found.");
-    ErrorInfo REGISTRATION_ERROR       = new ErrorInfoImpl(1011, "Registration error.");
-    ErrorInfo CLASS_NOT_FOUND          = new ErrorInfoImpl(1012, "Class not found.");
+    public static final ErrorInfo OK                        = ErrorInfo.of(0, null);
 
-    ErrorInfo NOT_AUTHENTICATED            = new ErrorInfoImpl(1100, "Account is not authenticated.");
-    ErrorInfo ACCESS_TOKEN_EXPIRED         = new ErrorInfoImpl(1101, "Access token is expired.");
-    ErrorInfo ACCESS_TOKEN_BROKEN          = new ErrorInfoImpl(1102, "Access token is broken.");
-    ErrorInfo ACCESS_TOKEN_NOT_PROVIDED    = new ErrorInfoImpl(1103, "Access token is not provided.");
-    ErrorInfo REFRESH_TOKEN_EXPIRED        = new ErrorInfoImpl(1104, "Refresh token is expired.");
-    ErrorInfo REFRESH_TOKEN_BROKEN         = new ErrorInfoImpl(1105, "Refresh token is broken.");
-    ErrorInfo NOT_SUPPORT_AUTH_PRINCIPAL   = new ErrorInfoImpl(1106, "Not support auth principal.");
+    public static final ErrorInfo INTERNAL_SERVER_ERROR     = ErrorInfo.of(1001, "%s",                           ErrorLevel.FATAL);
+    public static final ErrorInfo ENTITY_NOT_FOUND          = ErrorInfo.of(1002, "Entity %s(%s) not found.");
+    public static final ErrorInfo DELETION_RESTRICTED       = ErrorInfo.of(1003, "Deletion %s(%s)restricted.");
+    public static final ErrorInfo INVALID_SUBMITTED_DATA    = ErrorInfo.of(1004, "Invalid submitted data. %s");
+    public static final ErrorInfo INVALID_SERVER_DATA       = ErrorInfo.of(1005, "Invalid server data. %s",      ErrorLevel.FATAL);
+    public static final ErrorInfo SAVE_DATA_FAILED          = ErrorInfo.of(1006, "Save data failed.");
+    public static final ErrorInfo DUPLICATED_ENTITY         = ErrorInfo.of(1007, "Duplicated entity %s(%s).");
+    public static final ErrorInfo CLASS_NOT_FOUND           = ErrorInfo.of(1008, "Class %s not found.",          ErrorLevel.FATAL);
+    public static final ErrorInfo REQUIRED_PROPERTY_NOT_SET = ErrorInfo.of(1009, "Required property %s is not set.",    ErrorLevel.FATAL);
+    public static final ErrorInfo INCOMPATIBLE_TYPE         = ErrorInfo.of(1010, "Incompatible type %s, expect %s.",    ErrorLevel.FATAL);
+
+    public static final ErrorInfo AUTHENTICATION_REQUIRED       = ErrorInfo.of(1100, "Authentication required.");
+    public static final ErrorInfo NOT_AUTHENTICATED             = ErrorInfo.of(1101, "Account %s is not authenticated.");
+    public static final ErrorInfo ACCESS_TOKEN_EXPIRED          = ErrorInfo.of(1102, "Access token is expired.");
+    public static final ErrorInfo ACCESS_TOKEN_BROKEN           = ErrorInfo.of(1103, "Access token is broken.");
+    public static final ErrorInfo ACCESS_TOKEN_NOT_PROVIDED     = ErrorInfo.of(1104, "Access token is not provided.");
+    public static final ErrorInfo REFRESH_TOKEN_EXPIRED         = ErrorInfo.of(1105, "Refresh token is expired.");
+    public static final ErrorInfo REFRESH_TOKEN_BROKEN          = ErrorInfo.of(1106, "Refresh token is broken.");
+    public static final ErrorInfo PERMISSION_DENIED             = ErrorInfo.of(1107, "Permission Denied.");
+    public static final ErrorInfo PERMISSION_LIMITED            = ErrorInfo.of(1108, "Vip Level is not satisfied.", ErrorLevel.FATAL);
+    public static final ErrorInfo PERMISSION_NOT_FOUND          = ErrorInfo.of(1109, "Permission %s not found.",    ErrorLevel.FATAL);
+
+    public static final ErrorInfo PERMISSION_REGISTERED         = ErrorInfo.of(1200, "Permission %s has been registered to realm %s",   ErrorLevel.FATAL);
+    public static final ErrorInfo END_POINT_REGISTERED          = ErrorInfo.of(1201, "EndPoint %s has been registered to realm %s",     ErrorLevel.FATAL);
+    public static final ErrorInfo PERMISSION_REVOKE_FAILED      = ErrorInfo.of(1202, "Permission %s is enabled in realm %s. You have to re-register this realm without this permission to disable it first.",   ErrorLevel.FATAL);
+    public static final ErrorInfo END_POINT_REVOKE_FAILED       = ErrorInfo.of(1203, "EndPoint %s is enabled in realm %s. You have to re-register this realm without this permission to disable it first.",     ErrorLevel.FATAL);
 }

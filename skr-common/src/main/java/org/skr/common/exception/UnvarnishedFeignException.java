@@ -48,12 +48,12 @@ public class UnvarnishedFeignException extends BaseException {
                 errorInfo = JsonUtil.fromJSON(ErrorInfo.class, errorJson);
                 if (Checker.isEmpty(errorInfo.getFailedRpc())) {
                     // take methodKey if it hasn't not set in Exception handling chain.
-                    errorInfo.setFailedRpc(methodKey);
+                    errorInfo.failedRpc(methodKey);
                 }
             }
             exception = new UnvarnishedFeignException(errorInfo.getMsg());
         } catch (Exception ex) {
-            errorInfo = ErrorInfo.INTERNAL_SERVER_ERROR.setMsg(ex.getMessage());
+            errorInfo = ErrorInfo.INTERNAL_SERVER_ERROR.msgArgs(ex.getLocalizedMessage());
             exception = new UnvarnishedFeignException(errorInfo.getMsg(), ex);
         }
         exception.responseStatus = responseStatus;

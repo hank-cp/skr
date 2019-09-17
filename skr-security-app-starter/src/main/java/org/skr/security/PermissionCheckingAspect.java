@@ -43,8 +43,7 @@ public class PermissionCheckingAspect {
         PermissionDetail permissionDetail = registryProxy.getPermission(permissionCode);
 
         if (permissionDetail == null) {
-            throw new ConfException(ErrorInfo.PERMISSION_NOT_FOUND
-                    .setMsg("Permission %s is not found.", permissionCode));
+            throw new ConfException(ErrorInfo.PERMISSION_NOT_FOUND.msgArgs(permissionCode));
         }
 
         switch (permissionDetail.checkAuthorization(jwtPrincipal)) {

@@ -15,7 +15,7 @@
  */
 package demo.skr.auth.service;
 
-import demo.skr.ErrorInfo;
+import demo.skr.MyErrorInfo;
 import demo.skr.auth.model.Account;
 import demo.skr.auth.model.User;
 import demo.skr.auth.repository.AccountRepository;
@@ -58,15 +58,16 @@ public class AuthenticationService implements UserDetailsService, JwtPrincipalPr
         String tenentCode = (String) params.get("tenentCode");
         User user = userRepository.findOneByTenentCodeAndAccount(tenentCode, username);
 
-        if (user == null) throw new AuthException(ErrorInfo.ACCOUNT_NOT_BELONG_TO_ORG);
+        if (user == null) throw new AuthException(
+                MyErrorInfo.ACCOUNT_NOT_BELONG_TO_ORG.msgArgs(username, tenentCode));
         if (user.status == Constants.DISABLED)
-            throw new AuthException(ErrorInfo.USER_DISABLED);
+            throw new AuthException(MyErrorInfo.USER_DISABLED.msgArgs(username));
         if (user.status == User.USER_STATUS_JOINING_NEED_APPROVAL)
-            throw new AuthException(ErrorInfo.USER_NEED_APPROVAL);
+            throw new AuthException(MyErrorInfo.USER_NEED_APPROVAL.msgArgs(username));
         if (user.status == User.USER_STATUS_JOINING_REJECT)
-            throw new AuthException(ErrorInfo.USER_REJECTED);
+            throw new AuthException(MyErrorInfo.USER_REJECTED.msgArgs(username));
         if (user.account.status == Constants.DISABLED)
-            throw new AuthException(ErrorInfo.USER_DISABLED);
+            throw new AuthException(MyErrorInfo.USER_DISABLED.msgArgs(username));
 
         return user.buildJwtPrincipal();
     }

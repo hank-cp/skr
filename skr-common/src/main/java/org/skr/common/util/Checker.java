@@ -135,9 +135,8 @@ public final class Checker {
         if (Checker.isEmpty(violations)) return new ArrayList<>();
         return violations.stream().map(
                 violation -> ErrorInfo.INVALID_SUBMITTED_DATA
-                        .setPath(violation.getPropertyPath().toString())
-                        .setMsg(violation.getMessage())
-                        .setLevel(ErrorInfo.ErrorLevel.ERROR)
+                        .path(violation.getPropertyPath().toString())
+                        .msgArgs(violation.getMessage())
         ).collect(Collectors.toList());
     }
 }

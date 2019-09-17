@@ -78,8 +78,8 @@ public class JwtAuthentication {
         }
 
         if (properties.getJwtPrincipalClass() == null) {
-            throw new ConfException(ErrorInfo.CLASS_NOT_FOUND
-                    .setMsg("spring.skr.security.jwtPrincipalClass is not specified."));
+            throw new ConfException(ErrorInfo.REQUIRED_PROPERTY_NOT_SET
+                    .msgArgs("spring.skr.security.jwtPrincipalClass"));
         }
 
         return Optional.of(accessToken)

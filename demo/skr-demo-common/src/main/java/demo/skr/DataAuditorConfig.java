@@ -54,7 +54,9 @@ class DataAuditorConfig {
                 return Optional.of(principal.getUsername());
 
             } else {
-                throw new ConfException(ErrorInfo.INTERNAL_SERVER_ERROR);
+                throw new ConfException(ErrorInfo.INCOMPATIBLE_TYPE.msgArgs(
+                        authentication.getPrincipal().getClass(),
+                        JwtPrincipal.class.getName()));
             }
         }
     }

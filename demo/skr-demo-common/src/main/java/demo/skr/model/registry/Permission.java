@@ -84,8 +84,8 @@ public class Permission extends CodeBasedEntity implements PermissionRegistry {
         if (principal instanceof SimpleJwtPrincipal) {
             jwtPrincipal = (SimpleJwtPrincipal) principal;
         } else {
-            throw new ConfException(ErrorInfo.NOT_SUPPORT_AUTH_PRINCIPAL
-                    .setMsg("Not support auth principal %s", principal.getClass().getName()));
+            throw new ConfException(ErrorInfo.INCOMPATIBLE_TYPE
+                    .msgArgs(principal.getClass().getName(), SimpleJwtPrincipal.class.getName()));
         }
         boolean granted = (jwtPrincipal.getPermissionBit1() & bit1) != 0
                 && (jwtPrincipal.getPermissionBit2() & bit2) != 0
