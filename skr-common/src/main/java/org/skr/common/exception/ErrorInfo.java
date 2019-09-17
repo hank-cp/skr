@@ -141,13 +141,14 @@ public class ErrorInfo {
     public static final ErrorInfo ENTITY_NOT_FOUND          = ErrorInfo.of(1002, "Entity %s(%s) not found.");
     public static final ErrorInfo DELETION_RESTRICTED       = ErrorInfo.of(1003, "Deletion %s(%s)restricted.");
     public static final ErrorInfo INVALID_SUBMITTED_DATA    = ErrorInfo.of(1004, "Invalid submitted data. %s");
-    public static final ErrorInfo INVALID_SERVER_DATA       = ErrorInfo.of(1005, "Invalid server data. %s",     ErrorLevel.FATAL);
+    public static final ErrorInfo INVALID_SERVER_DATA       = ErrorInfo.of(1005, "Invalid server data. %s");
     public static final ErrorInfo SAVE_DATA_FAILED          = ErrorInfo.of(1006, "Save data failed.");
     public static final ErrorInfo DUPLICATED_ENTITY         = ErrorInfo.of(1007, "Duplicated entity %s(%s).");
     public static final ErrorInfo CLASS_NOT_FOUND           = ErrorInfo.of(1008, "Class %s not found.",         ErrorLevel.FATAL);
     public static final ErrorInfo REQUIRED_PROPERTY_NOT_SET = ErrorInfo.of(1009, "Required property %s is not set.",    ErrorLevel.FATAL);
     public static final ErrorInfo INCOMPATIBLE_TYPE         = ErrorInfo.of(1010, "Incompatible type %s, expect %s.",    ErrorLevel.FATAL);
     public static final ErrorInfo NOT_NULLABLE              = ErrorInfo.of(1011, "%s could not be null.",       ErrorLevel.FATAL);
+    public static final ErrorInfo ILLEGAL_DATA              = ErrorInfo.of(1012, "Illegal data %s.");
 
     public static final ErrorInfo AUTHENTICATION_REQUIRED       = ErrorInfo.of(1100, "Authentication required.");
     public static final ErrorInfo NOT_AUTHENTICATED             = ErrorInfo.of(1101, "Account %s is not authenticated.");
