@@ -146,7 +146,7 @@ public class ErrorInfo {
     public static final ErrorInfo DUPLICATED_ENTITY         = ErrorInfo.of(1007, "Duplicated entity %s(%s).");
     public static final ErrorInfo CLASS_NOT_FOUND           = ErrorInfo.of(1008, "Class %s not found.",         ErrorLevel.FATAL);
     public static final ErrorInfo REQUIRED_PROPERTY_NOT_SET = ErrorInfo.of(1009, "Required property %s is not set.",    ErrorLevel.FATAL);
-    public static final ErrorInfo INCOMPATIBLE_TYPE         = ErrorInfo.of(1010, "Incompatible type %s, expect %s.",    ErrorLevel.FATAL);
+    public static final ErrorInfo INCOMPATIBLE_TYPE         = ErrorInfo.of(1010, "Except type %s but %s is given.",     ErrorLevel.FATAL);
     public static final ErrorInfo NOT_NULLABLE              = ErrorInfo.of(1011, "%s could not be null.",       ErrorLevel.FATAL);
     public static final ErrorInfo ILLEGAL_DATA              = ErrorInfo.of(1012, "Illegal data %s.");
 

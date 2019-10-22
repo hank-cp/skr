@@ -85,7 +85,7 @@ public class Permission extends CodeBasedEntity implements PermissionRegistry {
             jwtPrincipal = (SimpleJwtPrincipal) principal;
         } else {
             throw new ConfException(ErrorInfo.INCOMPATIBLE_TYPE
-                    .msgArgs(principal.getClass().getName(), SimpleJwtPrincipal.class.getName()));
+                    .msgArgs(SimpleJwtPrincipal.class.getName(), principal.getClass().getName()));
         }
         boolean granted = (jwtPrincipal.getPermissionBit1() & bit1) != 0
                 && (jwtPrincipal.getPermissionBit2() & bit2) != 0
