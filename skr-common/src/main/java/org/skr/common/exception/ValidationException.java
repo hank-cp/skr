@@ -25,9 +25,9 @@ import java.util.List;
  *
  * @author <a href="https://github.com/hank-cp">Hank CP</a>
  */
-public class ValidationException extends RuntimeException {
+public class ValidationException extends Exception {
 
-    public final List<ErrorInfo> errorInfos;
+    private final List<ErrorInfo> errorInfos;
 
     public ValidationException(@NotNull List<ErrorInfo> errorInfos) {
         super("Validation failed.");
