@@ -38,13 +38,13 @@ public class ValidationException extends Exception {
         return errorInfos;
     }
 
-    public static ErrorInfo.ErrorLevel worstErrorLevel(List<ErrorInfo> errors) {
-        if (Checker.isEmpty(errors)) return null;
+    public ErrorInfo.ErrorLevel worstErrorLevel() {
+        if (Checker.isEmpty(errorInfos)) return null;
 
-        return errors.stream().map(ErrorInfo::getLevel)
+        return errorInfos.stream().map(ErrorInfo::getLevel)
                 .filter(level -> level == ErrorInfo.ErrorLevel.FATAL)
                 .findAny()
-                .orElse(errors.stream().map(ErrorInfo::getLevel)
+                .orElse(errorInfos.stream().map(ErrorInfo::getLevel)
                         .filter(level -> level == ErrorInfo.ErrorLevel.ERROR)
                         .findAny().orElse(ErrorInfo.ErrorLevel.WARNING));
     }
