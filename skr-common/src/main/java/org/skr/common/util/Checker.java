@@ -15,11 +15,11 @@
  */
 package org.skr.common.util;
 
-import org.joda.time.DateTime;
 import org.skr.common.exception.ErrorInfo;
 
 import javax.validation.ConstraintViolation;
 import java.io.File;
+import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -111,11 +111,11 @@ public final class Checker {
         return deleted != null && deleted;
     }
 
-    public static boolean isAfterOrEqual(DateTime dt1, DateTime dt2) {
+    public static boolean isAfterOrEqual(LocalDateTime dt1, LocalDateTime dt2) {
         return dt1.isEqual(dt2) || dt1.isAfter(dt2);
     }
 
-    public static boolean isBeforeOrEqual(DateTime dt1, DateTime dt2) {
+    public static boolean isBeforeOrEqual(LocalDateTime dt1, LocalDateTime dt2) {
         return dt1.isEqual(dt2) || dt1.isBefore(dt2);
     }
 
