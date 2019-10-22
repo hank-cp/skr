@@ -15,8 +15,6 @@
  */
 package org.skr.common.exception;
 
-import org.skr.common.util.Checker;
-
 import javax.validation.constraints.NotNull;
 import java.util.List;
 
@@ -25,7 +23,7 @@ import java.util.List;
  *
  * @author <a href="https://github.com/hank-cp">Hank CP</a>
  */
-public class ValidationException extends Exception {
+public class ValidationException extends RuntimeException {
 
     private final List<ErrorInfo> errorInfos;
 
@@ -39,14 +37,7 @@ public class ValidationException extends Exception {
     }
 
     public ErrorInfo.ErrorLevel worstErrorLevel() {
-        if (Checker.isEmpty(errorInfos)) return null;
-
-        return errorInfos.stream().map(ErrorInfo::getLevel)
-                .filter(level -> level == ErrorInfo.ErrorLevel.FATAL)
-                .findAny()
-                .orElse(errorInfos.stream().map(ErrorInfo::getLevel)
-                        .filter(level -> level == ErrorInfo.ErrorLevel.ERROR)
-                        .findAny().orElse(ErrorInfo.ErrorLevel.WARNING));
+        return ErrorInfo.worstErrorLevel(errorInfos);
     }
 
 }

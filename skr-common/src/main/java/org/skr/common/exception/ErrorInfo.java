@@ -20,6 +20,7 @@ import com.rits.cloning.Cloner;
 import org.skr.common.util.Checker;
 import org.skr.config.json.StringValuedEnum;
 
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -129,6 +130,17 @@ public class ErrorInfo {
     @JsonProperty("rpc")
     public String getFailedRpc() {
         return failedRpc;
+    }
+
+    public static ErrorInfo.ErrorLevel worstErrorLevel(List<ErrorInfo> errors) {
+        if (Checker.isEmpty(errors)) return null;
+
+        return errors.stream().map(ErrorInfo::getLevel)
+                .filter(level -> level == ErrorInfo.ErrorLevel.FATAL)
+                .findAny()
+                .orElse(errors.stream().map(ErrorInfo::getLevel)
+                        .filter(level -> level == ErrorInfo.ErrorLevel.ERROR)
+                        .findAny().orElse(ErrorInfo.ErrorLevel.WARNING));
     }
 
     //*************************************************************************
