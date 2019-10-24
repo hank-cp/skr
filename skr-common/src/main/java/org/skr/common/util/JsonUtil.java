@@ -18,6 +18,7 @@ package org.skr.common.util;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import org.laxture.spring.util.ApplicationContextProvider;
@@ -57,10 +58,45 @@ public class JsonUtil {
         return objectMapper;
     }
 
+    //*************************************************************************
+    // Using Shared ObjectMapper
+    //*************************************************************************
+
     public static <T> T fromJSON(final Class<?> type,
                                  final String json) {
         return fromJSON(getObjectMapper(), type, json);
     }
+
+    public static <T> T fromJSON(final TypeReference<T> type,
+                                 final String json) {
+        return fromJSON(getObjectMapper(), type, json);
+    }
+
+    public static <T> T fromJSON(final Class<?> type,
+                                 final JsonNode json) {
+        return fromJSON(getObjectMapper(), type, json);
+    }
+
+    public static <T> T fromJSON(final TypeReference<T> type,
+                                 final JsonNode json) {
+        return fromJSON(getObjectMapper(), type, json);
+    }
+
+    public static String toJSON(Object obj, Class<?> jsonViewClazz) {
+        return toJSON(getObjectMapper(), obj, jsonViewClazz);
+    }
+
+    public static String toJSON(Object obj) {
+        return toJSON(getObjectMapper(), obj);
+    }
+
+    public static JsonNode toJsonNode(Object obj) {
+        return toJsonNode(getObjectMapper(), obj);
+    }
+
+    //*************************************************************************
+    // Using Instanced ObjectMapper
+    //*************************************************************************
 
     @SuppressWarnings("unchecked")
     public static <T> T fromJSON(ObjectMapper objectMapper,
@@ -73,11 +109,6 @@ public class JsonUtil {
         }
     }
 
-    public static <T> T fromJSON(final TypeReference<T> type,
-                                 final String json) {
-        return fromJSON(getObjectMapper(), type, json);
-    }
-
     public static <T> T fromJSON(ObjectMapper objectMapper,
                                  final TypeReference<T> type,
                                  final String json) {
@@ -88,8 +119,25 @@ public class JsonUtil {
         }
     }
 
-    public static String toJSON(Object obj, Class<?> jsonViewClazz) {
-        return toJSON(getObjectMapper(), obj, jsonViewClazz);
+    @SuppressWarnings("unchecked")
+    public static <T> T fromJSON(ObjectMapper objectMapper,
+                                 final Class<?> type,
+                                 final JsonNode json) {
+        try {
+            return (T) objectMapper.convertValue(json, type);
+        } catch (Exception e) {
+            throw new RuntimeException("Deserialize json text failed. "+json, e);
+        }
+    }
+
+    public static <T> T fromJSON(ObjectMapper objectMapper,
+                                 final TypeReference<T> type,
+                                 final JsonNode json) {
+        try {
+            return objectMapper.convertValue(json, type);
+        } catch (Exception e) {
+            throw new RuntimeException("Deserialize json text failed. "+json, e);
+        }
     }
 
     public static String toJSON(ObjectMapper objectMapper,
@@ -101,13 +149,17 @@ public class JsonUtil {
         }
     }
 
-    public static String toJSON(Object obj) {
-        return toJSON(getObjectMapper(), obj);
-    }
-
     public static String toJSON(ObjectMapper objectMapper, Object obj) {
         try {
             return objectMapper.writeValueAsString(obj);
+        } catch (Exception e) {
+            throw new RuntimeException("Serialize object<"+obj.getClass().getName()+"> to json failed.", e);
+        }
+    }
+
+    public static JsonNode toJsonNode(ObjectMapper objectMapper, Object obj) {
+        try {
+            return objectMapper.valueToTree(obj);
         } catch (Exception e) {
             throw new RuntimeException("Serialize object<"+obj.getClass().getName()+"> to json failed.", e);
         }
