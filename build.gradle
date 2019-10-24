@@ -19,7 +19,7 @@ def isLibraryProject(String projectName) {
 }
 
 buildscript {
-    ext.springBootVersion = '2.1.6.RELEASE'
+    ext.springBootVersion = '2.1.9.RELEASE'
     ext.springCloudVersion = 'Greenwich.RELEASE'
 //    ext.springBootVersion = '2.0.8.RELEASE'
 //    ext.springCloudVersion = 'Finchley.RELEASE'
@@ -30,7 +30,7 @@ buildscript {
         maven { url 'http://repo.spring.io/plugins-release' }
     }
     dependencies {
-        classpath 'ch.raffael.markdown-doclet:markdown-doclet:1.4'
+//        classpath 'ch.raffael.markdown-doclet:markdown-doclet:1.4' // TODO this plugin is not worked since JDK 11
         classpath "org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}"
     }
 }
