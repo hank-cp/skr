@@ -19,7 +19,7 @@ def isLibraryProject(String projectName) {
 }
 
 buildscript {
-    ext.springBootVersion = '2.1.9.RELEASE'
+    ext.springBootVersion = '2.2.0.RELEASE'
     ext.springCloudVersion = 'Greenwich.RELEASE'
 //    ext.springBootVersion = '2.0.8.RELEASE'
 //    ext.springCloudVersion = 'Finchley.RELEASE'
@@ -101,8 +101,8 @@ subprojects {
 // Compile & Assemble
 //*************************************************************************
 
-    sourceCompatibility = JavaVersion.VERSION_12
-    targetCompatibility = JavaVersion.VERSION_12
+    sourceCompatibility = JavaVersion.VERSION_11
+    targetCompatibility = JavaVersion.VERSION_11
 
     compileJava {
         options.compilerArgs << '-parameters'

@@ -19,8 +19,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import org.hibernate.annotations.Type;
 import org.hibernate.annotations.TypeDef;
 import org.hibernate.annotations.TypeDefs;
-import org.jadira.usertype.dateandtime.joda.PersistentDateTime;
-import org.joda.time.DateTime;
+import org.jadira.usertype.dateandtime.threeten.PersistentLocalDateTime;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
@@ -29,13 +28,14 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 /**
  * @author <a href="https://github.com/hank-cp">Hank CP</a>
  */
 @TypeDefs({
-        @TypeDef(name = "datetime", typeClass = PersistentDateTime.class)
+        @TypeDef(name = "datetime", typeClass = PersistentLocalDateTime.class)
 })
 @MappedSuperclass
 @EntityListeners(AuditingEntityListener.class)
@@ -51,14 +51,14 @@ public class BaseEntity implements Serializable, Cloneable {
 
     @CreatedDate
     @Type(type="datetime")
-    public DateTime createdAt;
+    public LocalDateTime createdAt;
 
     @LastModifiedBy
     public String updatedBy;
 
     @LastModifiedDate
     @Type(type="datetime")
-    public DateTime updatedAt;
+    public LocalDateTime updatedAt;
 
     @Version
     public int ver = 0;
