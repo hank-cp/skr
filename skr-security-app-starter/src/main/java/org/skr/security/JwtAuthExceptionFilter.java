@@ -52,7 +52,7 @@ public class JwtAuthExceptionFilter extends OncePerRequestFilter {
                 authEx = (AuthException) ex.getCause();
             }
             if (authEx != null) {
-                response.getWriter().write(JsonUtil.toJSON(authEx.getErrorInfo()));
+                response.getWriter().write(JsonUtil.toJson(authEx.getErrorInfo()));
             }
         }
     }

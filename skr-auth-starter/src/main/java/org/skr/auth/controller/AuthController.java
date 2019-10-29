@@ -74,7 +74,7 @@ public class AuthController {
 
         JwtPrincipal principal = jwtPrincipalProvider.loadJwtPrincipal(
                 username, resolveAuthExtraParams(request));
-        String accessToken = JwtUtil.encode(JsonUtil.toJSON(principal),
+        String accessToken = JwtUtil.encode(JsonUtil.toJson(principal),
                 skrSecurityProperties.getAccessToken().getExpiration(),
                 skrSecurityProperties.getAccessToken().getSecret());
         String refreshToken = JwtUtil.encode(principal.getUsername(),
@@ -118,7 +118,7 @@ public class AuthController {
         JwtPrincipal principal = jwtPrincipalProvider.loadJwtPrincipal(
                 username, resolveAuthExtraParams(request));
 
-        String accessToken = JwtUtil.encode(JsonUtil.toJSON(principal),
+        String accessToken = JwtUtil.encode(JsonUtil.toJson(principal),
                 skrSecurityProperties.getAccessToken().getExpiration(),
                 skrSecurityProperties.getAccessToken().getSecret());
         String refreshToken = JwtUtil.encode(principal.getUsername(),
@@ -160,7 +160,7 @@ public class AuthController {
 
         JwtPrincipal principal = jwtPrincipalProvider.loadJwtPrincipal(
                 username, resolveAuthExtraParams(request));
-        String accessToken = JwtUtil.encode(JsonUtil.toJSON(principal),
+        String accessToken = JwtUtil.encode(JsonUtil.toJson(principal),
                 skrSecurityProperties.getAccessToken().getExpiration(),
                 skrSecurityProperties.getAccessToken().getSecret());
 

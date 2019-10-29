@@ -86,14 +86,14 @@ public class JwtAuthentication {
                 .map(token -> token.replace(prefix, ""))
                 .map(token -> new Tuple2<>(JwtUtil.decode(token, secret), token))
                 .map(decodedTuple -> {
-                    JwtPrincipal principal = JsonUtil.fromJSON(
+                    JwtPrincipal principal = JsonUtil.fromJson(
                             properties.getJwtPrincipalClass(), decodedTuple._0);
                     if (Checker.isTrue(principal.isRobot())) {
                         principal.setApiTrainJwtToken(accessToken);
                     } else {
                         principal.setApiTrainJwtToken(
                                 properties.getTrainToken().getPrefix() +
-                                        JwtUtil.encode(JsonUtil.toJSON(principal),
+                                        JwtUtil.encode(JsonUtil.toJson(principal),
                                                 properties.getTrainToken().getExpiration(),
                                                 properties.getTrainToken().getSecret()));
                     }

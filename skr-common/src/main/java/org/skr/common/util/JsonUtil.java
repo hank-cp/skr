@@ -18,12 +18,15 @@ package org.skr.common.util;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import org.laxture.spring.util.ApplicationContextProvider;
 import org.skr.config.json.*;
 
+import java.io.IOException;
+import java.util.Collection;
 import java.util.stream.Stream;
 
 /**
@@ -62,32 +65,42 @@ public class JsonUtil {
     // Using Shared ObjectMapper
     //*************************************************************************
 
-    public static <T> T fromJSON(final Class<?> type,
+    public static <T> T fromJson(final Class<?> type,
                                  final String json) {
-        return fromJSON(getObjectMapper(), type, json);
+        return fromJson(getObjectMapper(), type, json);
     }
 
-    public static <T> T fromJSON(final TypeReference<T> type,
+    public static <T> T fromJson(final TypeReference<T> type,
                                  final String json) {
-        return fromJSON(getObjectMapper(), type, json);
+        return fromJson(getObjectMapper(), type, json);
     }
 
-    public static <T> T fromJSON(final Class<?> type,
-                                 final JsonNode json) {
-        return fromJSON(getObjectMapper(), type, json);
+    public static <T> T fromJson(final JavaType javaType,
+                                 final String json) {
+        return fromJson(getObjectMapper(), javaType, json);
     }
 
-    public static <T> T fromJSON(final TypeReference<T> type,
-                                 final JsonNode json) {
-        return fromJSON(getObjectMapper(), type, json);
+    public static <T> T fromJson(final Class<?> type,
+                                 final JsonNode jsonNode) {
+        return fromJson(getObjectMapper(), type, jsonNode);
     }
 
-    public static String toJSON(Object obj, Class<?> jsonViewClazz) {
-        return toJSON(getObjectMapper(), obj, jsonViewClazz);
+    public static <T> T fromJson(final TypeReference<T> type,
+                                 final JsonNode jsonNode) {
+        return fromJson(getObjectMapper(), type, jsonNode);
     }
 
-    public static String toJSON(Object obj) {
-        return toJSON(getObjectMapper(), obj);
+    public static <T> T fromJson(final JavaType javaType,
+                                 final JsonNode jsonNode) {
+        return fromJson(getObjectMapper(), javaType, jsonNode);
+    }
+
+    public static String toJson(Object obj, Class<?> jsonViewClazz) {
+        return toJson(getObjectMapper(), obj, jsonViewClazz);
+    }
+
+    public static String toJson(Object obj) {
+        return toJson(getObjectMapper(), obj);
     }
 
     public static JsonNode toJsonNode(Object obj) {
@@ -99,48 +112,56 @@ public class JsonUtil {
     //*************************************************************************
 
     @SuppressWarnings("unchecked")
-    public static <T> T fromJSON(ObjectMapper objectMapper,
+    public static <T> T fromJson(ObjectMapper objectMapper,
                                  final Class<?> type,
                                  final String json) {
         try {
             return (T) objectMapper.readValue(json, type);
-        } catch (Exception e) {
+        } catch (IOException e) {
             throw new RuntimeException("Deserialize json text failed. "+json, e);
         }
     }
 
-    public static <T> T fromJSON(ObjectMapper objectMapper,
+    public static <T> T fromJson(ObjectMapper objectMapper,
                                  final TypeReference<T> type,
                                  final String json) {
         try {
             return objectMapper.readValue(json, type);
-        } catch (Exception e) {
+        } catch (IOException e) {
+            throw new RuntimeException("Deserialize json text failed. "+json, e);
+        }
+    }
+
+    public static <T> T fromJson(ObjectMapper objectMapper,
+                                 JavaType javaType,
+                                 String json) {
+        try {
+            return objectMapper.readValue(json, javaType);
+        } catch (IOException e) {
             throw new RuntimeException("Deserialize json text failed. "+json, e);
         }
     }
 
     @SuppressWarnings("unchecked")
-    public static <T> T fromJSON(ObjectMapper objectMapper,
+    public static <T> T fromJson(ObjectMapper objectMapper,
                                  final Class<?> type,
-                                 final JsonNode json) {
-        try {
-            return (T) objectMapper.convertValue(json, type);
-        } catch (Exception e) {
-            throw new RuntimeException("Deserialize json text failed. "+json, e);
-        }
+                                 final JsonNode jsonNode) {
+        return (T) objectMapper.convertValue(jsonNode, type);
     }
 
-    public static <T> T fromJSON(ObjectMapper objectMapper,
+    public static <T> T fromJson(ObjectMapper objectMapper,
                                  final TypeReference<T> type,
-                                 final JsonNode json) {
-        try {
-            return objectMapper.convertValue(json, type);
-        } catch (Exception e) {
-            throw new RuntimeException("Deserialize json text failed. "+json, e);
-        }
+                                 final JsonNode jsonNode) {
+        return objectMapper.convertValue(jsonNode, type);
     }
 
-    public static String toJSON(ObjectMapper objectMapper,
+    public static <T> T fromJson(ObjectMapper objectMapper,
+                                 JavaType javaType,
+                                 JsonNode jsonNode) {
+        return objectMapper.convertValue(jsonNode, javaType);
+    }
+
+    public static String toJson(ObjectMapper objectMapper,
                                 Object obj, Class<?> jsonViewClazz) {
         try {
             return objectMapper.writerWithView(jsonViewClazz).writeValueAsString(obj);
@@ -149,7 +170,7 @@ public class JsonUtil {
         }
     }
 
-    public static String toJSON(ObjectMapper objectMapper, Object obj) {
+    public static String toJson(ObjectMapper objectMapper, Object obj) {
         try {
             return objectMapper.writeValueAsString(obj);
         } catch (Exception e) {
@@ -163,6 +184,14 @@ public class JsonUtil {
         } catch (Exception e) {
             throw new RuntimeException("Serialize object<"+obj.getClass().getName()+"> to json failed.", e);
         }
+    }
+
+    public static JavaType getJavaType(Class<?> clazz) {
+        return JsonUtil.getObjectMapper().getSerializationConfig().getTypeFactory().constructType(clazz);
+    }
+
+    public static JavaType getCollectionJavaType(Class<? extends Collection> collectionClass, Class<?> elementClass) {
+        return JsonUtil.getObjectMapper().getSerializationConfig().getTypeFactory().constructCollectionType(collectionClass, elementClass);
     }
 
 }
