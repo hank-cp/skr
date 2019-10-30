@@ -22,6 +22,8 @@ import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 /**
  * @author <a href="https://github.com/hank-cp">Hank CP</a>
  */
@@ -44,11 +46,10 @@ public interface RegistryProxy {
 	void unregisterRealm(@PathVariable(name = "realmCode") String realmCode);
 
 	/** Revoke a disabled permission in order to reuse permissionCode. */
-	@PostMapping("/permission/{permissionCode}/revoke")
+	@PostMapping("/registry/permission/{permissionCode}/revoke")
 	void revokePermission(@PathVariable(name = "permissionCode") String permissionCode);
 
 	/** Revoke a disabled EndPoint in order to reuse url. */
-	@PostMapping("/end-point/revoke")
-	@Transactional
+	@PostMapping("/registry/end-point/revoke")
 	void revokeEndPoint(@RequestParam(name = "url") String url);
 }
