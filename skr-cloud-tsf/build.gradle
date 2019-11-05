@@ -1,6 +1,10 @@
 def tsfSpringCloudVersion = '1.14.0-Finchley-RELEASE'
 
 dependencies {
+    compile "org.springframework.cloud:spring-cloud-commons"
+    compile "org.springframework.cloud:spring-cloud-context"
+    compile "org.springframework.cloud:spring-cloud-starter-openfeign"
+
     compile "com.tencent.tsf:spring-cloud-tsf-consul-config:${tsfSpringCloudVersion}"
     compile "com.tencent.tsf:spring-cloud-tsf-consul-discovery:${tsfSpringCloudVersion}"
     compile "com.tencent.tsf:spring-cloud-tsf-sleuth:${tsfSpringCloudVersion}"
