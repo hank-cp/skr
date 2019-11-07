@@ -37,8 +37,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
-import static org.skr.common.util.CollectionUtils.*;
-
 /**
  * @author <a href="https://github.com/hank-cp">Hank CP</a>
  */
@@ -84,13 +82,13 @@ public class AuthController {
                 skrSecurityProperties.getLoginToken().getExpiration(),
                 skrSecurityProperties.getLoginToken().getSecret());
 
-        return map(
-            entry(skrSecurityProperties.getAccessToken().getHeader(),
+        return Map.ofEntries(
+            Map.entry(skrSecurityProperties.getAccessToken().getHeader(),
                     skrSecurityProperties.getAccessToken().getPrefix() + accessToken),
-            entry(skrSecurityProperties.getRefreshToken().getHeader(),
+            Map.entry(skrSecurityProperties.getRefreshToken().getHeader(),
                     skrSecurityProperties.getRefreshToken().getPrefix() + refreshToken),
-            entry("loginToken", loginToken),
-            entry("principal", principal)
+            Map.entry("loginToken", loginToken),
+            Map.entry("principal", principal)
         );
     }
 
@@ -125,12 +123,12 @@ public class AuthController {
                 skrSecurityProperties.getRefreshToken().getExpiration(),
                 skrSecurityProperties.getRefreshToken().getSecret());
 
-        return map(
-                entry(skrSecurityProperties.getAccessToken().getHeader(),
+        return Map.ofEntries(
+                Map.entry(skrSecurityProperties.getAccessToken().getHeader(),
                         skrSecurityProperties.getAccessToken().getPrefix() + accessToken),
-                entry(skrSecurityProperties.getRefreshToken().getHeader(),
+                Map.entry(skrSecurityProperties.getRefreshToken().getHeader(),
                         skrSecurityProperties.getRefreshToken().getPrefix() + refreshToken),
-                entry("principal", principal)
+                Map.entry("principal", principal)
         );
     }
 
@@ -164,8 +162,8 @@ public class AuthController {
                 skrSecurityProperties.getAccessToken().getExpiration(),
                 skrSecurityProperties.getAccessToken().getSecret());
 
-        Map<String, Object> result = map(
-            entry(skrSecurityProperties.getAccessToken().getHeader(),
+        Map<String, Object> result = Map.ofEntries(
+                Map.entry(skrSecurityProperties.getAccessToken().getHeader(),
                     skrSecurityProperties.getAccessToken().getPrefix() + accessToken)
         );
 

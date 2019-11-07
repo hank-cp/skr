@@ -33,6 +33,10 @@ import java.util.List;
 @Data
 public class SkrSecurityProperties {
 
+    private boolean appEnabled = true;
+
+    private boolean permissionCheckEnabled = true;
+
     /** renew refresh token together every time refresh access token */
     private boolean renewRefreshToken = false;
 

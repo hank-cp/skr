@@ -30,7 +30,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 
-import static org.skr.common.util.CollectionUtils.list;
+import java.util.List;
 
 /**
  * @author <a href="https://github.com/hank-cp">Hank CP</a>
@@ -66,11 +66,11 @@ public class AioApp implements Constants {
             realm.name = "demo-aio";
             realm.code = "demo-aio";
             registryProxy.registerRealm(RegisterBatch.of(realm,
-                    list(
+                    List.of(
                             Permission.of("Task_Management", "Task Management"),
                             Permission.of("Task_Management_Create", "Task Management - Create"),
                             Permission.of("Task_Management_Edit", "Task Management - Edit")),
-                    list(
+                    List.of(
                             EndPoint.of("Task_Management",
                                     "/tasks",
                                     "Demo-a.Task Management")

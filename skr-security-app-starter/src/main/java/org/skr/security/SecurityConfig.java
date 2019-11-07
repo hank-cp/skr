@@ -16,11 +16,15 @@
 package org.skr.security;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.boot.autoconfigure.AutoConfigureAfter;
+import org.springframework.boot.autoconfigure.AutoConfigureBefore;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
@@ -39,6 +43,7 @@ import java.util.Set;
  */
 @Configuration
 @Import({PermissionCheckingAspect.class, JwtAuthExceptionFilter.class})
+@ConditionalOnProperty(prefix = "spring.skr.security", name = "app-enabled", havingValue = "true", matchIfMissing = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired

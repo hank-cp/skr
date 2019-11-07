@@ -29,7 +29,7 @@ import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.stereotype.Component;
 
-import static org.skr.common.util.CollectionUtils.list;
+import java.util.List;
 
 /**
  * @author <a href="https://github.com/hank-cp">Hank CP</a>
@@ -62,11 +62,11 @@ public class DemoA {
             realm.name = "demo-a";
             realm.code = "demo-a";
             registryProxy.registerRealm(RegisterBatch.of(realm,
-                    list(
+                    List.of(
                         Permission.of("Task_Management", "Task Management"),
                         Permission.of("Task_Management_Create", "Task Management - Create"),
                         Permission.of("Task_Management_Edit", "Task Management - Edit")),
-                    list(
+                    List.of(
                         EndPoint.of("Task_Management",
                                 "/tasks",
                                 "Demo-a.Task Management")

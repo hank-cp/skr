@@ -18,6 +18,10 @@ spring:
     consul:
       discovery:
         enabled: false
+  skr:
+    security:
+      app-enabled: true
+      permission-check-enabled: true
 
 demo:
   skr:

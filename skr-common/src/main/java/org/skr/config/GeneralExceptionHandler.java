@@ -16,10 +16,7 @@
 package org.skr.config;
 
 import lombok.extern.slf4j.Slf4j;
-import org.skr.common.exception.AuthException;
-import org.skr.common.exception.BizException;
-import org.skr.common.exception.ErrorInfo;
-import org.skr.common.exception.UnvarnishedFeignException;
+import org.skr.common.exception.*;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpHeaders;
@@ -67,6 +64,15 @@ public class GeneralExceptionHandler extends ResponseEntityExceptionHandler {
                 ex.getErrorInfo(),
                 new HttpHeaders(),
                 HttpStatus.UNAUTHORIZED,
+                request);
+    }
+
+    @ExceptionHandler(PermissionException.class)
+    public ResponseEntity<Object> handleException(PermissionException ex, WebRequest request) {
+        return handleExceptionInternal(ex,
+                ex.getErrorInfo(),
+                new HttpHeaders(),
+                HttpStatus.FORBIDDEN,
                 request);
     }
 

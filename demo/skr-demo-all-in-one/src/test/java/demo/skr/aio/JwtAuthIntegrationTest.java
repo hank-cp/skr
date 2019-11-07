@@ -63,12 +63,7 @@ public class JwtAuthIntegrationTest {
 
         mvc.perform(get("/task/list")
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED)
-                .header("access-token", response.get("access-token").asText())
-                .content(EntityUtils.toString(new UrlEncodedFormEntity(Arrays.asList(
-                        new BasicNameValuePair("auth_tenentCode", "org1"),
-                        new BasicNameValuePair("username", "dev"),
-                        new BasicNameValuePair("password", "dev")
-                )))))
+                .header("access-token", response.get("access-token").asText()))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(0)));
     }
@@ -83,6 +78,34 @@ public class JwtAuthIntegrationTest {
                         new BasicNameValuePair("username", "dev"),
                         new BasicNameValuePair("password", "dev")
                 )))))
+                .andExpect(status().isForbidden());
+    }
+
+    @Test
+    public void testUserDetail() throws Exception {
+        mvc.perform(post("/auth/login")
+                .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+                .content(EntityUtils.toString(new UrlEncodedFormEntity(Arrays.asList(
+                        new BasicNameValuePair("auth_tenentCode", "org1"),
+                        new BasicNameValuePair("username", "guest"),
+                        new BasicNameValuePair("password", "guest")
+                )))))
+                .andExpect(status().isUnauthorized());;
+    }
+
+    @Test
+    public void testPermissionCheck() throws Exception {
+        JsonNode response = objectMapper.readTree(mvc.perform(post("/auth/login")
+                .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+                .content(EntityUtils.toString(new UrlEncodedFormEntity(Arrays.asList(
+                        new BasicNameValuePair("auth_tenentCode", "org1"),
+                        new BasicNameValuePair("username", "test"),
+                        new BasicNameValuePair("password", "test")
+                ))))).andReturn().getResponse().getContentAsByteArray());
+
+        mvc.perform(get("/task/list")
+                .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+                .header("access-token", response.get("access-token").asText()))
                 .andExpect(status().isForbidden());
     }
 

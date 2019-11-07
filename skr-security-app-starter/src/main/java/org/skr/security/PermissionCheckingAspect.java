@@ -18,12 +18,13 @@ package org.skr.security;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
-import org.skr.common.exception.AuthException;
 import org.skr.common.exception.ConfException;
 import org.skr.common.exception.ErrorInfo;
+import org.skr.common.exception.PermissionException;
 import org.skr.registry.proxy.RegistryProxy;
 import org.skr.security.annotation.RequirePermission;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
 
 /**
@@ -31,6 +32,7 @@ import org.springframework.stereotype.Component;
  */
 @Component
 @Aspect
+@ConditionalOnProperty(prefix = "spring.skr.security", name = "permission-check-enabled", havingValue = "true", matchIfMissing = true)
 public class PermissionCheckingAspect {
 
     @Autowired
@@ -49,9 +51,9 @@ public class PermissionCheckingAspect {
         switch (permissionDetail.checkAuthorization(jwtPrincipal)) {
             case PERMISSION_GRANTED: return joinPoint.proceed();
             case PERMISSION_DENIED:
-                throw new AuthException(ErrorInfo.PERMISSION_DENIED);
+                throw new PermissionException(ErrorInfo.PERMISSION_DENIED);
             case PERMISSION_LIMITATION:
-                throw new AuthException(ErrorInfo.PERMISSION_LIMITED);
+                throw new PermissionException(ErrorInfo.PERMISSION_LIMITED);
             default:
                 throw new ConfException(ErrorInfo.INTERNAL_SERVER_ERROR);
         }
