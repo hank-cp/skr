@@ -70,7 +70,7 @@ public class RegistryIntegrationTest {
     @Test
     public void testGeneratePermissionBits() {
         Tuple3<Long, Long, Long> bits = registryService.generatePermissionBits();
-        assertThat(bits._0, equalTo(8L));
+        assertThat(bits._0, equalTo(16L));
         assertThat(bits._1, equalTo(1L));
         assertThat(bits._2, equalTo(1L));
 
@@ -115,10 +115,10 @@ public class RegistryIntegrationTest {
         permission.code = "test";
         permission.name = "test";
         registryService.registerPermission(testRealm, permission);
-        assertThat(permission.bit1, equalTo(8L));
+        assertThat(permission.bit1, equalTo(16L));
         assertThat(permission.bit2, equalTo(1L));
         assertThat(permission.bit3, equalTo(1L));
-        assertThat(registryService.listPermissions(), hasSize(4));
+        assertThat(registryService.listPermissions(), hasSize(5));
 
         // test save failed by define permission on another realm
         Realm testRealm2 = new Realm();

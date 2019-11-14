@@ -1,8 +1,9 @@
 include 'skr-common',
-        'skr-auth-starter',
-        'skr-registry-starter',
-        'skr-registry-app-starter',
-        'skr-security-app-starter',
+        'skr-service-auth',
+        'skr-service-registry',
+        'skr-app-registry',
+        'skr-app-auth',
+        'skr-app-auth-perm',
 
 //        'skr-cloud-tsf',
         'skr-cloud-spring',

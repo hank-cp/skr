@@ -1,0 +1,10 @@
+server:
+  port: 8902
+spring:
+  application:
+    name: auth
+  cloud:
+    consul:
+      discovery:
+        enabled: false
+      enabled: false

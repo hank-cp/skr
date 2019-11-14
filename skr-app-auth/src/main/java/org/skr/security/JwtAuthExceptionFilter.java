@@ -42,7 +42,7 @@ public class JwtAuthExceptionFilter extends OncePerRequestFilter {
             filterChain.doFilter(request, response);
         } catch (AuthException | NestedServletException ex) {
             response.setStatus(HttpServletResponse.SC_FORBIDDEN);
-            response.setContentType(MediaType.APPLICATION_JSON_UTF8_VALUE);
+            response.setContentType(MediaType.APPLICATION_JSON_VALUE);
             AuthException authEx = null;
             if (ex instanceof AuthException) {
                 authEx = (AuthException) ex;

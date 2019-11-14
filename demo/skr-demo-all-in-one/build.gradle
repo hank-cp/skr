@@ -6,8 +6,9 @@ dependencies {
 
     compile project(':skr-demo-auth')
     compile project(':skr-demo-registry')
-    compile project(":skr-registry-app-starter")
-    compile project(':skr-security-app-starter')
+    compile project(":skr-app-registry")
+    compile project(':skr-app-auth')
+    compile project(':skr-app-auth-perm')
 
     runtimeOnly "org.hsqldb:hsqldb"
     

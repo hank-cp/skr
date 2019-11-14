@@ -63,13 +63,13 @@ public class DemoA {
             realm.code = "demo-a";
             registryProxy.registerRealm(RegisterBatch.of(realm,
                     List.of(
-                        Permission.of("Task_Management", "Task Management"),
-                        Permission.of("Task_Management_Create", "Task Management - Create"),
-                        Permission.of("Task_Management_Edit", "Task Management - Edit")),
+                            Permission.of("Task", "Task"),
+                            Permission.of("Task_Create", "Task - Create"),
+                            Permission.of("Task_Edit", "Task - Edit")),
                     List.of(
-                        EndPoint.of("Task_Management",
-                                "/tasks",
-                                "Demo-a.Task Management")
+                            EndPoint.of("Task",
+                                    "/tasks",
+                                    "Demo-a.Task")
                     )
             ));
 

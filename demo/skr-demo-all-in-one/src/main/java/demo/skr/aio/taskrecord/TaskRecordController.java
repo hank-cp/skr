@@ -15,6 +15,7 @@
  */
 package demo.skr.aio.taskrecord;
 
+import org.skr.security.annotation.RequirePermission;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -31,6 +32,7 @@ public class TaskRecordController {
     private TaskRecordRepository taskRecordRepository;
 
     @PostMapping("/{taskId}")
+    @RequirePermission("Task_Record")
     public void record(@PathVariable long taskId,
                        @RequestParam String operation) {
         TaskRecord taskRecord = new TaskRecord();
@@ -40,6 +42,7 @@ public class TaskRecordController {
     }
 
     @GetMapping("/list")
+    @RequirePermission("Task_Record")
     public List<TaskRecord> getTaskRecords() {
         return taskRecordRepository.findAll();
     }

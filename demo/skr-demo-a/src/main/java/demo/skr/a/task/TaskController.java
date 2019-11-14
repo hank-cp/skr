@@ -43,7 +43,7 @@ public class TaskController {
     }
 
     @GetMapping("/list")
-    @RequirePermission("Task_Management")
+    @RequirePermission("Task")
     public @ResponseBody List<Task> getTasks() {
         return taskRepository.findAll();
     }

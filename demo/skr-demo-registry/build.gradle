@@ -2,7 +2,7 @@ ext.httpPort = "${registry_httpPort}"
 
 dependencies {
     compile project(':skr-demo-common')
-    compile project(':skr-registry-starter')
+    compile project(':skr-service-registry')
 
     compile "org.hsqldb:hsqldb"
     

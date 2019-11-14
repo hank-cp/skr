@@ -2,7 +2,7 @@ ext.httpPort = "${auth_httpPort}"
 
 dependencies {
     compile project(':skr-demo-common')
-    compile project(':skr-auth-starter')
+    compile project(':skr-service-auth')
 
     compile "org.hsqldb:hsqldb"
     compile 'com.pszymczyk.consul:embedded-consul:2.0.0'

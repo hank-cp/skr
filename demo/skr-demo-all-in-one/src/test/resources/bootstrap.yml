@@ -1,0 +1,10 @@
+server:
+  port: 8980
+spring:
+  application:
+    name: aio
+  cloud:
+    consul:
+      discovery:
+        enabled: false
+      enabled: false

@@ -15,10 +15,21 @@
  */
 package demo.skr.b;
 
+import demo.skr.model.registry.EndPoint;
+import demo.skr.model.registry.Permission;
+import demo.skr.model.registry.Realm;
+import lombok.extern.slf4j.Slf4j;
+import org.skr.registry.RegisterBatch;
+import org.skr.registry.proxy.RegistryProxy;
+import org.springframework.beans.factory.InitializingBean;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.cloud.openfeign.EnableFeignClients;
+import org.springframework.stereotype.Component;
+
+import java.util.List;
 
 /**
  * @author <a href="https://github.com/hank-cp">Hank CP</a>
@@ -26,9 +37,38 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
 @SpringBootApplication(scanBasePackages = "demo.skr")
 @EnableFeignClients(basePackages = {"org.skr", "demo.skr"})
 @EnableDiscoveryClient
+@Slf4j
 public class DemoB {
+
     public static void main(String[] args) {
         SpringApplication.run(DemoB.class, args);
+    }
+
+    @Component
+    public static class OnStartUpListener implements InitializingBean {
+
+        @Autowired
+        private RegistryProxy registryProxy;
+
+        @Override
+        public void afterPropertiesSet() throws Exception {
+            log.info("Registering Realm demo-a ......");
+
+            Realm realm = new Realm();
+            realm.name = "demo-b";
+            realm.code = "demo-b";
+            registryProxy.registerRealm(RegisterBatch.of(realm,
+                    List.of(
+                            Permission.of("Task_Record", "Task Record")),
+                    List.of(
+                            EndPoint.of("Task_Record",
+                                    "/tasks",
+                                    "Demo-a.Task Record")
+                    )
+            ));
+
+            log.info("Registering realm demo-a done!");
+        }
     }
 }
 
