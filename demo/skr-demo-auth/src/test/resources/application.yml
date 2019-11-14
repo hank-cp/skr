@@ -17,3 +17,6 @@ spring:
 logging:
   level:
     org.hibernate.tool.schema.internal.ExceptionHandlerLoggedImpl: ERROR
+
+lolth:
+  embedded-consul: true

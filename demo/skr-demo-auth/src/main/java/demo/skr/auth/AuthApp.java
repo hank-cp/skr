@@ -15,9 +15,23 @@
  */
 package demo.skr.auth;
 
-import org.springframework.boot.SpringApplication;
+import com.pszymczyk.consul.ConsulProcess;
+import com.pszymczyk.consul.ConsulStarterBuilder;
+import org.apache.commons.io.FileUtils;
+import org.springframework.beans.factory.DisposableBean;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
+import org.springframework.context.ApplicationContextInitializer;
+import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.core.Ordered;
+
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Path;
+import java.util.Objects;
 
 /**
  * @author <a href="https://github.com/hank-cp">Hank CP</a>
@@ -25,8 +39,11 @@ import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 @SpringBootApplication(scanBasePackages = "demo.skr")
 @EnableDiscoveryClient
 public class AuthApp {
+
     public static void main(String[] args) {
-        SpringApplication.run(AuthApp.class, args);
+        new SpringApplicationBuilder()
+                .sources(AuthApp.class)
+                .initializers(new EmbeddedConsul()).run(args);
     }
 
 //    @Configuration
@@ -42,5 +59,38 @@ public class AuthApp {
 //                    new String[] { "--url", "jdbc:hsqldb:mem:local", "--user", "sa", "--password", ""});
 //        }
 //    }
+
+    @Configuration
+    @ConditionalOnProperty(value = "lolth.embedded-consul", havingValue = "true")
+    public static class EmbeddedConsul implements
+            ApplicationContextInitializer<ConfigurableApplicationContext>, DisposableBean, Ordered {
+
+        private ConsulProcess consul;
+
+        @Override
+        public int getOrder() {
+            return Ordered.HIGHEST_PRECEDENCE;
+        }
+
+        @Override
+        public void initialize(ConfigurableApplicationContext applicationContext) {
+            if (!Objects.equals(applicationContext.getEnvironment()
+                    .getProperty("lolth.embedded-consul"), "true")) return;
+            try {
+                FileUtils.forceMkdir(new File("tmp"));
+            } catch (IOException ignored) {}
+            consul = ConsulStarterBuilder.consulStarter()
+                    .withHttpPort(Integer.parseInt(applicationContext.getEnvironment()
+                            .getProperty("spring.cloud.consul.port", "8500")))
+                    .withConsulVersion("1.6.0")
+                    .withConsulBinaryDownloadDirectory(Path.of("tmp"))
+                    .build().start();
+        }
+
+        @Override
+        public void destroy() {
+            if (consul != null) consul.close();
+        }
+    }
 
 }

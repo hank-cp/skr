@@ -9,3 +9,4 @@ build
 logs/
 /transaction-logs
 .gradletasknamecache
+/tmp

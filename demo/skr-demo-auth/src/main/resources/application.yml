@@ -22,3 +22,6 @@ logging:
 tsf:
   swagger:
     enabled: false
+
+lolth:
+  embedded-consul: true
