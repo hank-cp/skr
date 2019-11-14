@@ -92,5 +92,4 @@ public class AuthApp {
             if (consul != null) consul.close();
         }
     }
-
 }
