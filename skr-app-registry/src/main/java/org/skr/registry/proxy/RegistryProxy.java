@@ -27,7 +27,7 @@ import java.util.List;
 /**
  * @author <a href="https://github.com/hank-cp">Hank CP</a>
  */
-@FeignClient(name = "registry")
+@FeignClient(name = "${spring.skr.registry.host:registry}", qualifier = "registryProxy")
 public interface RegistryProxy {
 
 	@GetMapping("/registry/permission/{permissionCode}")

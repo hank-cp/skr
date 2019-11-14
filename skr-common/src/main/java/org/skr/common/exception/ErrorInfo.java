@@ -17,6 +17,7 @@ package org.skr.common.exception;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.rits.cloning.Cloner;
+import lombok.ToString;
 import org.skr.common.util.Checker;
 import org.skr.config.json.StringValuedEnum;
 
@@ -26,6 +27,7 @@ import java.util.Objects;
 /**
  * @author <a href="https://github.com/hank-cp">Hank CP</a>
  */
+@ToString
 public class ErrorInfo {
 
     public enum ErrorLevel implements StringValuedEnum {
