@@ -1,0 +1,4 @@
+dependencies {
+    compile project(':skr-common')
+    compile project(':skr-app-registry')
+}
