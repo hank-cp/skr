@@ -70,7 +70,7 @@ subprojects {
     apply plugin: 'jacoco'
     apply plugin: 'io.spring.dependency-management'
 //    apply plugin: 'ch.raffael.markdown-doclet'
-    if (!isLibraryProject(name)) {
+    if (isLibraryProject(name)) {
         apply plugin: 'java-library'
         apply plugin: 'maven'
     }
