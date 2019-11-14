@@ -8,13 +8,3 @@ dependencies {
 
     runtimeOnly "org.hsqldb:hsqldb"
 }
-
-//*************************************************************************
-// App Properties
-//*************************************************************************
-
-mainClassName = 'demo.skr.a.DemoA'
-
-manifest {
-    attributes 'Main-Class': 'demo.skr.a.DemoA'
-}

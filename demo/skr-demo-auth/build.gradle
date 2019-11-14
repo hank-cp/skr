@@ -9,13 +9,3 @@ dependencies {
 
     testImplementation "org.springframework.boot:spring-boot-starter-test"
 }
-
-//*************************************************************************
-// App Properties
-//*************************************************************************
-
-mainClassName = 'demo.skr.auth.AuthApp'
-
-manifest {
-    attributes 'Main-Class': 'demo.skr.auth.AuthApp'
-}

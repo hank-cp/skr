@@ -28,6 +28,7 @@ import org.junit.runner.RunWith;
 import org.skr.common.exception.BizException;
 import org.skr.common.util.tuple.Tuple3;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -41,6 +42,7 @@ import static org.hamcrest.Matchers.*;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = RegistryApp.class)
+@AutoConfigureMockMvc
 @Rollback
 @Transactional
 public class RegistryIntegrationTest {

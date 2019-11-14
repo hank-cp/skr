@@ -8,13 +8,3 @@ dependencies {
     
     testImplementation "org.springframework.boot:spring-boot-starter-test"
 }
-
-//*************************************************************************
-// App Properties
-//*************************************************************************
-
-mainClassName = 'org.skr.registry.RegistryApp'
-
-manifest {
-    attributes 'Main-Class': 'org.skr.registry.RegistryApp'
-}
