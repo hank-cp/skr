@@ -1,3 +1,9 @@
+[![GitHub release](https://img.shields.io/github/release/hank-cp/skr.svg)](https://github.com/hank-cp/skr/releases)
+[![](https://jitpack.io/v/hank-cp/skr.svg)](https://jitpack.io/#hank-cp/skr)
+[![Github Actions](https://github.com/hank-cp/skr/workflows/Java%20CI/badge.svg)](https://github.com/hank-cp/skr/actions)
+![GitHub](https://img.shields.io/github/license/hank-cp/skr.svg)
+![GitHub last commit](https://img.shields.io/github/last-commit/hank-cp/skr.svg)
+
 Skr project is a Spring Boot/Cloud project skeleton that define abstraction 
 of JWT based security configuration.
 Project based on skr skeleton could define its own implementation 
