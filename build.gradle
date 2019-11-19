@@ -163,7 +163,7 @@ subprojects {
             archives javadocJar
         }
 
-        group = 'org.laxture.skr'
+        group = 'org.laxture'
     }
 
 }
