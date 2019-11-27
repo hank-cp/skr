@@ -17,6 +17,7 @@ package org.skr.common.exception;
 
 import javax.validation.constraints.NotNull;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * The super class for exceptions
@@ -28,7 +29,9 @@ public class ValidationException extends RuntimeException {
     private final List<ErrorInfo> errorInfos;
 
     public ValidationException(@NotNull List<ErrorInfo> errorInfos) {
-        super("Validation failed.");
+        super("Validation failed.\n"+errorInfos.stream()
+                .map(ErrorInfo::getMsg)
+                .collect(Collectors.joining("\n")));
         this.errorInfos = errorInfos;
     }
 
