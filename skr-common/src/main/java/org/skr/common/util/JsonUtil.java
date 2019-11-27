@@ -23,6 +23,8 @@ import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
+import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.laxture.spring.util.ApplicationContextProvider;
 import org.skr.config.json.*;
 import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
@@ -47,7 +49,7 @@ public class JsonUtil {
     public static Jackson2ObjectMapperBuilder newObjectMapperBuilder() {
         return new Jackson2ObjectMapperBuilder()
                 .serializationInclusion(JsonInclude.Include.NON_NULL)
-                .modulesToInstall(getDefaultModule())
+                .modulesToInstall(getDefaultModule(), new Jdk8Module(), new JavaTimeModule())
                 .visibility(PropertyAccessor.FIELD, JsonAutoDetect.Visibility.PUBLIC_ONLY)
                 .visibility(PropertyAccessor.GETTER, JsonAutoDetect.Visibility.PUBLIC_ONLY)
                 .visibility(PropertyAccessor.SETTER, JsonAutoDetect.Visibility.PUBLIC_ONLY)
