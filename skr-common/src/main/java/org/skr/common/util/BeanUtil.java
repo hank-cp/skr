@@ -18,13 +18,16 @@ package org.skr.common.util;
 import org.apache.commons.lang3.ArrayUtils;
 import org.springframework.util.Assert;
 
+import java.io.*;
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.Collection;
 
 /**
  * @author <a href="https://github.com/hank-cp">Hank CP</a>
  */
+@SuppressWarnings("unchecked")
 public class BeanUtil {
 
     /**
@@ -57,7 +60,6 @@ public class BeanUtil {
      * @param fields including or excluding fields
      * @param isInclude
      */
-    @SuppressWarnings("unchecked")
     public static <E> void copyIncludeOrExcludeFields(E source, E target, boolean isInclude, String... fields) {
         Assert.notNull(source, "Source must not be null");
         Assert.notNull(target, "Target must not be null");
@@ -107,6 +109,80 @@ public class BeanUtil {
                         "Copy field "+ field.getName()+" failed.", e);
             }
         }
+    }
+
+    public static <T> T getFieldValue(Object target, String fieldName) {
+        return (T) getFieldValue(target, target.getClass(), fieldName);
+    }
+
+    public static Class getFieldClass(Object target, String fieldName) {
+        try {
+            return target.getClass().getDeclaredField(fieldName).getType();
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    private static Object getFieldValue(Object target, Class clazz, String fieldName) {
+        try {
+            Field field = clazz.getDeclaredField(fieldName);
+            field.setAccessible(true);
+            return field.get(target);
+        } catch (NoSuchFieldException nsfe) {
+            if (clazz.getSuperclass() != null) {
+                return getFieldValue(target, clazz.getSuperclass(), fieldName);
+            } else {
+                return null;
+            }
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    public static void setFieldValue(Object target, String fieldName, Object value) {
+        setFieldValue(target, target.getClass(), fieldName, value);
+    }
+
+    private static void setFieldValue(Object target, Class clazz, String fieldName, Object value) {
+        try {
+            Field field = target.getClass().getDeclaredField(fieldName);
+            field.setAccessible(true);
+            field.set(target, value);
+        } catch (NoSuchFieldException nsfe) {
+            if (clazz.getSuperclass() != null) {
+                setFieldValue(target, clazz.getSuperclass(), fieldName, value);
+            } else {
+                throw new RuntimeException("Set field "+fieldName+" failed.", nsfe);
+            }
+        } catch (Exception e) {
+            throw new RuntimeException("Set field "+fieldName+" failed.", e);
+        }
+    }
+
+    public static <T extends Serializable> T deepClone(T o) {
+        try {
+            ByteArrayOutputStream byteOut = new ByteArrayOutputStream();
+            ObjectOutputStream out = new ObjectOutputStream(byteOut);
+            out.writeObject(o);
+            out.flush();
+            ObjectInputStream in = new ObjectInputStream(new ByteArrayInputStream(byteOut.toByteArray()));
+            return (T) o.getClass().cast(in.readObject());
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to copy Object "+o.getClass().getName(), e);
+        }
+    }
+
+    public static Method getMethodSafe(Class<?> clazz, String methodName, Class... parameterTypes) {
+        Method method;
+        try {
+            method = parameterTypes.length > 0
+                    ? clazz.getDeclaredMethod(methodName, parameterTypes)
+                    : clazz.getDeclaredMethod(methodName);
+        } catch (NoSuchMethodException e) {
+            return null;
+        }
+        if (method != null) method.setAccessible(true);
+        return method;
     }
 
 }
