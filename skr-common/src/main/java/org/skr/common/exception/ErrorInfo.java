@@ -17,11 +17,15 @@ package org.skr.common.exception;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.rits.cloning.Cloner;
+import lombok.NonNull;
 import lombok.ToString;
 import org.skr.common.util.Checker;
 import org.skr.config.json.StringValuedEnum;
 
+import javax.validation.constraints.NotNull;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 /**
@@ -55,7 +59,9 @@ public class ErrorInfo {
         }
     }
 
+    @NotNull
     private int code;
+    @NotNull
     private String msg;
     private ErrorLevel level = ErrorLevel.ERROR;
 
@@ -63,8 +69,9 @@ public class ErrorInfo {
     private String path;
     private String failedRpc;
     private String exception;
+    private Map<String, Object> extra;
 
-    private ErrorInfo() {}
+    private boolean shared = true;
 
     public static ErrorInfo of(int code, String msg) {
         ErrorInfo errorInfo = new ErrorInfo();
@@ -79,28 +86,36 @@ public class ErrorInfo {
         return errorInfo;
     }
 
+    private static ErrorInfo getOrCopy(@NonNull ErrorInfo target) {
+        ErrorInfo errorInfo;
+        if (target.shared) {
+            errorInfo = Cloner.shared().shallowClone(target);
+            errorInfo.shared = false;
+        } else {
+            errorInfo = target;
+        }
+        return errorInfo;
+    }
+
     public ErrorInfo exception(Throwable ex) {
-        ErrorInfo newInstance = Cloner.shared().shallowClone(this);
-        newInstance.exception = BaseException.toString(ex);
-        return newInstance;
+        ErrorInfo errorInfo = getOrCopy(this);
+        errorInfo.exception = BaseException.toString(ex);
+        return errorInfo;
     }
 
     public ErrorInfo msgArgs(Object... args) {
-        ErrorInfo newInstance = Cloner.shared().shallowClone(this);
-        newInstance.args = args;
-        return newInstance;
+        ErrorInfo errorInfo = getOrCopy(this);
+        errorInfo.args = args;
+        return errorInfo;
     }
 
-    public ErrorInfo path(String path) {
-        ErrorInfo newInstance = Cloner.shared().shallowClone(this);
-        newInstance.path = path;
-        return newInstance;
-    }
-
-    public ErrorInfo failedRpc(String failedRpc) {
-        ErrorInfo newInstance = Cloner.shared().shallowClone(this);
-        newInstance.failedRpc = failedRpc;
-        return newInstance;
+    public ErrorInfo extra(String key, Object value) {
+        ErrorInfo errorInfo = getOrCopy(this);
+        if (errorInfo.extra == null) {
+            errorInfo.extra = new HashMap<>();
+        }
+        errorInfo.extra.put(key, value);
+        return errorInfo;
     }
 
     @JsonProperty("ec")
@@ -114,11 +129,6 @@ public class ErrorInfo {
         return !Checker.isEmpty(args) ? String.format(msg, (Object[])args) : msg;
     }
 
-    @JsonProperty("ep")
-    public String getPath() {
-        return path;
-    }
-
     @JsonProperty("elv")
     public ErrorLevel getLevel() {
         return level;
@@ -129,9 +139,15 @@ public class ErrorInfo {
         return exception;
     }
 
-    @JsonProperty("rpc")
-    public String getFailedRpc() {
-        return failedRpc;
+    @JsonProperty("extra")
+    public Map<String, Object> getExtra() {
+        return extra;
+    }
+
+    public <T> T getExtra(String key) {
+        if (Checker.isEmpty(extra)) return null;
+        //noinspection unchecked
+        return (T) extra.get(key);
     }
 
     public static ErrorInfo.ErrorLevel worstErrorLevel(List<ErrorInfo> errors) {

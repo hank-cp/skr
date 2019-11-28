@@ -26,6 +26,7 @@ import java.util.stream.Collectors;
 /**
  * @author <a href="https://github.com/hank-cp">Hank CP</a>
  */
+@SuppressWarnings("OptionalUsedAsFieldOrParameterType")
 public final class Checker {
 
     private Checker() {}
@@ -37,7 +38,7 @@ public final class Checker {
     }
 
     public static boolean isZero(Optional<Long> longNum) {
-        return longNum == null || !longNum.isPresent() || longNum.get() == 0;
+        return longNum == null || longNum.isEmpty() || longNum.get() == 0;
     }
 
     public static boolean isZero(Integer integer) {
@@ -53,11 +54,11 @@ public final class Checker {
     }
 
     public static boolean isEmpty(CharSequence text) {
-        return text == null || text.length() <= 0 || "null".equals(text);
+        return text == null || text.length() <= 0 || "null".contentEquals(text);
     }
 
     public static boolean isEmpty(Optional<? extends CharSequence> text) {
-        return !text.isPresent() || isEmpty(text.get());
+        return text.isEmpty() || isEmpty(text.get());
     }
 
     public static boolean isEmpty(Object[] array) {
@@ -90,7 +91,7 @@ public final class Checker {
     }
 
     public static boolean isEmptyCollection(Optional<? extends Collection> collection) {
-        return !collection.isPresent() || collection.get().isEmpty();
+        return collection.isEmpty() || collection.get().isEmpty();
     }
 
     @SuppressWarnings("rawtypes")
@@ -135,7 +136,7 @@ public final class Checker {
         if (Checker.isEmpty(violations)) return new ArrayList<>();
         return violations.stream().map(
                 violation -> ErrorInfo.INVALID_SUBMITTED_DATA
-                        .path(violation.getPropertyPath().toString())
+                        .extra("path", violation.getPropertyPath().toString())
                         .msgArgs(violation.getMessage())
         ).collect(Collectors.toList());
     }

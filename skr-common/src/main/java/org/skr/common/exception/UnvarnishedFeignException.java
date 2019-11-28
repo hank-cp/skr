@@ -46,9 +46,9 @@ public class UnvarnishedFeignException extends BaseException {
             if (response.body() != null) {
                 String errorJson = Util.toString(response.body().asReader());
                 errorInfo = JsonUtil.fromJson(ErrorInfo.class, errorJson);
-                if (Checker.isEmpty(errorInfo.getFailedRpc())) {
+                if (Checker.isEmpty(errorInfo.<String>getExtra("failedRpc"))) {
                     // take methodKey if it hasn't not set in Exception handling chain.
-                    errorInfo.failedRpc(methodKey);
+                    errorInfo.extra("failedRpc", methodKey);
                 }
             }
             exception = new UnvarnishedFeignException(errorInfo.getMsg());
