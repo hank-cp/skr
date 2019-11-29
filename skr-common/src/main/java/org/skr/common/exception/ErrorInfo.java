@@ -66,8 +66,6 @@ public class ErrorInfo {
     private ErrorLevel level = ErrorLevel.ERROR;
 
     private Object[] args;
-    private String path;
-    private String failedRpc;
     private String exception;
     private Map<String, Object> extra;
 
