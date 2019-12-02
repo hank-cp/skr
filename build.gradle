@@ -15,7 +15,7 @@ def isLibraryProject(String projectName) {
 
 buildscript {
     ext.springBootVersion = '2.2.0.RELEASE'
-    ext.springCloudVersion = 'Hoxton.RC2'
+    ext.springCloudVersion = 'Hoxton.RELEASE'
 //    ext.springCloudVersion = 'Greenwich.RELEASE'
 //    ext.springBootVersion = '2.0.8.RELEASE'
 //    ext.springCloudVersion = 'Finchley.RELEASE'
