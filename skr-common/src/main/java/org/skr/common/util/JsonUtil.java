@@ -192,11 +192,11 @@ public class JsonUtil {
     }
 
     public static JavaType getJavaType(Class<?> clazz) {
-        return JsonUtil.getObjectMapper().getSerializationConfig().getTypeFactory().constructType(clazz);
+        return getObjectMapper().getSerializationConfig().getTypeFactory().constructType(clazz);
     }
 
     public static JavaType getCollectionJavaType(Class<? extends Collection> collectionClass, Class<?> elementClass) {
-        return JsonUtil.getObjectMapper().getSerializationConfig().getTypeFactory().constructCollectionType(collectionClass, elementClass);
+        return getObjectMapper().getSerializationConfig().getTypeFactory().constructCollectionType(collectionClass, elementClass);
     }
 
 }

@@ -17,7 +17,6 @@ package org.skr.common.exception;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
@@ -47,11 +46,6 @@ public abstract class BaseException extends RuntimeException {
         return ErrorInfo.INTERNAL_SERVER_ERROR;
     }
 
-    @Override
-    public String toString() {
-        return toString(this);
-    }
-
     private static List<StackTraceElement> getTopStackTraceElement(Throwable cause) {
         List<StackTraceElement> topStack = new ArrayList<>(TOP_STACK);
         for (StackTraceElement stackTraceElement : cause.getStackTrace()) {
@@ -62,10 +56,9 @@ public abstract class BaseException extends RuntimeException {
         return topStack;
     }
 
-    public static String toString(Throwable cause) {
+    public static String getStackTrace(Throwable cause) {
         List<StackTraceElement> stack = getTopStackTraceElement(cause);
-        return Optional.ofNullable(cause.getLocalizedMessage()).orElse("")
-                + stack.stream().map(element -> {
+        return stack.stream().map(element -> {
             String fullClassName = element.getClassName();
             String className = fullClassName.substring(fullClassName.lastIndexOf('.') + 1);
             return String.format("%s:%s(%s)", className, element.getMethodName(), element.getLineNumber());

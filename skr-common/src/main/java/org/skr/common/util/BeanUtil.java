@@ -172,12 +172,25 @@ public class BeanUtil {
         }
     }
 
-    public static Method getMethodSafe(Class<?> clazz, String methodName, Class... parameterTypes) {
+    public static Method getDeclaredMethod(Class<?> clazz, String methodName, Class... parameterTypes) {
         Method method;
         try {
             method = parameterTypes.length > 0
                     ? clazz.getDeclaredMethod(methodName, parameterTypes)
                     : clazz.getDeclaredMethod(methodName);
+        } catch (NoSuchMethodException e) {
+            return null;
+        }
+        if (method != null) method.setAccessible(true);
+        return method;
+    }
+
+    public static Method getMethod(Class<?> clazz, String methodName, Class... parameterTypes) {
+        Method method;
+        try {
+            method = parameterTypes.length > 0
+                    ? clazz.getMethod(methodName, parameterTypes)
+                    : clazz.getMethod(methodName);
         } catch (NoSuchMethodException e) {
             return null;
         }
