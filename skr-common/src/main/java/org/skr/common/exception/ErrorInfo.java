@@ -97,7 +97,7 @@ public class ErrorInfo {
 
     public ErrorInfo exception(Throwable ex) {
         ErrorInfo errorInfo = getOrCopy(this);
-        errorInfo.exception = BaseException.toString(ex);
+        errorInfo.exception = ex.getLocalizedMessage();
         return errorInfo;
     }
 
