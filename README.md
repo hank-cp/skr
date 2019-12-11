@@ -1,6 +1,5 @@
 [![GitHub release](https://img.shields.io/github/release/hank-cp/skr.svg)](https://github.com/hank-cp/skr/releases)
-[![](https://jitpack.io/v/hank-cp/skr.svg)](https://jitpack.io/#hank-cp/skr)
-[![Github Actions](https://github.com/hank-cp/skr/workflows/Java%20CI/badge.svg)](https://github.com/hank-cp/skr/actions)
+[![Github Actions](https://github.com/hank-cp/skr/workflows/Test/badge.svg)](https://github.com/hank-cp/skr/actions)
 ![GitHub](https://img.shields.io/github/license/hank-cp/skr.svg)
 ![GitHub last commit](https://img.shields.io/github/last-commit/hank-cp/skr.svg)
 
