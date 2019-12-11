@@ -16,9 +16,7 @@ def isLibraryProject(String projectName) {
 buildscript {
     ext.springBootVersion = '2.2.0.RELEASE'
     ext.springCloudVersion = 'Hoxton.RELEASE'
-//    ext.springCloudVersion = 'Greenwich.RELEASE'
-//    ext.springBootVersion = '2.0.8.RELEASE'
-//    ext.springCloudVersion = 'Finchley.RELEASE'
+    ext.lombokVersion = '1.18.8'
 
     repositories {
         jcenter()
@@ -73,17 +71,23 @@ subprojects {
     if (isLibraryProject(name)) {
         apply plugin: 'java-library'
         apply plugin: 'maven'
+        apply plugin: 'maven-publish'
+        apply plugin: 'signing'
     }
 
 //*************************************************************************
 // Properties
 //*************************************************************************
 
-    Properties verProp = new Properties()
-    verProp.load(project.rootProject.file('version.properties').newDataInputStream())
-    ext.mainVersion = (verProp.get(("${project.name}" + '.ver' ).toString()) ?: '0.0.1').toString()
-    ext.buildNumber = (verProp.get(("${project.name}" + '.build').toString()) ?: '1').toString()
-    version = "${mainVersion}"  //.${buildNumber}"
+    Properties localProp = new Properties()
+    try {
+        localProp.load(project.rootProject.file('local.properties').newDataInputStream())
+    } catch(Exception ignored) {}
+    ext.sonatypeUsername = localProp.getProperty('sonatypeUsername')
+    ext.sonatypePassword = localProp.getProperty('sonatypePassword')
+    ext."signing.keyId" = localProp.getProperty('signing.keyId')
+    ext."signing.password" = localProp.getProperty('signing.password')
+    ext."signing.secretKeyRingFile" = localProp.getProperty('signing.secretKeyRingFile')
 
     task setProperties {
         doFirst {
@@ -107,13 +111,16 @@ subprojects {
     }
     tasks.withType(Javadoc) {
         options.encoding = 'UTF-8'
+        if(JavaVersion.current().isJava9Compatible()) {
+            options.addBooleanOption('html5', true)
+        }
     }
 
     jar {
         manifest.attributes provider: 'gradle'
         enabled true
         doFirst {
-            archiveFileName = "$project.name-$version.${archiveExtension.get()}"
+            archiveFileName = "$project.name-${archiveVersion.get()}.${archiveExtension.get()}"
         }
     }
 
@@ -149,21 +156,77 @@ subprojects {
     if (isLibraryProject(name)) {
 
         task sourcesJar(type: Jar, dependsOn: classes) {
-            archiveClassifier = 'sources'
+            archiveClassifier.set('sources')
             from sourceSets.main.allSource
         }
 
         task javadocJar(type: Jar, dependsOn: javadoc) {
-            archiveClassifier = 'javadoc'
+            archiveClassifier.set('javadoc')
             from javadoc.destinationDir
         }
 
         artifacts {
+            archives jar
             archives sourcesJar
             archives javadocJar
         }
 
         group = 'org.laxture'
+
+        publishing {
+            publications {
+                mavenJava(MavenPublication) {
+                    groupId = project.getGroup()
+                    from components.java
+                    artifact sourcesJar
+                    artifact javadocJar
+                    pom {
+                        name = project.name
+                        description = 'skr project is a Spring Boot/Cloud project skeleton that define abstraction of JWT based security configuration.'
+                        url = 'https://github.com/hank-cp/skr'
+                        organization {
+                            name = 'org.laxture'
+                            url = 'https://laxture.org'
+                        }
+                        issueManagement {
+                            system = 'GitHub'
+                            url = 'https://github.com/hank-cp/skr/issues'
+                        }
+                        license {
+                            name = 'Apache License 3.0'
+                            url = 'https://github.com/hank-cp/skr/blob/master/LICENSE'
+                            distribution = 'repo'
+                        }
+                        scm {
+                            url = 'https://github.com/hank-cp/skr'
+                            connection = 'scm:git:git://github.com/hank-cp/skr.git'
+                            developerConnection = 'scm:git:ssh://git@github.com:hank-cp/skr.git'
+                        }
+                        developers {
+                            developer {
+                                name = 'Hank CP'
+                                email = 'true.cp@gmail.com'
+                            }
+                        }
+                    }
+                    repositories {
+                        maven {
+                            def snapshotsRepoUrl = "https://oss.sonatype.org/content/repositories/snapshots"
+                            def stagingRepoUrl = "https://oss.sonatype.org/service/local/staging/deploy/maven2"
+                            url = version.endsWith('SNAPSHOT') ? snapshotsRepoUrl : stagingRepoUrl
+                            credentials {
+                                username sonatypeUsername
+                                password sonatypePassword
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        signing {
+            sign publishing.publications.mavenJava
+        }
     }
 
 }

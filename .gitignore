@@ -10,3 +10,4 @@ logs/
 /transaction-logs
 .gradletasknamecache
 /tmp
+/local.properties
