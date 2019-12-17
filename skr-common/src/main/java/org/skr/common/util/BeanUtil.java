@@ -15,9 +15,11 @@
  */
 package org.skr.common.util;
 
+import lombok.NonNull;
 import org.apache.commons.lang3.ArrayUtils;
 import org.springframework.util.Assert;
 
+import javax.validation.constraints.NotNull;
 import java.io.*;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -40,7 +42,9 @@ public class BeanUtil {
      *
      * @param ignoreFields fields to be ignored
      */
-    public static <E> void copyFields(E source, E target, String... ignoreFields) {
+    public static <E> void copyFields(@NonNull E source,
+                                      @NonNull E target,
+                                      String... ignoreFields) {
         copyIncludeOrExcludeFields(source, target, false,
                 ArrayUtils.addAll(ignoreFields, "id", "uid", "createdBy", "createdAt", "updatedBy", "updatedAt"));
     }
@@ -50,7 +54,9 @@ public class BeanUtil {
      *
      * @param specifiedFields fields to be copied
      */
-    public static <E> void copySpecifiedFields(E source, E target, String... specifiedFields) {
+    public static <E> void copySpecifiedFields(@NonNull E source,
+                                               @NonNull E target,
+                                               String... specifiedFields) {
         copyIncludeOrExcludeFields(source, target, true, specifiedFields);
     }
 
@@ -60,7 +66,10 @@ public class BeanUtil {
      * @param fields including or excluding fields
      * @param isInclude
      */
-    public static <E> void copyIncludeOrExcludeFields(E source, E target, boolean isInclude, String... fields) {
+    private static <E> void copyIncludeOrExcludeFields(@NonNull E source,
+                                                       @NonNull E target,
+                                                       boolean isInclude,
+                                                       String... fields) {
         Assert.notNull(source, "Source must not be null");
         Assert.notNull(target, "Target must not be null");
 
@@ -111,11 +120,22 @@ public class BeanUtil {
         }
     }
 
-    public static <T> T getFieldValue(Object target, String fieldName) {
-        return (T) getFieldValue(target, target.getClass(), fieldName);
+    public static <T> T getFieldValue(@NotNull Object target,
+                                      @NonNull String fieldName) {
+        String[] fieldPath = fieldName.split("\\.");
+        Object obj = target;
+        int i=0;
+        while (i<fieldPath.length) {
+            if (obj == null) break;
+            obj = getFieldValue(obj, obj.getClass(), fieldPath[i]);
+            i++;
+        }
+
+        return (T) obj;
     }
 
-    public static Class getFieldClass(Object target, String fieldName) {
+    public static Class getFieldClass(@NonNull Object target,
+                                      @NonNull String fieldName) {
         try {
             return target.getClass().getDeclaredField(fieldName).getType();
         } catch (Exception e) {
@@ -123,7 +143,9 @@ public class BeanUtil {
         }
     }
 
-    private static Object getFieldValue(Object target, Class clazz, String fieldName) {
+    private static Object getFieldValue(@NonNull Object target,
+                                        @NonNull Class clazz,
+                                        @NonNull String fieldName) {
         try {
             Field field = clazz.getDeclaredField(fieldName);
             field.setAccessible(true);
@@ -139,11 +161,16 @@ public class BeanUtil {
         }
     }
 
-    public static void setFieldValue(Object target, String fieldName, Object value) {
+    public static void setFieldValue(@NonNull Object target,
+                                     @NonNull String fieldName,
+                                     Object value) {
         setFieldValue(target, target.getClass(), fieldName, value);
     }
 
-    private static void setFieldValue(Object target, Class clazz, String fieldName, Object value) {
+    private static void setFieldValue(@NonNull Object target,
+                                      @NonNull Class clazz,
+                                      @NonNull String fieldName,
+                                      Object value) {
         try {
             Field field = target.getClass().getDeclaredField(fieldName);
             field.setAccessible(true);
@@ -159,7 +186,7 @@ public class BeanUtil {
         }
     }
 
-    public static <T extends Serializable> T deepClone(T o) {
+    public static <T extends Serializable> T deepClone(@NonNull T o) {
         try {
             ByteArrayOutputStream byteOut = new ByteArrayOutputStream();
             ObjectOutputStream out = new ObjectOutputStream(byteOut);
@@ -172,7 +199,9 @@ public class BeanUtil {
         }
     }
 
-    public static Method getDeclaredMethod(Class<?> clazz, String methodName, Class... parameterTypes) {
+    public static Method getDeclaredMethod(@NonNull Class<?> clazz,
+                                           @NonNull String methodName,
+                                           Class... parameterTypes) {
         Method method;
         try {
             method = parameterTypes.length > 0
@@ -185,7 +214,9 @@ public class BeanUtil {
         return method;
     }
 
-    public static Method getMethod(Class<?> clazz, String methodName, Class... parameterTypes) {
+    public static Method getMethod(@NonNull Class<?> clazz,
+                                   @NonNull String methodName,
+                                   Class... parameterTypes) {
         Method method;
         try {
             method = parameterTypes.length > 0
