@@ -81,4 +81,18 @@ public class AioApp implements Constants {
             log.info("Registering realm aio done!");
         }
     }
+//
+//    @Configuration
+//    public class SpringRootConfig {
+//
+//        @Autowired
+//        DataSource dataSource;
+//
+//        //default username : sa, password : ''
+//        @PostConstruct
+//        public void getDbManager(){
+//            DatabaseManagerSwing.main(
+//                    new String[] { "--url", "jdbc:hsqldb:mem:local", "--user", "sa", "--password", ""});
+//        }
+//    }
 }

@@ -19,17 +19,12 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 
-import javax.validation.constraints.NotNull;
-
 /**
  * @author <a href="https://github.com/hank-cp">Hank CP</a>
  */
-public interface JwtPrincipal {
+public interface JwtPrincipal extends UserPrincipal {
 
-    @NotNull
-    String getUsername();
-
-    Boolean isRobot();
+    Boolean isGhost();
 
     @JsonIgnore
     String getApiTrainJwtToken();

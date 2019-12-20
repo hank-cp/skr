@@ -25,7 +25,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 /**
- * Resolve {@link JwtAuthentication.JwtAuthenticationToken} from request header
+ * Resolve {@link JwtAuthenticationToken} from request header
  *
  * @author <a href="https://github.com/hank-cp">Hank CP</a>
  */
@@ -42,7 +42,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request,
                                     HttpServletResponse response,
                                     FilterChain filterChain) throws IOException, ServletException {
-        JwtAuthentication.authenticate(request.getHeader(
+        JwtAuthenticationToken.authenticate(request.getHeader(
                 skrSecurityProperties.getAccessToken().getHeader()), skrSecurityProperties);
         filterChain.doFilter(request, response);
     }

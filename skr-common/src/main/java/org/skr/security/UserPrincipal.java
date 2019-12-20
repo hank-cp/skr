@@ -13,21 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package demo.skr.auth.repository;
+package org.skr.security;
 
-import demo.skr.auth.model.Account;
-import demo.skr.auth.model.User;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
+import javax.validation.constraints.NotNull;
 
 /**
+ * User identification in the actual system
+ *
  * @author <a href="https://github.com/hank-cp">Hank CP</a>
  */
-@Repository
-public interface UserRepository extends JpaRepository<User, Long> {
+public interface UserPrincipal {
 
-    User findOneByTenentCodeAndUsername(String tenentCode, String username);
-
-    User findOneByTenentCodeAndAccount(String tenentCode, Account account);
-
+    @NotNull
+    String getUsername();
 }

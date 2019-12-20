@@ -26,7 +26,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.skr.common.exception.BizException;
 import org.skr.common.exception.ConfException;
-import org.skr.common.util.tuple.Tuple3;
 import org.skr.registry.SiteEntry;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -75,43 +74,20 @@ public class RegistryIntegrationTest {
     @Test
     @Transactional
     public void testGeneratePermissionBits() {
-        Tuple3<Long, Long, Long> bits = registryService.generatePermissionBits();
-        assertThat(bits._0, equalTo(1L));
-        assertThat(bits._1, equalTo(1L));
-        assertThat(bits._2, equalTo(1L));
+        Long bit = registryService.generatePermissionBits();
+        assertThat(bit, equalTo(1L));
 
         Permission permission = new Permission();
         permission.realm = testRealm;
         permission.code = "test";
         permission.name = "test";
-        permission.bit1 = 1L << 32;
-        permission.bit2 = 1L;
-        permission.bit3 = 1L;
+        permission.bit = 1L << 32;
         permissionRepository.save(permission);
         entityManager.flush();
 
         // new bits generated on persistent
-        bits = registryService.generatePermissionBits();
-        assertThat(bits._0, equalTo(1L << 33));
-
-        permission = permissionRepository.findById("test").get();
-        permission.bit1 = Long.MAX_VALUE;
-        permissionRepository.save(permission);
-        entityManager.flush();
-        bits = registryService.generatePermissionBits();
-        assertThat(bits._0, equalTo(1L));
-        assertThat(bits._1, equalTo(1L << 1));
-        assertThat(bits._2, equalTo(1L));
-
-        permission = permissionRepository.findById("test").get();
-        permission.bit1 = Long.MAX_VALUE;
-        permission.bit2 = Long.MAX_VALUE;
-        permissionRepository.save(permission);
-        entityManager.flush();
-        bits = registryService.generatePermissionBits();
-        assertThat(bits._0, equalTo(1L));
-        assertThat(bits._1, equalTo(1L));
-        assertThat(bits._2, equalTo(1L << 1));
+        bit = registryService.generatePermissionBits();
+        assertThat(bit, equalTo(1L << 33));
     }
 
     @Test
@@ -122,9 +98,7 @@ public class RegistryIntegrationTest {
         permission.code = "test";
         permission.name = "test";
         registryService.registerPermission(testRealm, permission);
-        assertThat(permission.bit1, equalTo(1L));
-        assertThat(permission.bit2, equalTo(1L));
-        assertThat(permission.bit3, equalTo(1L));
+        assertThat(permission.bit, equalTo(1L));
         assertThat(registryService.listPermissions(), hasSize(1));
 
         // test save failed by define permission on another realm
@@ -169,9 +143,7 @@ public class RegistryIntegrationTest {
         permission.code = "test";
         permission.name = "test";
         registryService.registerPermission(testRealm, permission);
-        assertThat(permission.bit1, equalTo(1L));
-        assertThat(permission.bit2, equalTo(1L));
-        assertThat(permission.bit3, equalTo(1L));
+        assertThat(permission.bit, equalTo(1L));
         assertThat(registryService.listPermissions(), hasSize(1));
 
         // deletion failed because permission is enabled.

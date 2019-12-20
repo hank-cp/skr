@@ -58,7 +58,7 @@ public class SkrSecurityProperties {
     private Token refreshToken = new Token();
 
     /** Token setting for automation api invocation, like batch jobs */
-    private Token robotToken = new Token();
+    private Token ghostToken = new Token();
 
     /** Token setting for trained api invocation */
     private Token trainToken = new Token();
@@ -75,9 +75,6 @@ public class SkrSecurityProperties {
 
         /** http header field to hold the token */
         private String header;
-
-        /** Default user name if the token does not provide one */
-        private String username;
     }
 
 }

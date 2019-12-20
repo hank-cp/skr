@@ -38,7 +38,25 @@ import java.util.Optional;
  * @author <a href="https://github.com/hank-cp">Hank CP</a>
  */
 @Slf4j
-public class JwtAuthentication {
+public class JwtAuthenticationToken extends AbstractAuthenticationToken {
+
+    private final JwtPrincipal principal;
+
+    public JwtAuthenticationToken(@NotNull JwtPrincipal principal) {
+        super(Collections.emptyList());
+        this.principal = principal;
+        setAuthenticated(true);
+    }
+
+    @Override
+    public Object getCredentials() {
+        return "";
+    }
+
+    @Override
+    public Object getPrincipal() {
+        return this.principal;
+    }
 
     public static void authenticate(String accessToken, SkrSecurityProperties properties) {
         try {
@@ -67,9 +85,9 @@ public class JwtAuthentication {
         if (accessToken.startsWith(properties.getAccessToken().getPrefix())) {
             prefix = properties.getAccessToken().getPrefix();
             secret = properties.getAccessToken().getSecret();
-        } else if (accessToken.startsWith(properties.getRobotToken().getPrefix())) {
-            prefix = properties.getRobotToken().getPrefix();
-            secret = properties.getRobotToken().getSecret();
+        } else if (accessToken.startsWith(properties.getGhostToken().getPrefix())) {
+            prefix = properties.getGhostToken().getPrefix();
+            secret = properties.getGhostToken().getSecret();
         } else if (accessToken.startsWith(properties.getTrainToken().getPrefix())) {
             prefix = properties.getTrainToken().getPrefix();
             secret = properties.getTrainToken().getSecret();
@@ -88,14 +106,12 @@ public class JwtAuthentication {
                 .map(decodedTuple -> {
                     JwtPrincipal principal = JsonUtil.fromJson(
                             properties.getJwtPrincipalClass(), decodedTuple._0);
-                    if (Checker.isTrue(principal.isRobot())) {
+                    if (Checker.isTrue(principal.isGhost())) {
                         principal.setApiTrainJwtToken(accessToken);
                     } else {
                         principal.setApiTrainJwtToken(
-                                properties.getTrainToken().getPrefix() +
-                                        JwtUtil.encode(JsonUtil.toJson(principal),
-                                                properties.getTrainToken().getExpiration(),
-                                                properties.getTrainToken().getSecret()));
+                                Token.of(properties.getTrainToken(), principal)
+                                    .encode());
                     }
 
                     return new JwtAuthenticationToken(principal);
@@ -103,30 +119,4 @@ public class JwtAuthentication {
                 .orElse(null);
     }
 
-    public static class JwtAuthenticationToken extends AbstractAuthenticationToken {
-
-        private final JwtPrincipal principal;
-
-        public JwtAuthenticationToken(@NotNull JwtPrincipal principal) {
-            super(Collections.emptyList());
-
-            if (principal == null) {
-                throw new IllegalArgumentException(
-                        "Cannot pass null or empty values to constructor");
-            }
-
-            this.principal = principal;
-            setAuthenticated(true);
-        }
-
-        @Override
-        public Object getCredentials() {
-            return "";
-        }
-
-        @Override
-        public Object getPrincipal() {
-            return this.principal;
-        }
-    }
 }

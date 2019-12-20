@@ -46,13 +46,7 @@ public class Permission extends CodeBasedEntity implements PermissionRegistry {
     public int vipLevel;
 
     @Column(updatable = false)
-    public long bit1 = 1;
-
-    @Column(updatable = false)
-    public long bit2 = 1;
-
-    @Column(updatable = false)
-    public long bit3 = 1;
+    public long bit = 1;
 
     @Override
     public String getCode() {
@@ -87,9 +81,7 @@ public class Permission extends CodeBasedEntity implements PermissionRegistry {
             throw new ConfException(ErrorInfo.INCOMPATIBLE_TYPE
                     .msgArgs(SimpleJwtPrincipal.class.getName(), principal.getClass().getName()));
         }
-        boolean granted = (jwtPrincipal.getPermissionBit1() & bit1) != 0
-                && (jwtPrincipal.getPermissionBit2() & bit2) != 0
-                && (jwtPrincipal.getPermissionBit3() & bit3) != 0;
+        boolean granted = (jwtPrincipal.getPermissionBit() & bit) != 0;
         if (!granted) return PermissionResult.PERMISSION_DENIED;
 
         if (jwtPrincipal.getVipLevel() < getVipLevel())

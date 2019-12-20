@@ -13,10 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package demo.skr.auth.repository;
+package demo.skr.auth.repository.certification;
 
 import demo.skr.auth.model.Account;
-import demo.skr.auth.model.User;
+import demo.skr.auth.model.certification.SmsCertification;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -24,10 +24,10 @@ import org.springframework.stereotype.Repository;
  * @author <a href="https://github.com/hank-cp">Hank CP</a>
  */
 @Repository
-public interface UserRepository extends JpaRepository<User, Long> {
+public interface SmsCertificationRepository extends JpaRepository<SmsCertification, Long> {
 
-    User findOneByTenentCodeAndUsername(String tenentCode, String username);
+    SmsCertification findByAccount(Account account);
 
-    User findOneByTenentCodeAndAccount(String tenentCode, Account account);
+    SmsCertification findByMobilePhone(String mobilePhone);
 
 }

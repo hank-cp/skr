@@ -16,6 +16,7 @@
 package demo.skr.model;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.Type;
 import org.hibernate.annotations.TypeDef;
 import org.hibernate.annotations.TypeDefs;
@@ -61,6 +62,7 @@ public class BaseEntity implements Serializable, Cloneable {
     public LocalDateTime updatedAt;
 
     @Version
+    @ColumnDefault("0")
     public int ver = 0;
 
     //*************************************************************************

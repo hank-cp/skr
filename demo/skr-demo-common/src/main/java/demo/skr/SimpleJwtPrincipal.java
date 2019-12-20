@@ -30,25 +30,21 @@ public class SimpleJwtPrincipal implements JwtPrincipal {
 
     private String username;
 
-    private long permissionBit1;
+    private String tenentCode;
 
-    private long permissionBit2;
-
-    private long permissionBit3;
-
-    private String nickName;
+    private long permissionBit;
 
     private byte status;
 
     @Setter
     private String apiTrainJwtToken;
 
-    private Boolean robot;
+    private Boolean ghost;
 
     private int vipLevel;
 
     @Override
-    public Boolean isRobot() {
-        return robot;
+    public Boolean isGhost() {
+        return ghost;
     }
 }

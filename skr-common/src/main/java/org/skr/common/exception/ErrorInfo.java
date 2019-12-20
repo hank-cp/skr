@@ -180,9 +180,10 @@ public class ErrorInfo {
     public static final ErrorInfo CONSTRUCTOR_NOT_FOUND     = ErrorInfo.of(1013, "Required constructor is not found for class %s.");
     public static final ErrorInfo METHOD_NOT_FOUND          = ErrorInfo.of(1014, "Method %s is not found for class %s.",    ErrorLevel.FATAL);
     public static final ErrorInfo FIELD_NOT_FOUND           = ErrorInfo.of(1015, "Field %s is not found for class %s.",     ErrorLevel.FATAL);
+    public static final ErrorInfo MISSING_ARGUMENT          = ErrorInfo.of(1016, "Argument %s is missing.",                 ErrorLevel.FATAL);
 
     public static final ErrorInfo AUTHENTICATION_REQUIRED       = ErrorInfo.of(1100, "Authentication required.");
-    public static final ErrorInfo NOT_AUTHENTICATED             = ErrorInfo.of(1101, "Account %s is not authenticated.");
+    public static final ErrorInfo BAD_CERTIFICATION             = ErrorInfo.of(1101, "Sign in failed with %s.");
     public static final ErrorInfo ACCESS_TOKEN_EXPIRED          = ErrorInfo.of(1102, "Access token is expired.");
     public static final ErrorInfo ACCESS_TOKEN_BROKEN           = ErrorInfo.of(1103, "Access token is broken.");
     public static final ErrorInfo ACCESS_TOKEN_NOT_PROVIDED     = ErrorInfo.of(1104, "Access token is not provided.");
@@ -191,6 +192,9 @@ public class ErrorInfo {
     public static final ErrorInfo PERMISSION_DENIED             = ErrorInfo.of(1107, "Permission Denied.");
     public static final ErrorInfo PERMISSION_LIMITED            = ErrorInfo.of(1108, "Vip Level is not satisfied.", ErrorLevel.FATAL);
     public static final ErrorInfo PERMISSION_NOT_FOUND          = ErrorInfo.of(1109, "Permission %s not found.",    ErrorLevel.FATAL);
+    public static final ErrorInfo CERTIFICATION_NOT_FOUND       = ErrorInfo.of(1110, "Certification %s is not found.");
+    public static final ErrorInfo CERTIFICATION_REGISTERED      = ErrorInfo.of(1111, "Certification %s has been registered.");
+    public static final ErrorInfo LAST_CERTIFICATION            = ErrorInfo.of(1112, "Last certification %s cannot be unbind.");
 
     public static final ErrorInfo PERMISSION_REGISTERED         = ErrorInfo.of(1200, "Permission %s has been registered to realm %s",   ErrorLevel.FATAL);
     public static final ErrorInfo END_POINT_REGISTERED          = ErrorInfo.of(1201, "EndPoint %s has been registered to realm %s",     ErrorLevel.FATAL);

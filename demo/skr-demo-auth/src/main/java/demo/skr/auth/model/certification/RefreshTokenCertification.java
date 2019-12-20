@@ -13,17 +13,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.skr.auth.service;
+package demo.skr.auth.model.certification;
 
-import org.skr.security.JwtPrincipal;
-
-import java.util.Map;
+import lombok.NoArgsConstructor;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
+import org.skr.security.Certification;
 
 /**
  * @author <a href="https://github.com/hank-cp">Hank CP</a>
  */
-public interface JwtPrincipalProvider {
+@RequiredArgsConstructor(staticName = "of")
+@NoArgsConstructor
+public class RefreshTokenCertification implements Certification {
 
-    JwtPrincipal loadJwtPrincipal(String username, Map<String, Object> params);
+    @NonNull
+    public String refreshToken;
 
+    @Override
+    public String getIdentity() {
+        return refreshToken;
+    }
 }

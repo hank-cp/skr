@@ -25,8 +25,11 @@ import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.context.ApplicationContextInitializer;
 import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.Ordered;
+import org.springframework.security.crypto.password.NoOpPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.io.File;
 import java.io.IOException;
@@ -59,6 +62,11 @@ public class AuthApp {
 //                    new String[] { "--url", "jdbc:hsqldb:mem:local", "--user", "sa", "--password", ""});
 //        }
 //    }
+
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return NoOpPasswordEncoder.getInstance();
+    }
 
     @Configuration
     @ConditionalOnProperty(value = "lolth.embedded-consul", havingValue = "true")

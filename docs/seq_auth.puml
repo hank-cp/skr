@@ -1,27 +1,19 @@
 @startuml
 title Sign Up
-AppClient -> AuthServer: I want to sign up
-AuthServer -> AppClient: <font color=red>sign up token</font> and <font color=red>captcha</font>
-AppClient -> AuthServer: My <font color=red>principle</font> and <font color=red>credential</font>\n(with sign up token and captcha)
-AuthServer -> SecurityImpl: Check if this <font color=red>principle</font> is valid to register
-SecurityImpl -> AuthServer: check result
-AuthServer -> SecurityImpl: All right, save it to your database
-SecurityImpl -> AuthServer: saved
-AuthServer -->x AppClient: Refused because:\n - sign up token expired\n - principle existed\n - or...
-AuthServer -> AppClient: OK. here are your <font color=red>authentication tokens</font>\n - accessToken\n - refreshToken\n - loginToken
+AppClient -> AuthManager: I want to sign up
+AuthManager -> AppClient: <font color=red>sign up token</font> and <font color=red>captcha</font>
+AppClient -> AuthManager: My <font color=red>principle</font> and <font color=red>credential</font>\n(with sign up token and captcha)
+AuthManager -> AuthManagerImpl: Check if this <font color=red>principle</font> is valid to register
+AuthManagerImpl -> AuthManager: Checks ok, the <font color=red>principle</font> and <font color=red>credential</font> have been save to database.
+AuthManagerImpl -->X AuthManager: Refused because:\n - principle existed\n - certification identify exsited.\n - etc...
+AuthManager -->x AppClient: Refused because:\n - sign up token expired\n - principle existed\n - etc...
+AuthManager -> AppClient: OK. here are your <font color=red>authentication tokens</font>\n - accessToken\n - refreshToken\n - loginToken
 
-newpage Login
-AppClient -> AuthServer: I want to login with my <font color=red>principle</font> and <font color=red>credential</font>
-AuthServer -> SecurityImpl: Check if this <font color=red>principle</font> and <font color=red>credential</font> is valid
-SecurityImpl -> AuthServer: check result
-AuthServer -->x AppClient: Refused because:\n - principle not found\n - credential not match
-AuthServer -> AppClient: OK. here are your <font color=red>authentication tokens</font>\n - accessToken\n - refreshToken
-
-newpage Login by token
-AppClient -> AuthServer: I want to login with my <font color=red>login token</font>
-AuthServer -> AuthServer: Decode the <font color=red>login token</font>
-AuthServer -->x AppClient: Refused because:\n - decode failed\n - token expired\n - principle not found
-AuthServer -> AppClient: OK. here are your <font color=red>authentication tokens</font>\n - accessToken\n - refreshToken
-
+newpage Sign in
+AppClient -> AuthManager: I want to login with this <font color=red>credential</font>
+AuthManager -> AuthManagerImpl: Check if this <font color=red>credential</font> is valid
+AuthManagerImpl -> AuthManager: Checks ok, this <font color=red>credential</font> associates to this <font color=red>principle</font>
+AuthManager -->x AppClient: Refused because:\n - principle not found\n - credential not match
+AuthManager -> AppClient: OK. here are your <font color=red>authentication tokens</font>\n - accessToken\n - refreshToken
 
 @enduml

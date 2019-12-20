@@ -29,6 +29,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Arrays;
 
@@ -43,6 +44,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = AioApp.class)
 @AutoConfigureMockMvc
+@Transactional
 @Rollback
 public class PermissionCheckTest {
 
@@ -54,46 +56,46 @@ public class PermissionCheckTest {
 
     @Test
     public void testPermissionGranted() throws Exception {
-        JsonNode response = objectMapper.readTree(mvc.perform(post("/auth/login")
+        JsonNode response = objectMapper.readTree(mvc.perform(post("/auth/sign-in")
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                 .content(EntityUtils.toString(new UrlEncodedFormEntity(Arrays.asList(
-                        new BasicNameValuePair("auth_tenentCode", "org1"),
                         new BasicNameValuePair("username", "dev"),
-                        new BasicNameValuePair("password", "dev")
+                        new BasicNameValuePair("password", "dev"),
+                        new BasicNameValuePair("tenentCode", "org")
                 ))))).andReturn().getResponse().getContentAsByteArray());
-        String accessToken = response.get("access-token").asText();
+        String accessToken = response.get("accessToken").asText();
         assertThat(accessToken, allOf(notNullValue(), not(emptyString())));
 
         mvc.perform(get("/task/list")
-                .header("access-token", accessToken)
+                .header("accessToken", accessToken)
                 .contentType(MediaType.APPLICATION_JSON_VALUE))
                 .andExpect(status().isOk());
 
         mvc.perform(get("/task_record/list")
-                .header("access-token", accessToken)
+                .header("accessToken", accessToken)
                 .contentType(MediaType.APPLICATION_JSON_VALUE))
                 .andExpect(status().isOk());
     }
 
     @Test
     public void testPermissionDenied() throws Exception {
-        JsonNode response = objectMapper.readTree(mvc.perform(post("/auth/login")
+        JsonNode response = objectMapper.readTree(mvc.perform(post("/auth/sign-in")
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                 .content(EntityUtils.toString(new UrlEncodedFormEntity(Arrays.asList(
-                        new BasicNameValuePair("auth_tenentCode", "org1"),
                         new BasicNameValuePair("username", "test"),
-                        new BasicNameValuePair("password", "test")
+                        new BasicNameValuePair("password", "test"),
+                        new BasicNameValuePair("tenentCode", "org")
                 ))))).andReturn().getResponse().getContentAsByteArray());
-        String accessToken = response.get("access-token").asText();
+        String accessToken = response.get("accessToken").asText();
         assertThat(accessToken, allOf(notNullValue(), not(emptyString())));
 
         mvc.perform(get("/task/list")
-                .header("access-token", accessToken)
+                .header("accessToken", accessToken)
                 .contentType(MediaType.APPLICATION_JSON_VALUE))
                 .andExpect(status().isForbidden());
 
         mvc.perform(get("/task_record/list")
-                .header("access-token", accessToken)
+                .header("accessToken", accessToken)
                 .contentType(MediaType.APPLICATION_JSON_VALUE))
                 .andExpect(status().isForbidden());
     }

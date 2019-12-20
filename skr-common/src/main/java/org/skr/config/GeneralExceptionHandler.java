@@ -49,12 +49,21 @@ public class GeneralExceptionHandler extends ResponseEntityExceptionHandler {
         return super.handleExceptionInternal(ex, standerBody, headers, status, request);
     }
 
+    @ExceptionHandler(ConfException.class)
+    public ResponseEntity<Object> handleException(ConfException ex, WebRequest request) {
+        return handleExceptionInternal(ex,
+                ex.getErrorInfo(),
+                new HttpHeaders(),
+                HttpStatus.INTERNAL_SERVER_ERROR,
+                request);
+    }
+
     @ExceptionHandler(BizException.class)
     public ResponseEntity<Object> handleException(BizException ex, WebRequest request) {
         return handleExceptionInternal(ex,
                 ex.getErrorInfo(),
                 new HttpHeaders(),
-                HttpStatus.UNPROCESSABLE_ENTITY,
+                HttpStatus.INTERNAL_SERVER_ERROR,
                 request);
     }
 

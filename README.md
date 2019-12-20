@@ -6,46 +6,48 @@
 
 Skr project is a Spring Boot/Cloud project skeleton that define abstraction 
 of JWT based security configuration.
-Project based on skr skeleton could define its own implementat
+Project based on skr skeleton could define its own implementation
+
 ## Feature
-* JWT based Security Abstraction
-* Modular Registration Abstraction
-* Spring Boot starter 
-* Switch Spring Cloud platform
+* JWT based security abstraction
+* Modular registration abstraction
+    * Permission registration
+    * EndPoint registration
+* Spring Boot Starter 
+* Switchable Spring Cloud platform
     * [Self-Setup Spring Cloud](https://spring.io/projects/spring-cloud)
     * [Tencent TSF](https://cloud.tencent.com/product/tsf)
+    
+## Authentication flows
+![](docs/sign_up.png)
+![](docs/sign_in.png)
+![](docs/request.png)
 
-## Getting Start with Spring Cloud
-* Install consul
-* Start consul 
-    ```
-    consul agent -dev
-    ```
-* Start 
-    ```
-    -Dserver.port=8001 -Dtsf_consul_ip=192.168.1.120 -Dtsf_consul_port=8500 -Dtsf_application_id=auth -Dtsf_group_id=skr
-    ```
-
-## Getting Start with Spring Boot (all in one monolithic)
+## Terminology
+* Principal
+    * UserPrincipal
+    * JwtPrincipal
+* Certification
+* Tokens
+    * access-token:
+    * refresh-token:
+    * login-token:
+    * robot-token:
+    * train-token:
 
 ## Auth Service
+TBD
 
 ## Registry Service
+TBD
 
 ## Switch Spring Cloud provider
+TBD
 
 ## Convention
 
 #### Exception
+* [ErrorInfo](skr-common/src/main/java/org/skr/common/exception/ErrorInfo.java)
 * [AuthException](skr-common/src/main/java/org/skr/common/exception/AuthException.java)
 * [BizException](skr-common/src/main/java/org/skr/common/exception/BizException.java)
-* [ConfigurationException](skr-common/src/main/java/org/skr/common/exception/ConfException.java)
-
-<!--
-## Reference
-* [Spring Cloud Feign](https://cloud.spring.io/spring-cloud-netflix/multi/multi_spring-cloud-feign.html)
-* [lombok](https://projectlombok.org/features/all)
-* [memcached](https://github.com/memcached/memcached/wiki/Commands)
-* [GraphQL Java](https://www.graphql-java.com/documentation/master/)
-* [Tencent Cloud TSF](https://cloud.tencent.com/document/product/649)
--->
+* [ConfException](skr-common/src/main/java/org/skr/common/exception/ConfException.java)

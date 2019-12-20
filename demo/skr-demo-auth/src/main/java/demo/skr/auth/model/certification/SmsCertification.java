@@ -13,43 +13,39 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package demo.skr.auth.model;
+package demo.skr.auth.model.certification;
 
+import demo.skr.auth.model.Account;
 import demo.skr.model.IdBasedEntity;
-import org.skr.security.UserPrincipal;
+import lombok.NoArgsConstructor;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
+import org.skr.security.Certification;
 
 import javax.persistence.Entity;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
+import javax.persistence.OneToOne;
+import javax.persistence.Transient;
 
 /**
  * @author <a href="https://github.com/hank-cp">Hank CP</a>
  */
 @Entity
-@Table(name = "t_user")
-public class User extends IdBasedEntity implements UserPrincipal {
+@RequiredArgsConstructor(staticName = "of")
+@NoArgsConstructor
+public class SmsCertification extends IdBasedEntity implements Certification {
 
-    public static final byte USER_STATUS_JOINING_NEED_APPROVAL = 2;
-    public static final byte USER_STATUS_JOINING_REJECT = 3;
-
-    @NotNull
-    @ManyToOne
-    public Tenent tenent;
-
-    @NotNull
-    @ManyToOne
+    @OneToOne(optional = false)
     public Account account;
 
-    public long permissionBit;
+    @NonNull
+    public String mobilePhone;
 
-    public String username;
-
-    /** 0=enabled; 1=disabled; 2=apply to join org; 3=reject to join org; */
-    public byte status;
+    @NonNull
+    @Transient
+    public String captcha;
 
     @Override
-    public @NotNull String getUsername() {
-        return username;
+    public String getIdentity() {
+        return mobilePhone;
     }
 }

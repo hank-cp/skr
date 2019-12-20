@@ -23,5 +23,5 @@ import org.springframework.stereotype.Repository;
  * @author <a href="https://github.com/hank-cp">Hank CP</a>
  */
 @Repository
-public interface TenentRepository extends JpaRepository<Tenent, Long> {
+public interface TenentRepository extends JpaRepository<Tenent, String> {
 }

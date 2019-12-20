@@ -32,7 +32,7 @@ import java.util.List;
 @Repository
 public interface PermissionRepository extends JpaRepository<Permission, String> {
 
-    @Query("SELECT p FROM Permission p ORDER BY p.bit3, p.bit2, p.bit1 DESC")
+    @Query("SELECT p FROM Permission p ORDER BY p.bit DESC")
     List<Permission> findByMaxBit(Pageable pageable);
 
     default Permission findMaxBitPermission() {

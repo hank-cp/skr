@@ -13,21 +13,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package demo.skr.auth.repository;
+package demo.skr.auth.model.certification;
 
-import demo.skr.auth.model.Account;
-import demo.skr.auth.model.User;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
+import lombok.NoArgsConstructor;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
+import org.skr.security.Certification;
 
 /**
  * @author <a href="https://github.com/hank-cp">Hank CP</a>
  */
-@Repository
-public interface UserRepository extends JpaRepository<User, Long> {
+@RequiredArgsConstructor(staticName = "of")
+@NoArgsConstructor
+public class LoginTokenCertification implements Certification {
 
-    User findOneByTenentCodeAndUsername(String tenentCode, String username);
+    @NonNull
+    public String loginToken;
 
-    User findOneByTenentCodeAndAccount(String tenentCode, Account account);
-
+    @Override
+    public String getIdentity() {
+        return loginToken;
+    }
 }

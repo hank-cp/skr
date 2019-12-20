@@ -9,21 +9,21 @@ spring:
         - /public/**
       login-token:
         secret: sKrRrRrRrRrRrRrRrLogin
-        expiration: 10080 # default 7 days
+        expiration: 10080 # 7 days
+        header: loginToken
       access-token:
         secret: sKrRrRrRrRrRrRrRrAccess
         expiration: 10    # 5 mins
         prefix: Bearer-
-        header: access-token
+        header: accessToken
       refresh-token:
         secret: sKrRrRrRrRrRrRrRrRefresh
         expiration: 30    # 30 mins
-        prefix: Refresh-
-        header: refresh-token
-      robot-token:
+        header: refreshToken
+      ghost-token:
         secret: sKrRrRrRrRrRrRrRrRobot
         prefix: Robot-
-        username: ∆coreRobot∆
+        username: ∆daemon∆
       train-token:
         secret: sKrRrRrRrRrRrRrRrTrain
         prefix: Train-

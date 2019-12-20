@@ -13,15 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package demo.skr.aio;
+package demo.skr.auth;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.skr.common.exception.ErrorInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -29,11 +28,11 @@ import org.springframework.http.MediaType;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Arrays;
-import java.util.concurrent.Callable;
 
-import static org.hamcrest.Matchers.notNullValue;
+import static org.hamcrest.Matchers.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -41,70 +40,57 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  * @author <a href="https://github.com/hank-cp">Hank CP</a>
  */
 @RunWith(SpringRunner.class)
-@SpringBootTest(classes = AioApp.class)
+@SpringBootTest(classes = AuthApp.class)
 @AutoConfigureMockMvc
+@Transactional
 @Rollback
-public class AuthIntegrationTest {
+public class AuthSignUpTest {
 
     @Autowired
     private MockMvc mvc;
 
-    @Autowired
-    private ObjectMapper objectMapper;
-
     @Test
-    public void testAuth() throws Exception {
-        mvc.perform(post("/auth/login")
+    public void testSignUpWithoutTenent() throws Exception {
+        mvc.perform(post("/auth/sign-up")
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                 .content(EntityUtils.toString(new UrlEncodedFormEntity(Arrays.asList(
-                        new BasicNameValuePair("auth_tenentCode", "org1"),
-                        new BasicNameValuePair("username", "dev"),
-                        new BasicNameValuePair("password", "dev")
+                        new BasicNameValuePair("username", "asdf"),
+                        new BasicNameValuePair("password", "asdf")
                 )))))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("access-token", notNullValue()))
-                .andExpect(jsonPath("refresh-token", notNullValue()));
-    }
+                .andExpect(jsonPath("accessToken", notNullValue()))
+                .andExpect(jsonPath("refreshToken", notNullValue()))
+                .andExpect(jsonPath("loginToken", notNullValue()))
+                .andExpect(jsonPath("principal", notNullValue()))
+                .andExpect(jsonPath("principal.tenentCode").doesNotExist());
 
-    @Test
-    public void testLoginFailed() throws Exception {
-        mvc.perform(post("/auth/login")
+        mvc.perform(post("/auth/sign-up")
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                 .content(EntityUtils.toString(new UrlEncodedFormEntity(Arrays.asList(
-                        new BasicNameValuePair("auth_tenentCode", "org1"),
-                        new BasicNameValuePair("username", "dev"),
-                        new BasicNameValuePair("password", "123")
+                        new BasicNameValuePair("username", "asdf"),
+                        new BasicNameValuePair("password", "qwer")
                 )))))
-                .andExpect(status().isUnauthorized());
+                .andExpect(status().isUnauthorized())
+                .andExpect(jsonPath("ec", equalTo(ErrorInfo.CERTIFICATION_REGISTERED.getCode())));
     }
 
     @Test
-    public void testRefreshToken() throws Exception {
-        JsonNode response = objectMapper.readTree(mvc.perform(post("/auth/login")
+    public void testSignUpWithTenent() throws Exception {
+        mvc.perform(post("/auth/sign-up")
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                 .content(EntityUtils.toString(new UrlEncodedFormEntity(Arrays.asList(
-                        new BasicNameValuePair("auth_tenentCode", "org1"),
-                        new BasicNameValuePair("username", "dev"),
-                        new BasicNameValuePair("password", "dev")
-                ))))).andReturn().getResponse().getContentAsByteArray());
-
-        mvc.perform(post("/auth/refresh-token")
-                .contentType(MediaType.APPLICATION_FORM_URLENCODED)
-                .content(EntityUtils.toString(new UrlEncodedFormEntity(Arrays.asList(
-                        new BasicNameValuePair("auth_tenentCode", "org1"),
-                        new BasicNameValuePair("refreshToken", response.get("refresh-token").asText())
+                        new BasicNameValuePair("username", "asdf"),
+                        new BasicNameValuePair("password", "asdf"),
+                        new BasicNameValuePair("tenentCode", "org")
                 )))))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("access-token", notNullValue()));
-    }
-
-    public static Throwable exceptionOf(Callable<?> callable) {
-        try {
-            callable.call();
-            return null;
-        } catch (Throwable t) {
-            return t;
-        }
+                .andExpect(jsonPath("accessToken", notNullValue()))
+                .andExpect(jsonPath("refreshToken", notNullValue()))
+                .andExpect(jsonPath("loginToken", notNullValue()))
+                .andExpect(jsonPath("principal", notNullValue()))
+                // User for tenent should be created
+                .andExpect(jsonPath("principal.username", equalTo("asdf")))
+                .andExpect(jsonPath("principal.tenentCode", equalTo("org")));
     }
 
 }
