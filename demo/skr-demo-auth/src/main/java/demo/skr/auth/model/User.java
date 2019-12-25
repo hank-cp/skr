@@ -49,7 +49,12 @@ public class User extends IdBasedEntity implements UserPrincipal {
     public byte status;
 
     @Override
-    public @NotNull String getUsername() {
+    public @NotNull String getIdentity() {
+        return username;
+    }
+
+    @Override
+    public @NotNull String getDisplayName() {
         return username;
     }
 }

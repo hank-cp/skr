@@ -24,6 +24,17 @@ import javax.validation.constraints.NotNull;
  */
 public interface UserPrincipal {
 
+    /**
+     * Unique identity of this principal. Authentication
+     * services must be able to locate unique actual
+     * User principal via this identity.
+     */
     @NotNull
-    String getUsername();
+    String getIdentity();
+
+    /**
+     * Human friendly user name for this principal.
+     */
+    @NotNull
+    String getDisplayName();
 }

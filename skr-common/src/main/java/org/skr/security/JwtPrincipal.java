@@ -16,6 +16,7 @@
 package org.skr.security;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.laxture.spring.util.ApplicationContextProvider;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 
@@ -24,20 +25,33 @@ import org.springframework.security.core.context.SecurityContextHolder;
  */
 public interface JwtPrincipal extends UserPrincipal {
 
+    @JsonIgnore
     Boolean isGhost();
 
+    /**
+     * make a new accessToken that will never be expired for internal
+     * chain service call.
+     */
     @JsonIgnore
-    String getApiTrainJwtToken();
+    default String getChainAccessToken() {
+        SkrSecurityProperties skrSecurityProperties = ApplicationContextProvider
+                .getBean(SkrSecurityProperties.class);
+        return Token.of(
+                skrSecurityProperties.getAccessToken().getHeader(),
+                this,
+                skrSecurityProperties.getAccessToken().getPrefix(),
+                0L,
+                skrSecurityProperties.getAccessToken().getSecret()).encode();
+    }
 
-    void setApiTrainJwtToken(String token);
-
-    static JwtPrincipal getCurrentPrincipal() {
+    static <T extends JwtPrincipal> T getCurrentPrincipal() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         JwtPrincipal user = null;
         if (authentication != null && authentication.isAuthenticated()
                 && authentication.getPrincipal() instanceof JwtPrincipal) {
             user = (JwtPrincipal) authentication.getPrincipal();
         }
-        return user;
+        //noinspection unchecked
+        return (T) user;
     }
 }

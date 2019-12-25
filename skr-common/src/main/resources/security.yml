@@ -24,6 +24,3 @@ spring:
         secret: sKrRrRrRrRrRrRrRrRobot
         prefix: Robot-
         username: ∆daemon∆
-      train-token:
-        secret: sKrRrRrRrRrRrRrRrTrain
-        prefix: Train-

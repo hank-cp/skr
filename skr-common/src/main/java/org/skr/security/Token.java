@@ -51,8 +51,8 @@ public class Token {
         return prefix+JwtUtil.encode(JsonUtil.toJson(principal), expiration, secret);
     }
 
-    public String encodeUsername() {
-        return prefix+JwtUtil.encode(principal.getUsername(), expiration, secret);
+    public String encodeIdentity() {
+        return prefix+JwtUtil.encode(principal.getIdentity(), expiration, secret);
     }
 
     public String encode(Function<Token, String> payloadGenerator) {

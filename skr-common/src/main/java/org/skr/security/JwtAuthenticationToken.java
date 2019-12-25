@@ -88,9 +88,6 @@ public class JwtAuthenticationToken extends AbstractAuthenticationToken {
         } else if (accessToken.startsWith(properties.getGhostToken().getPrefix())) {
             prefix = properties.getGhostToken().getPrefix();
             secret = properties.getGhostToken().getSecret();
-        } else if (accessToken.startsWith(properties.getTrainToken().getPrefix())) {
-            prefix = properties.getTrainToken().getPrefix();
-            secret = properties.getTrainToken().getSecret();
         } else {
             throw new AuthException(ErrorInfo.AUTHENTICATION_REQUIRED);
         }
@@ -106,14 +103,6 @@ public class JwtAuthenticationToken extends AbstractAuthenticationToken {
                 .map(decodedTuple -> {
                     JwtPrincipal principal = JsonUtil.fromJson(
                             properties.getJwtPrincipalClass(), decodedTuple._0);
-                    if (Checker.isTrue(principal.isGhost())) {
-                        principal.setApiTrainJwtToken(accessToken);
-                    } else {
-                        principal.setApiTrainJwtToken(
-                                Token.of(properties.getTrainToken(), principal)
-                                    .encode());
-                    }
-
                     return new JwtAuthenticationToken(principal);
                 })
                 .orElse(null);

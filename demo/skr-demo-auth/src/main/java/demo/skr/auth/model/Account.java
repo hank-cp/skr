@@ -31,7 +31,12 @@ public class Account extends IdBasedEntity implements UserPrincipal {
     public byte status;
 
     @Override
-    public @NotNull String getUsername() {
+    public @NotNull String getIdentity() {
+        return Long.toString(id);
+    }
+
+    @Override
+    public @NotNull String getDisplayName() {
         return uid.toString();
     }
 }

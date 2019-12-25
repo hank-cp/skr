@@ -46,8 +46,8 @@ public abstract class AuthManager {
      * be contained in <code>principal</code>
      */
     public final UserPrincipal signUp(UserPrincipal principal,
-                                @NonNull Certification certification,
-                                Map<String, Object> arguments) {
+                                      @NonNull Certification certification,
+                                      Map<String, Object> arguments) {
         return saveCertification(principal, certification, arguments);
     }
 
@@ -56,7 +56,7 @@ public abstract class AuthManager {
      * bound {@link UserPrincipal}
      */
     public final UserPrincipal signIn(@NonNull Certification certification,
-                                Map<String, Object> arguments) {
+                                      Map<String, Object> arguments) {
         UserPrincipal principal = authenticate(certification, arguments);
         if (principal == null) throw new AuthException(
                 ErrorInfo.BAD_CERTIFICATION.msgArgs(certification.getIdentity()));

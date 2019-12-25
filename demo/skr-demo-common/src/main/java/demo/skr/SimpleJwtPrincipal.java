@@ -18,6 +18,8 @@ package demo.skr;
 import lombok.*;
 import org.skr.security.JwtPrincipal;
 
+import javax.validation.constraints.NotNull;
+
 /**
  * @author <a href="https://github.com/hank-cp">Hank CP</a>
  */
@@ -42,6 +44,16 @@ public class SimpleJwtPrincipal implements JwtPrincipal {
     private Boolean ghost;
 
     private int vipLevel;
+
+    @Override
+    public @NotNull String getIdentity() {
+        return username;
+    }
+
+    @Override
+    public @NotNull String getDisplayName() {
+        return username;
+    }
 
     @Override
     public Boolean isGhost() {
