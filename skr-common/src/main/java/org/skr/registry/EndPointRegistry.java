@@ -33,8 +33,6 @@ public interface EndPointRegistry extends Registry {
 
     PermissionRegistry getPermission();
 
-    List<String> getRelatedPermissionCodes();
-
     @NotNull
     String getBreadcrumb();
 
