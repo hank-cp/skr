@@ -172,7 +172,7 @@ public class BeanUtil {
                                       @NonNull String fieldName,
                                       Object value) {
         try {
-            Field field = target.getClass().getDeclaredField(fieldName);
+            Field field = clazz.getDeclaredField(fieldName);
             field.setAccessible(true);
             field.set(target, value);
         } catch (NoSuchFieldException nsfe) {

@@ -61,7 +61,7 @@ public interface CertificationHandler<Cert extends Certification> {
      * Tells that how to save given {@link Certification} and bind it to
      * {@link UserPrincipal}
      */
-    UserPrincipal saveCertification(@NonNull UserPrincipal principal,
+    UserPrincipal saveCertification(UserPrincipal principal,
                                     @NonNull Cert certification,
                                     Map<String, Object> arguments);
 

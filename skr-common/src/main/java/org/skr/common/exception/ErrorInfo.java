@@ -183,7 +183,7 @@ public class ErrorInfo {
     public static final ErrorInfo MISSING_ARGUMENT          = ErrorInfo.of(1016, "Argument %s is missing.",                 ErrorLevel.FATAL);
 
     public static final ErrorInfo AUTHENTICATION_REQUIRED       = ErrorInfo.of(1100, "Authentication required.");
-    public static final ErrorInfo BAD_CERTIFICATION             = ErrorInfo.of(1101, "Sign in failed with %s.");
+    public static final ErrorInfo BAD_CERTIFICATION             = ErrorInfo.of(1101, "Verify certification for %s failed.");
     public static final ErrorInfo ACCESS_TOKEN_EXPIRED          = ErrorInfo.of(1102, "Access token is expired.");
     public static final ErrorInfo ACCESS_TOKEN_BROKEN           = ErrorInfo.of(1103, "Access token is broken.");
     public static final ErrorInfo ACCESS_TOKEN_NOT_PROVIDED     = ErrorInfo.of(1104, "Access token is not provided.");

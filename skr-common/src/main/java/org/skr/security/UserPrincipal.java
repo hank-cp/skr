@@ -15,8 +15,6 @@
  */
 package org.skr.security;
 
-import javax.validation.constraints.NotNull;
-
 /**
  * User identification in the actual system
  *
@@ -29,12 +27,10 @@ public interface UserPrincipal {
      * services must be able to locate unique actual
      * User principal via this identity.
      */
-    @NotNull
     String getIdentity();
 
     /**
      * Human friendly user name for this principal.
      */
-    @NotNull
     String getDisplayName();
 }
