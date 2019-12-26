@@ -52,8 +52,7 @@ public class AuthController extends AuthManager {
         }
     };
 
-    @Override
-    public JwtPrincipal buildJwtPrincipal(UserPrincipal principal) {
+    private JwtPrincipal buildJwtPrincipal(UserPrincipal principal) {
         if (principal instanceof Account) {
             Account account = (Account) principal;
             return SimpleJwtPrincipal.of(

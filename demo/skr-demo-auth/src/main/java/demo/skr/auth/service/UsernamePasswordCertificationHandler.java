@@ -39,7 +39,8 @@ import java.util.Map;
  * @author <a href="https://github.com/hank-cp">Hank CP</a>
  */
 @Component
-public class UsernamePasswordCertificationHandler implements CertificationHandler {
+public class UsernamePasswordCertificationHandler
+        implements CertificationHandler<UsernamePasswordCertification> {
 
     @Autowired
     private UsernamePasswordCertificationRepository usernamePasswordCertificationRepository;
@@ -62,26 +63,23 @@ public class UsernamePasswordCertificationHandler implements CertificationHandle
     }
 
     @Override
-    public UserPrincipal authenticate(@NonNull Certification certification,
+    public UserPrincipal authenticate(@NonNull UsernamePasswordCertification certification,
                                       Map<String, Object> arguments) throws AuthException {
-        UsernamePasswordCertification usernamePasswordCertification =
-                (UsernamePasswordCertification) certification;
-
         UsernamePasswordCertification existedUsernamePasswordCertification =
                 usernamePasswordCertificationRepository.findByUsername(
-                        usernamePasswordCertification.username);
+                        certification.username);
 
         // Username doesn't existed
         if (existedUsernamePasswordCertification == null) {
             throw new AuthException(ErrorInfo.CERTIFICATION_NOT_FOUND
-                    .msgArgs(usernamePasswordCertification.getIdentity()));
+                    .msgArgs(certification.getIdentity()));
         }
 
         // password mismatch
-        if (!passwordEncoder.matches(usernamePasswordCertification.password,
+        if (!passwordEncoder.matches(certification.password,
                 existedUsernamePasswordCertification.password)) {
             throw new AuthException(ErrorInfo.BAD_CERTIFICATION
-                    .msgArgs(usernamePasswordCertification.getIdentity()));
+                    .msgArgs(certification.getIdentity()));
         }
 
         Account account = existedUsernamePasswordCertification.account;
@@ -96,12 +94,12 @@ public class UsernamePasswordCertificationHandler implements CertificationHandle
     }
 
     @Override
-    public Certification findByIdentity(String certificationIdentity) {
+    public UsernamePasswordCertification findByIdentity(String certificationIdentity) {
         return usernamePasswordCertificationRepository.findByUsername(certificationIdentity);
     }
 
     @Override
-    public Certification getCertification(@NonNull UserPrincipal principal) {
+    public UsernamePasswordCertification getCertification(@NonNull UserPrincipal principal) {
         Account account = null;
         if (principal instanceof Account) {
             account = (Account) principal;
@@ -116,20 +114,18 @@ public class UsernamePasswordCertificationHandler implements CertificationHandle
 
     @Override
     public UserPrincipal saveCertification(UserPrincipal principal,
-                                           @NonNull Certification certification,
+                                           @NonNull UsernamePasswordCertification certification,
                                            Map<String, Object> arguments) {
-        UsernamePasswordCertification usernamePasswordCertification =
-                (UsernamePasswordCertification) certification;
         if (principal == null) {
             Account account = saveCertificationAndAccount(null,
-                    usernamePasswordCertification);
+                    certification);
             if (arguments != null && arguments.containsKey("tenentCode")) {
                 User user = new User();
                 user.account = account;
-                user.username = usernamePasswordCertification.username;
+                user.username = certification.username;
                 user.tenent = tenentRepository.findById(arguments.get("tenentCode").toString()).get();
                 return saveCertificationAndUser(user,
-                        usernamePasswordCertification);
+                        certification);
             } else {
                 return account;
             }
@@ -138,12 +134,12 @@ public class UsernamePasswordCertificationHandler implements CertificationHandle
         if (principal instanceof Account) {
             return saveCertificationAndAccount(
                     (Account) principal,
-                    usernamePasswordCertification);
+                    certification);
 
         } else if (principal instanceof User) {
             return saveCertificationAndUser(
                     (User) principal,
-                    usernamePasswordCertification);
+                    certification);
         }
         return principal;
     }

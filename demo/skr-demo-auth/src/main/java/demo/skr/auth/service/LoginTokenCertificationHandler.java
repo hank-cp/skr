@@ -38,7 +38,8 @@ import java.util.Optional;
  * @author <a href="https://github.com/hank-cp">Hank CP</a>
  */
 @Component
-public class LoginTokenCertificationHandler implements CertificationHandler {
+public class LoginTokenCertificationHandler
+        implements CertificationHandler<LoginTokenCertification> {
 
     @Autowired
     private SkrSecurityProperties skrSecurityProperties;
@@ -52,12 +53,11 @@ public class LoginTokenCertificationHandler implements CertificationHandler {
     }
 
     @Override
-    public UserPrincipal authenticate(@NonNull Certification certification,
+    public UserPrincipal authenticate(@NonNull LoginTokenCertification certification,
                                       Map<String, Object> arguments) throws AuthException {
-        LoginTokenCertification loginTokenCertification = (LoginTokenCertification) certification;
         String payload;
         try {
-            payload = Optional.of(loginTokenCertification.loginToken)
+            payload = Optional.of(certification.loginToken)
                     .map(token -> JwtUtil.decode(token,
                             skrSecurityProperties.getLoginToken().getSecret()))
                     .orElse(null);
@@ -76,21 +76,24 @@ public class LoginTokenCertificationHandler implements CertificationHandler {
     }
 
     @Override
-    public Certification findByIdentity(@NonNull String certificationIdentity) {
+    public LoginTokenCertification findByIdentity(@NonNull String certificationIdentity) {
         return null;
     }
 
     @Override
-    public Certification getCertification(@NonNull UserPrincipal principal) {
+    public LoginTokenCertification getCertification(@NonNull UserPrincipal principal) {
         return null;
     }
 
     @Override
-    public UserPrincipal saveCertification(@NonNull UserPrincipal principal, @NonNull Certification certification, Map<String, Object> arguments) {
+    public UserPrincipal saveCertification(@NonNull UserPrincipal principal,
+                                           @NonNull LoginTokenCertification certification,
+                                           Map<String, Object> arguments) {
         return principal;
     }
 
     @Override
-    public void removeCertification(@NonNull UserPrincipal principal, @NonNull String certificationIdentity) {
+    public void removeCertification(@NonNull UserPrincipal principal,
+                                    @NonNull String certificationIdentity) {
     }
 }

@@ -58,9 +58,9 @@ public class AuthSignUpTest {
                         new BasicNameValuePair("password", "asdf")
                 )))))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("accessToken", notNullValue()))
-                .andExpect(jsonPath("refreshToken", notNullValue()))
-                .andExpect(jsonPath("loginToken", notNullValue()))
+                .andExpect(jsonPath("access-token", notNullValue()))
+                .andExpect(jsonPath("refresh-token", notNullValue()))
+                .andExpect(jsonPath("login-token", notNullValue()))
                 .andExpect(jsonPath("principal", notNullValue()))
                 .andExpect(jsonPath("principal.tenentCode").doesNotExist());
 
@@ -84,9 +84,9 @@ public class AuthSignUpTest {
                         new BasicNameValuePair("tenentCode", "org")
                 )))))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("accessToken", notNullValue()))
-                .andExpect(jsonPath("refreshToken", notNullValue()))
-                .andExpect(jsonPath("loginToken", notNullValue()))
+                .andExpect(jsonPath("access-token", notNullValue()))
+                .andExpect(jsonPath("refresh-token", notNullValue()))
+                .andExpect(jsonPath("login-token", notNullValue()))
                 .andExpect(jsonPath("principal", notNullValue()))
                 // User for tenent should be created
                 .andExpect(jsonPath("principal.username", equalTo("asdf")))

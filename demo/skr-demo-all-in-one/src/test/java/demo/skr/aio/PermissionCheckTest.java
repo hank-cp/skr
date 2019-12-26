@@ -63,16 +63,16 @@ public class PermissionCheckTest {
                         new BasicNameValuePair("password", "dev"),
                         new BasicNameValuePair("tenentCode", "org")
                 ))))).andReturn().getResponse().getContentAsByteArray());
-        String accessToken = response.get("accessToken").asText();
+        String accessToken = response.get("access-token").asText();
         assertThat(accessToken, allOf(notNullValue(), not(emptyString())));
 
         mvc.perform(get("/task/list")
-                .header("accessToken", accessToken)
+                .header("access-token", accessToken)
                 .contentType(MediaType.APPLICATION_JSON_VALUE))
                 .andExpect(status().isOk());
 
         mvc.perform(get("/task_record/list")
-                .header("accessToken", accessToken)
+                .header("access-token", accessToken)
                 .contentType(MediaType.APPLICATION_JSON_VALUE))
                 .andExpect(status().isOk());
     }
@@ -86,16 +86,16 @@ public class PermissionCheckTest {
                         new BasicNameValuePair("password", "test"),
                         new BasicNameValuePair("tenentCode", "org")
                 ))))).andReturn().getResponse().getContentAsByteArray());
-        String accessToken = response.get("accessToken").asText();
+        String accessToken = response.get("access-token").asText();
         assertThat(accessToken, allOf(notNullValue(), not(emptyString())));
 
         mvc.perform(get("/task/list")
-                .header("accessToken", accessToken)
+                .header("access-token", accessToken)
                 .contentType(MediaType.APPLICATION_JSON_VALUE))
                 .andExpect(status().isForbidden());
 
         mvc.perform(get("/task_record/list")
-                .header("accessToken", accessToken)
+                .header("access-token", accessToken)
                 .contentType(MediaType.APPLICATION_JSON_VALUE))
                 .andExpect(status().isForbidden());
     }

@@ -25,7 +25,7 @@ import java.util.Map;
 /**
  * @author <a href="https://github.com/hank-cp">Hank CP</a>
  */
-public interface CertificationHandler {
+public interface CertificationHandler<Cert extends Certification> {
 
     /**
      * check if this handler could be apply to certain {@link Certification}
@@ -40,7 +40,7 @@ public interface CertificationHandler {
      * @return {@link UserPrincipal} to given {@link Certification}
      * @throws AuthException if given {@link Certification} is not authenticated.
      */
-    UserPrincipal authenticate(@NonNull Certification certification,
+    UserPrincipal authenticate(@NonNull Cert certification,
                                Map<String, Object> arguments)
             throws AuthException;
 
@@ -50,19 +50,19 @@ public interface CertificationHandler {
      *
      * @return {@link Certification} that has <code>certificationIdentity</code>
      */
-    Certification findByIdentity(@NonNull String certificationIdentity);
+    Cert findByIdentity(@NonNull String certificationIdentity);
 
     /**
      * @return {@link Certification} of given {@link UserPrincipal}
      */
-    Certification getCertification(@NonNull UserPrincipal principal);
+    Cert getCertification(@NonNull UserPrincipal principal);
 
     /**
      * Tells that how to save given {@link Certification} and bind it to
      * {@link UserPrincipal}
      */
     UserPrincipal saveCertification(@NonNull UserPrincipal principal,
-                                    @NonNull Certification certification,
+                                    @NonNull Cert certification,
                                     Map<String, Object> arguments);
 
     /**

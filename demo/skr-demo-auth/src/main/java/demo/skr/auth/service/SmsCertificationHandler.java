@@ -39,7 +39,8 @@ import java.util.Map;
  * @author <a href="https://github.com/hank-cp">Hank CP</a>
  */
 @Component
-public class SmsCertificationHandler implements CertificationHandler {
+public class SmsCertificationHandler
+        implements CertificationHandler<SmsCertification> {
 
     @Autowired
     private SmsCertificationRepository smsCertificationRepository;
@@ -56,22 +57,20 @@ public class SmsCertificationHandler implements CertificationHandler {
     }
 
     @Override
-    public UserPrincipal authenticate(@NonNull Certification certification,
+    public UserPrincipal authenticate(@NonNull SmsCertification certification,
                                       Map<String, Object> arguments) throws AuthException {
-        SmsCertification smsCertification = (SmsCertification) certification;
-
         SmsCertification existedSmsCertification =
                 smsCertificationRepository.findByMobilePhone(
-                        smsCertification.mobilePhone);
+                        certification.mobilePhone);
 
         // Username doesn't existed
         if (existedSmsCertification == null) {
             throw new AuthException(ErrorInfo.CERTIFICATION_NOT_FOUND
-                    .msgArgs(smsCertification.getIdentity()));
+                    .msgArgs(certification.getIdentity()));
         }
 
         // password mismatch
-        if (Checker.isEmpty(smsCertification.captcha)) {
+        if (Checker.isEmpty(certification.captcha)) {
             throw new AuthException(MyErrorInfo.INVALID_SMS_CAPTCHA);
         }
 
@@ -87,12 +86,12 @@ public class SmsCertificationHandler implements CertificationHandler {
     }
 
     @Override
-    public Certification findByIdentity(@NonNull String certificationIdentity) {
+    public SmsCertification findByIdentity(@NonNull String certificationIdentity) {
         return smsCertificationRepository.findByMobilePhone(certificationIdentity);
     }
 
     @Override
-    public Certification getCertification(@NonNull UserPrincipal principal) {
+    public SmsCertification getCertification(@NonNull UserPrincipal principal) {
         Account account = null;
         if (principal instanceof Account) {
             account = (Account) principal;
@@ -107,17 +106,17 @@ public class SmsCertificationHandler implements CertificationHandler {
 
     @Override
     public UserPrincipal saveCertification(@NonNull UserPrincipal principal,
-                                           @NonNull Certification certification,
+                                           @NonNull SmsCertification certification,
                                            Map<String, Object> arguments) {
         if (principal instanceof Account) {
             return saveCertificationAndAccount(
                     (Account) principal,
-                    (SmsCertification) certification);
+                    certification);
 
         } else if (principal instanceof User) {
             return saveCertificationAndUser(
                     (User) principal,
-                    (SmsCertification) certification);
+                    certification);
         }
         return principal;
     }

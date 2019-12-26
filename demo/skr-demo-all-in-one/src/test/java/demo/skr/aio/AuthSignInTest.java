@@ -65,9 +65,9 @@ public class AuthSignInTest {
                         new BasicNameValuePair("password", "test")
                 )))))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("accessToken", notNullValue()))
-                .andExpect(jsonPath("refreshToken", notNullValue()))
-                .andExpect(jsonPath("loginToken", notNullValue()))
+                .andExpect(jsonPath("access-token", notNullValue()))
+                .andExpect(jsonPath("refresh-token", notNullValue()))
+                .andExpect(jsonPath("login-token", notNullValue()))
                 .andExpect(jsonPath("principal", notNullValue()))
                 .andExpect(jsonPath("principal.tenentCode").doesNotExist());
 
@@ -78,9 +78,9 @@ public class AuthSignInTest {
                         new BasicNameValuePair("password", "guest")
                 )))))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("accessToken", notNullValue()))
-                .andExpect(jsonPath("refreshToken", notNullValue()))
-                .andExpect(jsonPath("loginToken", notNullValue()))
+                .andExpect(jsonPath("access-token", notNullValue()))
+                .andExpect(jsonPath("refresh-token", notNullValue()))
+                .andExpect(jsonPath("login-token", notNullValue()))
                 .andExpect(jsonPath("principal", notNullValue()))
                 .andExpect(jsonPath("principal.tenentCode").doesNotExist());
     }
@@ -95,9 +95,9 @@ public class AuthSignInTest {
                         new BasicNameValuePair("tenentCode", "org")
                 )))))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("accessToken", notNullValue()))
-                .andExpect(jsonPath("refreshToken", notNullValue()))
-                .andExpect(jsonPath("loginToken", notNullValue()))
+                .andExpect(jsonPath("access-token", notNullValue()))
+                .andExpect(jsonPath("refresh-token", notNullValue()))
+                .andExpect(jsonPath("login-token", notNullValue()))
                 .andExpect(jsonPath("principal", notNullValue()))
                 // User for tenent should be created
                 .andExpect(jsonPath("principal.username", equalTo("test")))
@@ -129,11 +129,11 @@ public class AuthSignInTest {
         mvc.perform(post("/auth/sign-in-by-token")
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                 .content(EntityUtils.toString(new UrlEncodedFormEntity(List.of(
-                        new BasicNameValuePair("loginToken", response.get("loginToken").asText())
+                        new BasicNameValuePair("loginToken", response.get("login-token").asText())
                 )))))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("accessToken", notNullValue()))
-                .andExpect(jsonPath("refreshToken", notNullValue()))
+                .andExpect(jsonPath("access-token", notNullValue()))
+                .andExpect(jsonPath("refresh-token", notNullValue()))
                 .andExpect(jsonPath("principal", notNullValue()))
                 .andExpect(jsonPath("principal.tenentCode", equalTo("org")));
     }
@@ -151,10 +151,10 @@ public class AuthSignInTest {
         mvc.perform(post("/auth/refresh-token")
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                 .content(EntityUtils.toString(new UrlEncodedFormEntity(List.of(
-                        new BasicNameValuePair("refreshToken", response.get("refreshToken").asText())
+                        new BasicNameValuePair("refreshToken", response.get("refresh-token").asText())
                 )))))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("accessToken", notNullValue()))
+                .andExpect(jsonPath("access-token", notNullValue()))
                 .andExpect(jsonPath("principal", notNullValue()))
                 .andExpect(jsonPath("principal.tenentCode", equalTo("org")));
     }
@@ -172,7 +172,7 @@ public class AuthSignInTest {
         mvc.perform(post("/auth/bind-mobile")
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                 .content(EntityUtils.toString(new UrlEncodedFormEntity(List.of(
-                        new BasicNameValuePair("loginToken", response.get("loginToken").asText()),
+                        new BasicNameValuePair("loginToken", response.get("login-token").asText()),
                         new BasicNameValuePair("mobile", "123456789"),
                         new BasicNameValuePair("captcha", "qwerty")
                 )))))
@@ -187,8 +187,8 @@ public class AuthSignInTest {
                         new BasicNameValuePair("tenentCode", "org")
                 )))))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("accessToken", notNullValue()))
-                .andExpect(jsonPath("refreshToken", notNullValue()))
+                .andExpect(jsonPath("access-token", notNullValue()))
+                .andExpect(jsonPath("refresh-token", notNullValue()))
                 .andExpect(jsonPath("principal", notNullValue()))
                 .andExpect(jsonPath("principal.tenentCode", equalTo("org")));
 
@@ -200,8 +200,8 @@ public class AuthSignInTest {
                         new BasicNameValuePair("captcha", "zxcvbn")
                 )))))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("accessToken", notNullValue()))
-                .andExpect(jsonPath("refreshToken", notNullValue()))
+                .andExpect(jsonPath("access-token", notNullValue()))
+                .andExpect(jsonPath("refresh-token", notNullValue()))
                 .andExpect(jsonPath("principal", notNullValue()))
                 .andExpect(jsonPath("principal.tenentCode").doesNotExist());
 
@@ -209,7 +209,7 @@ public class AuthSignInTest {
         mvc.perform(post("/auth/unbind-mobile")
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                 .content(EntityUtils.toString(new UrlEncodedFormEntity(List.of(
-                        new BasicNameValuePair("loginToken", response.get("loginToken").asText()),
+                        new BasicNameValuePair("loginToken", response.get("login-token").asText()),
                         new BasicNameValuePair("mobile", "123456789")
                 )))))
                 .andExpect(status().isOk());
@@ -240,7 +240,7 @@ public class AuthSignInTest {
         mvc.perform(post("/auth/unbind-username")
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                 .content(EntityUtils.toString(new UrlEncodedFormEntity(List.of(
-                        new BasicNameValuePair("loginToken", response.get("loginToken").asText()),
+                        new BasicNameValuePair("loginToken", response.get("login-token").asText()),
                         new BasicNameValuePair("username", "test")
                 )))))
                 .andExpect(status().isInternalServerError())

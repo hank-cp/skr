@@ -111,6 +111,7 @@ subprojects {
     }
     tasks.withType(Javadoc) {
         options.encoding = 'UTF-8'
+        options.addStringOption('Xdoclint:none', '-quiet')
         if(JavaVersion.current().isJava9Compatible()) {
             options.addBooleanOption('html5', true)
         }

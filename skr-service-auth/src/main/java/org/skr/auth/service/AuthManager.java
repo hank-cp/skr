@@ -20,7 +20,6 @@ import org.skr.common.exception.AuthException;
 import org.skr.common.exception.BizException;
 import org.skr.common.exception.ErrorInfo;
 import org.skr.security.Certification;
-import org.skr.security.JwtPrincipal;
 import org.skr.security.SkrSecurityProperties;
 import org.skr.security.UserPrincipal;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -92,8 +91,6 @@ public abstract class AuthManager {
         }
         removeCertification(principal, removingCertification);
     }
-
-    public abstract JwtPrincipal buildJwtPrincipal(UserPrincipal principal);
 
     protected UserPrincipal authenticate(@NonNull Certification certification,
                                          Map<String, Object> arguments) {

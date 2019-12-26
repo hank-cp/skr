@@ -38,7 +38,8 @@ import java.util.Optional;
  * @author <a href="https://github.com/hank-cp">Hank CP</a>
  */
 @Component
-public class RefreshTokenCertificationHandler implements CertificationHandler {
+public class RefreshTokenCertificationHandler
+        implements CertificationHandler<RefreshTokenCertification> {
 
     @Autowired
     private SkrSecurityProperties skrSecurityProperties;
@@ -52,12 +53,11 @@ public class RefreshTokenCertificationHandler implements CertificationHandler {
     }
 
     @Override
-    public UserPrincipal authenticate(@NonNull Certification certification,
+    public UserPrincipal authenticate(@NonNull RefreshTokenCertification certification,
                                       Map<String, Object> arguments) throws AuthException {
-        RefreshTokenCertification refreshTokenCertification = (RefreshTokenCertification) certification;
         String payload;
         try {
-            payload = Optional.of(refreshTokenCertification.refreshToken)
+            payload = Optional.of(certification.refreshToken)
                     .map(token -> JwtUtil.decode(token,
                             skrSecurityProperties.getRefreshToken().getSecret()))
                     .orElse(null);
@@ -76,17 +76,19 @@ public class RefreshTokenCertificationHandler implements CertificationHandler {
     }
 
     @Override
-    public Certification findByIdentity(@NonNull String certificationIdentity) {
+    public RefreshTokenCertification findByIdentity(@NonNull String certificationIdentity) {
         return null;
     }
 
     @Override
-    public Certification getCertification(@NonNull UserPrincipal principal) {
+    public RefreshTokenCertification getCertification(@NonNull UserPrincipal principal) {
         return null;
     }
 
     @Override
-    public UserPrincipal saveCertification(@NonNull UserPrincipal principal, @NonNull Certification certification, Map<String, Object> arguments) {
+    public UserPrincipal saveCertification(@NonNull UserPrincipal principal,
+                                           @NonNull RefreshTokenCertification certification,
+                                           Map<String, Object> arguments) {
         return principal;
     }
 

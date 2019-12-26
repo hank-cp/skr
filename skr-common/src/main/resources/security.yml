@@ -10,17 +10,17 @@ spring:
       login-token:
         secret: sKrRrRrRrRrRrRrRrLogin
         expiration: 10080 # 7 days
-        header: loginToken
+        header: login-token
       access-token:
         secret: sKrRrRrRrRrRrRrRrAccess
         expiration: 10    # 5 mins
         prefix: Bearer-
-        header: accessToken
+        header: access-token
       refresh-token:
         secret: sKrRrRrRrRrRrRrRrRefresh
         expiration: 30    # 30 mins
-        header: refreshToken
+        header: refresh-token
       ghost-token:
         secret: sKrRrRrRrRrRrRrRrRobot
         prefix: Robot-
-        username: ∆daemon∆
+        username: ØSYSTEM
