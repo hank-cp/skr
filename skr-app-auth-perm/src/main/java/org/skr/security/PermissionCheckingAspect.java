@@ -21,7 +21,7 @@ import org.aspectj.lang.annotation.Aspect;
 import org.skr.common.exception.ConfException;
 import org.skr.common.exception.ErrorInfo;
 import org.skr.common.exception.PermissionException;
-import org.skr.registry.proxy.RegistryProxy;
+import org.skr.registry.RegistryServiceClient;
 import org.skr.security.annotation.RequirePermission;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -36,13 +36,13 @@ import org.springframework.stereotype.Component;
 public class PermissionCheckingAspect {
 
     @Autowired
-    private RegistryProxy registryProxy;
+    private RegistryServiceClient registryService;
 
     @Around("@annotation(permission)")
     public Object check(ProceedingJoinPoint joinPoint, RequirePermission permission) throws Throwable {
         String permissionCode = permission.value();
         JwtPrincipal jwtPrincipal = JwtPrincipal.getCurrentPrincipal();
-        PermissionDetail permissionDetail = registryProxy.getPermission(permissionCode);
+        PermissionDetail permissionDetail = registryService.getPermission(permissionCode);
 
         if (permissionDetail == null) {
             throw new ConfException(ErrorInfo.PERMISSION_NOT_FOUND.msgArgs(permissionCode));

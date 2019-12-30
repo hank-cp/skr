@@ -20,13 +20,12 @@ import com.rits.cloning.Cloner;
 import lombok.NonNull;
 import lombok.ToString;
 import org.skr.common.util.Checker;
-import org.skr.config.json.StringValuedEnum;
+import org.skr.config.json.ValuedEnum;
 
 import javax.validation.constraints.NotNull;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
 /**
  * @author <a href="https://github.com/hank-cp">Hank CP</a>
@@ -34,7 +33,7 @@ import java.util.Objects;
 @ToString
 public class ErrorInfo {
 
-    public enum ErrorLevel implements StringValuedEnum {
+    public enum ErrorLevel implements ValuedEnum<String> {
         WARNING("warn"), // client should prompt user with warning message
         ERROR("error"),  // client should stop user operating, generally caused by error input or data restrictions
         FATAL("fatal");  // client should stop to be functional, shit happens...
@@ -51,11 +50,7 @@ public class ErrorInfo {
         }
 
         public static ErrorLevel parse(String value) {
-            for (ErrorLevel item : ErrorLevel.values()) {
-                if (!Objects.equals(item.value(), value)) continue;
-                return item;
-            }
-            return FATAL;
+            return ValuedEnum.parse(ErrorLevel.values(), value, FATAL);
         }
     }
 

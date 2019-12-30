@@ -15,31 +15,21 @@
  */
 package org.skr.config.json;
 
-import com.fasterxml.jackson.core.JsonGenerator;
-import com.fasterxml.jackson.databind.SerializerProvider;
-import com.fasterxml.jackson.databind.ser.std.StdSerializer;
-
-import java.io.IOException;
+import java.util.Objects;
 
 /**
- * JSON Serialization for Int value Enum
- *
  * @author <a href="https://github.com/hank-cp">Hank CP</a>
  */
-public class IntValuedEnumSerializer extends StdSerializer<IntValuedEnum> {
+public interface ValuedEnum<V> {
 
-    public IntValuedEnumSerializer() {
-        this(null);
-    }
+    V value();
 
-    public IntValuedEnumSerializer(Class<IntValuedEnum> t) {
-        super(t);
-    }
-
-    @Override
-    public void serialize(IntValuedEnum value, JsonGenerator jgen, SerializerProvider provider)
-            throws IOException {
-        jgen.writeNumber(value.value());
+    static <E extends ValuedEnum<V>, V> E parse(E[] values, V value, E defaultItem) {
+        for (E item : values) {
+            if (!Objects.equals(item.value(), value)) continue;
+            return item;
+        }
+        return defaultItem;
     }
 
 }

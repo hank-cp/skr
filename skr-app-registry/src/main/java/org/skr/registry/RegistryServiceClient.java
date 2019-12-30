@@ -15,14 +15,12 @@
  */
 package org.skr.registry;
 
-import org.skr.registry.controller.RegistryController;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
+import org.springframework.cloud.openfeign.FeignClient;
 
 /**
  * @author <a href="https://github.com/hank-cp">Hank CP</a>
  */
-@Configuration
-@Import(RegistryController.class)
-public class    RegistryConfiguration {
+@FeignClient(name = "${spring.skr.registry.host:registry}", qualifier = "registryService")
+public interface RegistryServiceClient extends IRegistryService {
+
 }

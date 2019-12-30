@@ -29,6 +29,7 @@ import org.skr.registry.RealmRegistry;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingClass;
 import org.springframework.boot.autoconfigure.jackson.JacksonAutoConfiguration;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.ApplicationContextAware;
@@ -52,7 +53,8 @@ public class CommonConfiguration {
 
     @Configuration
     @AutoConfigureAfter(JacksonAutoConfiguration.class)
-    public static class JacksonConfigurer implements InitializingBean {
+    @ConditionalOnMissingClass("org.skr.registry.controller.RegistryController")
+    public static class RegistryJsonConfigurer implements InitializingBean {
 
         @Autowired
         private ObjectMapper objectMapper;

@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package demo.skr.aio;
+package demo.skr.aio.integration;
 
 import demo.skr.registry.RegistryApp;
 import demo.skr.registry.model.EndPoint;
@@ -21,7 +21,7 @@ import demo.skr.registry.model.Permission;
 import demo.skr.registry.model.Realm;
 import demo.skr.registry.repository.PermissionRepository;
 import demo.skr.registry.repository.RealmRepository;
-import demo.skr.registry.service.RegistryServiceImpl;
+import demo.skr.registry.service.RegistryManagerImpl;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -47,7 +47,7 @@ import static org.hamcrest.Matchers.*;
 public class RegistryIntegrationTest {
 
     @Autowired
-    private RegistryServiceImpl registryService;
+    private RegistryManagerImpl registryService;
 
     @Autowired
     private RealmRepository realmRepository;

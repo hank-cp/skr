@@ -16,14 +16,14 @@
 package org.skr.security;
 
 import org.apache.commons.lang3.NotImplementedException;
-import org.skr.config.json.IntValuedEnum;
+import org.skr.config.json.ValuedEnum;
 
 /**
  * @author <a href="https://github.com/hank-cp">Hank CP</a>
  */
 public interface PermissionDetail {
 
-    enum PermissionResult implements IntValuedEnum {
+    enum PermissionResult implements ValuedEnum<Integer> {
         PERMISSION_GRANTED(0), PERMISSION_DENIED(1), PERMISSION_LIMITATION(2);
 
         private final int value;
@@ -33,16 +33,12 @@ public interface PermissionDetail {
         }
 
         @Override
-        public int value() {
+        public Integer value() {
             return value;
         }
 
         public static PermissionResult parse(int value) {
-            for (PermissionResult item : PermissionResult.values()) {
-                if (item.value() != value) continue;
-                return item;
-            }
-            return PERMISSION_DENIED;
+            return ValuedEnum.parse(PermissionResult.values(), value, PERMISSION_DENIED);
         }
     }
 

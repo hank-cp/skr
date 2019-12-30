@@ -21,8 +21,7 @@ import demo.skr.registry.model.Realm;
 import lombok.extern.java.Log;
 import org.skr.common.Constants;
 import org.skr.registry.RegisterBatch;
-import org.skr.registry.proxy.RegistryLocalProxy;
-import org.skr.registry.proxy.RegistryProxy;
+import org.skr.registry.RegistryServiceClient;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
@@ -44,8 +43,8 @@ public class AioApp implements Constants {
     }
 
     @Bean
-    public RegistryProxy registryProxy() {
-        return new RegistryLocalProxy();
+    public RegistryServiceClient registryProxy() {
+        return new RegistryServiceMock();
     }
 
     //*************************************************************************
@@ -56,7 +55,7 @@ public class AioApp implements Constants {
     public static class OnStartUpListener implements InitializingBean {
 
         @Autowired
-        private RegistryProxy registryProxy;
+        private RegistryServiceClient registryProxy;
 
         @Override
         public void afterPropertiesSet() throws Exception {

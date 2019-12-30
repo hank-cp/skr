@@ -106,6 +106,10 @@ subprojects {
         options.compilerArgs << '-parameters'
     }
 
+    compileTestJava {
+        options.compilerArgs << '-parameters'
+    }
+
     tasks.withType(AbstractCompile) {
         options.encoding = 'UTF-8'
     }

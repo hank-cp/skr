@@ -13,52 +13,49 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.skr.registry.proxy;
+package demo.skr.aio;
 
-import org.skr.registry.EndPointRegistry;
-import org.skr.registry.PermissionRegistry;
-import org.skr.registry.RealmRegistry;
-import org.skr.registry.RegisterBatch;
-import org.skr.registry.service.RegistryService;
+import org.skr.registry.*;
+import org.skr.registry.service.IRegistryManager;
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * @author <a href="https://github.com/hank-cp">Hank CP</a>
  */
 @SuppressWarnings("unchecked")
-public class RegistryLocalProxy implements RegistryProxy {
+public class RegistryServiceMock implements RegistryServiceClient {
 
     @Autowired
-    private RegistryService registryService;
+    private IRegistryManager registryManager;
 
     @Override
     public PermissionRegistry getPermission(String code) {
-        return registryService.getPermission(code);
+        return registryManager.getPermission(code);
     }
 
     @Override
     public EndPointRegistry getEndPoint(String url) {
-        return registryService.getEndPoint(url);
+        return registryManager.getEndPoint(url);
     }
 
     @Override
     public void registerRealm(RegisterBatch realmBatch) {
-        registryService.registerRealm(realmBatch.realm, realmBatch.permissions, realmBatch.endPoints);
+        registryManager.registerRealm(realmBatch.realm, realmBatch.permissions, realmBatch.endPoints);
     }
 
     @Override
     public void unregisterRealm(String realmCode) {
-        RealmRegistry realm = registryService.getRealm(realmCode);
-        registryService.unregisterRealm(realm);
+        RealmRegistry realm = registryManager.getRealm(realmCode);
+        registryManager.unregisterRealm(realm);
     }
 
     @Override
     public void revokePermission(String permissionCode) {
-        registryService.revokePermission(permissionCode);
+        registryManager.revokePermission(permissionCode);
     }
 
     @Override
     public void revokeEndPoint(String url) {
-        registryService.revokeEndPoint(url);
+        registryManager.revokeEndPoint(url);
     }
 }

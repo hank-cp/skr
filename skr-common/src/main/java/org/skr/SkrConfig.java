@@ -15,10 +15,15 @@
  */
 package org.skr;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.skr.common.util.JsonUtil;
 import org.skr.config.GeneralExceptionHandler;
 import org.skr.security.SkrSecurityProperties;
+import org.springframework.beans.factory.InitializingBean;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.boot.autoconfigure.jackson.JacksonAutoConfiguration;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.cache.interceptor.KeyGenerator;
 import org.springframework.cache.interceptor.SimpleKey;
@@ -57,10 +62,18 @@ public class SkrConfig {
         };
     }
 
-    @Bean
-    @ConditionalOnMissingBean
-    public Jackson2ObjectMapperBuilder jackson2ObjectMapperBuilder() {
-        return JsonUtil.newObjectMapperBuilder();
+    @Configuration
+    @AutoConfigureAfter(JacksonAutoConfiguration.class)
+    public static class JacksonConfigurer implements InitializingBean {
+
+        @Autowired
+        private ObjectMapper objectMapper;
+
+        @SuppressWarnings("Duplicates")
+        @Override
+        public void afterPropertiesSet() {
+            JsonUtil.setupObjectMapper(objectMapper);
+        }
     }
 
 }

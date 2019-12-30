@@ -20,7 +20,7 @@ import demo.skr.model.registry.Permission;
 import demo.skr.model.registry.Realm;
 import lombok.extern.slf4j.Slf4j;
 import org.skr.registry.RegisterBatch;
-import org.skr.registry.proxy.RegistryProxy;
+import org.skr.registry.RegistryServiceClient;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
@@ -52,7 +52,7 @@ public class DemoA {
     public static class OnStartUpListener implements InitializingBean {
 
         @Autowired
-        private RegistryProxy registryProxy;
+        private RegistryServiceClient registryService;
 
         @Override
         public void afterPropertiesSet() throws Exception {
@@ -61,7 +61,7 @@ public class DemoA {
             Realm realm = new Realm();
             realm.name = "demo-a";
             realm.code = "demo-a";
-            registryProxy.registerRealm(RegisterBatch.of(realm,
+            registryService.registerRealm(RegisterBatch.of(realm,
                     List.of(
                             Permission.of("Task", "Task"),
                             Permission.of("Task_Create", "Task - Create"),

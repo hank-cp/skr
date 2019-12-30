@@ -17,22 +17,17 @@ package org.skr.common.util;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.PropertyAccessor;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
-import com.fasterxml.jackson.databind.module.SimpleModule;
-import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.laxture.spring.util.ApplicationContextProvider;
-import org.skr.config.json.*;
+import org.skr.config.json.ValueEnumModule;
 import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
 
 import java.io.IOException;
 import java.util.Collection;
-import java.util.stream.Stream;
 
 /**
  * @author <a href="https://github.com/hank-cp">Hank CP</a>
@@ -42,28 +37,24 @@ public class JsonUtil {
     public static ObjectMapper getObjectMapper() {
         ObjectMapper objectMapper = ApplicationContextProvider.getBean(ObjectMapper.class);
         if (objectMapper == null) {
-            objectMapper = newObjectMapperBuilder().build();
+            objectMapper = Jackson2ObjectMapperBuilder.json().build();
+            setupObjectMapper(objectMapper);
         }
         return objectMapper;
     }
 
-    public static Jackson2ObjectMapperBuilder newObjectMapperBuilder() {
-        return new Jackson2ObjectMapperBuilder()
-                .serializationInclusion(JsonInclude.Include.NON_NULL)
-                .modulesToInstall(getDefaultModule(), new Jdk8Module(), new JavaTimeModule())
-                .featuresToDisable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
-                .visibility(PropertyAccessor.FIELD, JsonAutoDetect.Visibility.PUBLIC_ONLY)
-                .visibility(PropertyAccessor.GETTER, JsonAutoDetect.Visibility.PUBLIC_ONLY)
-                .visibility(PropertyAccessor.SETTER, JsonAutoDetect.Visibility.PUBLIC_ONLY)
-                .visibility(PropertyAccessor.IS_GETTER, JsonAutoDetect.Visibility.PUBLIC_ONLY)
-                .visibility(PropertyAccessor.CREATOR, JsonAutoDetect.Visibility.NONE);
-    }
+    public static ObjectMapper setupObjectMapper(ObjectMapper objectMapper) {
+        objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
+        objectMapper.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
+        objectMapper.registerModule(new ValueEnumModule());
 
-    public static SimpleModule getDefaultModule() {
-        return new SimpleModule()
-                .addSerializer(IntValuedEnum.class, new IntValuedEnumSerializer())
-                .addSerializer(StringValuedEnum.class, new StringValuedEnumSerializer())
-                .addSerializer(Stream.class, new StreamSerializer());
+        objectMapper.setVisibility(objectMapper.getSerializationConfig()
+                .getDefaultVisibilityChecker()
+                .withFieldVisibility(JsonAutoDetect.Visibility.PUBLIC_ONLY)
+                .withIsGetterVisibility(JsonAutoDetect.Visibility.PUBLIC_ONLY)
+                .withGetterVisibility(JsonAutoDetect.Visibility.PUBLIC_ONLY)
+                .withSetterVisibility(JsonAutoDetect.Visibility.PUBLIC_ONLY));
+        return objectMapper;
     }
 
     //*************************************************************************

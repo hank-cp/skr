@@ -30,13 +30,9 @@ public class RegistryApp implements Constants {
         SpringApplication.run(RegistryApp.class, args);
     }
 
-    //*************************************************************************
-    // Application Startup Listener
-    //*************************************************************************
-
     @Configuration
     @AutoConfigureAfter(JacksonAutoConfiguration.class)
-    public static class JacksonConfigure implements InitializingBean {
+    public static class RegistryJsonConfigurer implements InitializingBean {
 
         @Autowired
         private ObjectMapper objectMapper;

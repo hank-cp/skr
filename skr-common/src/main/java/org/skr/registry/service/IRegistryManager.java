@@ -28,7 +28,7 @@ import java.util.*;
  * @author <a href="https://github.com/hank-cp">Hank CP</a>
  */
 @Service
-public interface RegistryService<
+public interface IRegistryManager<
         Realm extends RealmRegistry,
         Permission extends PermissionRegistry,
         EndPoint extends EndPointRegistry> {
