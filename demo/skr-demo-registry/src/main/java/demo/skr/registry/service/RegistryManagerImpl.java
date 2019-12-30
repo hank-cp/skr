@@ -66,6 +66,7 @@ public class RegistryManagerImpl implements
         return realmRepository.findById(realmCode).orElse(null);
     }
 
+    @Override
     public List<Permission> listPermissions() {
         return permissionRepository.findEnabledPermissions();
     }
@@ -75,6 +76,7 @@ public class RegistryManagerImpl implements
         return permissionRepository.findById(permissionCode).orElse(null);
     }
 
+    @Override
     public List<EndPoint> listEndPoints() {
         return endPointRepository.findEnabledEndPoints();
     }

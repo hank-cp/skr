@@ -41,7 +41,11 @@ public interface IRegistryManager<
 
     void unregisterRealm(Realm realm);
 
+    List<Permission> listPermissions();
+
     Permission getPermission(String permissionCode);
+
+    List<EndPoint> listEndPoints();
 
     EndPoint getEndPoint(String url);
 

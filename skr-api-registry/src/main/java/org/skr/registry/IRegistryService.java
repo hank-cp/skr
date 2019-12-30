@@ -17,13 +17,21 @@ package org.skr.registry;
 
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 /**
  * @author <a href="https://github.com/hank-cp">Hank CP</a>
  */
 public interface IRegistryService {
 
+	@GetMapping("/registry/permissions")
+	List<PermissionRegistry> listPermissions();
+
 	@GetMapping("/registry/permission/{code}")
 	PermissionRegistry getPermission(@PathVariable String code);
+
+	@GetMapping("/registry/end-points")
+	List<EndPointRegistry> listEndPoints();
 
 	/** Get Permission */
 	@GetMapping("/registry/end-point/{url}")
@@ -34,7 +42,7 @@ public interface IRegistryService {
 	void registerRealm(@RequestBody RegisterBatch realmBatch);
 
 	/** Register app service */
-	@PostMapping("/registry/realm/unregister/{realmCode}")
+	@PostMapping("/registry/realm/{realmCode}/unregister")
 	void unregisterRealm(@PathVariable String realmCode);
 
 	/** Revoke a disabled permission in order to reuse permissionCode. */

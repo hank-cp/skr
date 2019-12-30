@@ -19,6 +19,8 @@ import org.skr.registry.*;
 import org.skr.registry.service.IRegistryManager;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.List;
+
 /**
  * @author <a href="https://github.com/hank-cp">Hank CP</a>
  */
@@ -29,8 +31,18 @@ public class RegistryServiceMock implements RegistryServiceClient {
     private IRegistryManager registryManager;
 
     @Override
+    public List<PermissionRegistry> listPermissions() {
+        return registryManager.listPermissions();
+    }
+
+    @Override
     public PermissionRegistry getPermission(String code) {
         return registryManager.getPermission(code);
+    }
+
+    @Override
+    public List<EndPointRegistry> listEndPoints() {
+        return registryManager.listEndPoints();
     }
 
     @Override

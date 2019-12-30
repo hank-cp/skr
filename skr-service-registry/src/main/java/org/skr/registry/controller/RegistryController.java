@@ -22,6 +22,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 /**
  * @author <a href="https://github.com/hank-cp">Hank CP</a>
  */
@@ -34,10 +36,20 @@ public class RegistryController implements IRegistryService {
     @Autowired
     private IRegistryManager registryManager;
 
+    @GetMapping("/registry/permissions")
+    public List<PermissionRegistry> listPermissions() {
+        return registryManager.listPermissions();
+    }
+
     /** Get Permission */
     @GetMapping("/permission/{permissionCode}")
     public PermissionRegistry getPermission(@PathVariable String permissionCode) {
         return registryManager.getPermission(permissionCode);
+    }
+
+    @GetMapping("/registry/end-points")
+    public List<EndPointRegistry> listEndPoints() {
+        return registryManager.listEndPoints();
     }
 
     /** Get Permission */
