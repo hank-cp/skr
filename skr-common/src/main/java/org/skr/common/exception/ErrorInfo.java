@@ -176,6 +176,7 @@ public class ErrorInfo {
     public static final ErrorInfo METHOD_NOT_FOUND          = ErrorInfo.of(1014, "Method %s is not found for class %s.",    ErrorLevel.FATAL);
     public static final ErrorInfo FIELD_NOT_FOUND           = ErrorInfo.of(1015, "Field %s is not found for class %s.",     ErrorLevel.FATAL);
     public static final ErrorInfo MISSING_ARGUMENT          = ErrorInfo.of(1016, "Argument %s is missing.",                 ErrorLevel.FATAL);
+    public static final ErrorInfo PARSE_METHOD_NOT_FOUND    = ErrorInfo.of(1017, "a static 'parse(%s value)' method is required for ValuedEnum %s.", ErrorLevel.FATAL);
 
     public static final ErrorInfo AUTHENTICATION_REQUIRED       = ErrorInfo.of(1100, "Authentication required.");
     public static final ErrorInfo BAD_CERTIFICATION             = ErrorInfo.of(1101, "Verify certification for %s failed.");

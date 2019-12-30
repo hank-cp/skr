@@ -18,13 +18,10 @@ package org.skr.config.json;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
-import org.skr.common.util.BeanUtil;
 
 import java.io.IOException;
-import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
 import java.util.Arrays;
-import java.util.Map;
 import java.util.Optional;
 
 /**
@@ -33,18 +30,6 @@ import java.util.Optional;
  * @author <a href="https://github.com/hank-cp">Hank CP</a>
  */
 public class ValuedEnumDeserializer extends StdDeserializer<ValuedEnum> {
-
-    private static final Map<Class<?>, Class<?>> PRIMITIVE_TYPES = Map.of(
-            Boolean.class,      boolean.class,
-            Byte.class,         byte.class,
-            Character.class,    char.class,
-            Double.class,       double.class,
-            Float.class,        float.class,
-            Integer.class,      int.class,
-            Long.class,         long.class,
-            Short.class,        short.class,
-            Void.class,         void.class
-    );
 
     public ValuedEnumDeserializer() {
         this(null);
@@ -65,16 +50,7 @@ public class ValuedEnumDeserializer extends StdDeserializer<ValuedEnum> {
             throw new IllegalStateException(handledType()+" is not valid ValuedEnum.");
         }
 
-        Method parseMethod = BeanUtil.getMethod(handledType(), "parse", valueType.get());
-        if (parseMethod == null) {
-            // try to get premitive version "parse" method
-            parseMethod = BeanUtil.getMethod(handledType(), "parse", PRIMITIVE_TYPES.get(valueType.get()));
-        }
         Object value = jp.getCodec().readValue(jp, valueType.get());
-        try {
-            return (ValuedEnum) parseMethod.invoke(parseMethod, value);
-        } catch (Exception e) {
-            throw new IllegalStateException(e.getLocalizedMessage(), e);
-        }
+        return ValuedEnum.parse(handledType(), value);
     }
 }
