@@ -27,9 +27,9 @@ import java.util.stream.Stream;
 /**
  * @author <a href="https://github.com/hank-cp">Hank CP</a>
  */
-public class ValueEnumModule extends SimpleModule {
+public class ValuedEnumModule extends SimpleModule {
 
-    public ValueEnumModule() {
+    public ValuedEnumModule() {
         addSerializer(Stream.class, new StreamSerializer());
         addSerializer(ValuedEnum.class, new ValuedEnumSerializer());
         setDeserializers(new ValueEnumDeserializers());

@@ -23,7 +23,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import org.laxture.spring.util.ApplicationContextProvider;
-import org.skr.config.json.ValueEnumModule;
+import org.skr.config.json.ValuedEnumModule;
 import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
 
 import java.io.IOException;
@@ -46,7 +46,7 @@ public class JsonUtil {
     public static ObjectMapper setupObjectMapper(ObjectMapper objectMapper) {
         objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
         objectMapper.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
-        objectMapper.registerModule(new ValueEnumModule());
+        objectMapper.registerModule(new ValuedEnumModule());
 
         objectMapper.setVisibility(objectMapper.getSerializationConfig()
                 .getDefaultVisibilityChecker()
