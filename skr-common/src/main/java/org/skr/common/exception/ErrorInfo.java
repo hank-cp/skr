@@ -19,6 +19,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.rits.cloning.Cloner;
 import lombok.NonNull;
 import lombok.ToString;
+import org.laxture.spring.util.ApplicationContextProvider;
 import org.skr.common.util.Checker;
 import org.skr.config.json.ValuedEnum;
 
@@ -65,6 +66,7 @@ public class ErrorInfo {
     private Map<String, Object> extra;
 
     private boolean shared = true;
+    private ClassLoader classLoader;
 
     public static ErrorInfo of(int code, String msg) {
         ErrorInfo errorInfo = new ErrorInfo();
@@ -76,6 +78,12 @@ public class ErrorInfo {
     public static ErrorInfo of(int code, String msg, ErrorLevel level) {
         ErrorInfo errorInfo = of(code, msg);
         errorInfo.level = level;
+        return errorInfo;
+    }
+
+    public static ErrorInfo of(int code, String msg, ErrorLevel level, ClassLoader classLoader) {
+        ErrorInfo errorInfo = of(code, msg, level);
+        errorInfo.classLoader = classLoader;
         return errorInfo;
     }
 
@@ -118,8 +126,7 @@ public class ErrorInfo {
 
     @JsonProperty("msg")
     public String getMsg() {
-        // TODO I18N msg
-        return !Checker.isEmpty(args) ? String.format(msg, (Object[])args) : msg;
+        return ApplicationContextProvider.getMessage(this.getClass(), msg, args);
     }
 
     @JsonProperty("elv")
@@ -160,40 +167,36 @@ public class ErrorInfo {
 
     public static final ErrorInfo OK                        = ErrorInfo.of(0, null);
 
-    public static final ErrorInfo INTERNAL_SERVER_ERROR     = ErrorInfo.of(1001, "%s",                                      ErrorLevel.FATAL);
-    public static final ErrorInfo ENTITY_NOT_FOUND          = ErrorInfo.of(1002, "Entity %s(%s) not found.");
-    public static final ErrorInfo DELETION_RESTRICTED       = ErrorInfo.of(1003, "Deletion %s(%s)restricted.");
-    public static final ErrorInfo INVALID_SUBMITTED_DATA    = ErrorInfo.of(1004, "Invalid submitted data. %s");
-    public static final ErrorInfo INVALID_SERVER_DATA       = ErrorInfo.of(1005, "Invalid server data. %s");
-    public static final ErrorInfo SAVE_DATA_FAILED          = ErrorInfo.of(1006, "Save data failed.");
-    public static final ErrorInfo DUPLICATED_ENTITY         = ErrorInfo.of(1007, "Duplicated entity %s(%s).");
-    public static final ErrorInfo CLASS_NOT_FOUND           = ErrorInfo.of(1008, "Class %s not found.",                     ErrorLevel.FATAL);
-    public static final ErrorInfo REQUIRED_PROPERTY_NOT_SET = ErrorInfo.of(1009, "Required property %s is not set.",        ErrorLevel.FATAL);
-    public static final ErrorInfo INCOMPATIBLE_TYPE         = ErrorInfo.of(1010, "Except type %s but %s is given.",         ErrorLevel.FATAL);
-    public static final ErrorInfo NOT_NULLABLE              = ErrorInfo.of(1011, "%s could not be null.",                   ErrorLevel.FATAL);
-    public static final ErrorInfo ILLEGAL_DATA              = ErrorInfo.of(1012, "Illegal data %s.");
-    public static final ErrorInfo CONSTRUCTOR_NOT_FOUND     = ErrorInfo.of(1013, "Required constructor is not found for class %s.");
-    public static final ErrorInfo METHOD_NOT_FOUND          = ErrorInfo.of(1014, "Method %s is not found for class %s.",    ErrorLevel.FATAL);
-    public static final ErrorInfo FIELD_NOT_FOUND           = ErrorInfo.of(1015, "Field %s is not found for class %s.",     ErrorLevel.FATAL);
-    public static final ErrorInfo MISSING_ARGUMENT          = ErrorInfo.of(1016, "Argument %s is missing.",                 ErrorLevel.FATAL);
-    public static final ErrorInfo PARSE_METHOD_NOT_FOUND    = ErrorInfo.of(1017, "a static 'parse(%s value)' method is required for ValuedEnum %s.", ErrorLevel.FATAL);
+    public static final ErrorInfo INTERNAL_SERVER_ERROR     = ErrorInfo.of(1001, "error.INTERNAL_SERVER_ERROR",    ErrorLevel.FATAL);
+    public static final ErrorInfo ENTITY_NOT_FOUND          = ErrorInfo.of(1002, "error.ENTITY_NOT_FOUND");
+    public static final ErrorInfo DELETION_RESTRICTED       = ErrorInfo.of(1003, "error.DELETION_RESTRICTED");
+    public static final ErrorInfo INVALID_SUBMITTED_DATA    = ErrorInfo.of(1004, "error.INVALID_SUBMITTED_DATA");
+    public static final ErrorInfo INVALID_SERVER_DATA       = ErrorInfo.of(1005, "error.INVALID_SERVER_DATA");
+    public static final ErrorInfo SAVE_DATA_FAILED          = ErrorInfo.of(1006, "error.SAVE_DATA_FAILED");
+    public static final ErrorInfo DUPLICATED_ENTITY         = ErrorInfo.of(1007, "error.DUPLICATED_ENTITY");
+    public static final ErrorInfo INCOMPATIBLE_TYPE         = ErrorInfo.of(1010, "error.INCOMPATIBLE_TYPE",         ErrorLevel.FATAL);
+    public static final ErrorInfo METHOD_NOT_FOUND          = ErrorInfo.of(1014, "error.METHOD_NOT_FOUND",          ErrorLevel.FATAL);
+    public static final ErrorInfo FIELD_NOT_FOUND           = ErrorInfo.of(1015, "error.FIELD_NOT_FOUND",           ErrorLevel.FATAL);
+    public static final ErrorInfo MISSING_PROPERTY          = ErrorInfo.of(1009, "error.MISSING_PROPERTY",          ErrorLevel.FATAL);
+    public static final ErrorInfo MISSING_ARGUMENT          = ErrorInfo.of(1016, "error.MISSING_ARGUMENT",          ErrorLevel.FATAL);
+    public static final ErrorInfo PARSE_METHOD_NOT_FOUND    = ErrorInfo.of(1017, "error.PARSE_METHOD_NOT_FOUND",    ErrorLevel.FATAL);
 
-    public static final ErrorInfo AUTHENTICATION_REQUIRED       = ErrorInfo.of(1100, "Authentication required.");
-    public static final ErrorInfo BAD_CERTIFICATION             = ErrorInfo.of(1101, "Verify certification for %s failed.");
-    public static final ErrorInfo ACCESS_TOKEN_EXPIRED          = ErrorInfo.of(1102, "Access token is expired.");
-    public static final ErrorInfo ACCESS_TOKEN_BROKEN           = ErrorInfo.of(1103, "Access token is broken.");
-    public static final ErrorInfo ACCESS_TOKEN_NOT_PROVIDED     = ErrorInfo.of(1104, "Access token is not provided.");
-    public static final ErrorInfo REFRESH_TOKEN_EXPIRED         = ErrorInfo.of(1105, "Refresh token is expired.");
-    public static final ErrorInfo REFRESH_TOKEN_BROKEN          = ErrorInfo.of(1106, "Refresh token is broken.");
-    public static final ErrorInfo PERMISSION_DENIED             = ErrorInfo.of(1107, "Permission Denied.");
-    public static final ErrorInfo PERMISSION_LIMITED            = ErrorInfo.of(1108, "Vip Level is not satisfied.", ErrorLevel.FATAL);
-    public static final ErrorInfo PERMISSION_NOT_FOUND          = ErrorInfo.of(1109, "Permission %s not found.",    ErrorLevel.FATAL);
-    public static final ErrorInfo CERTIFICATION_NOT_FOUND       = ErrorInfo.of(1110, "Certification %s is not found.");
-    public static final ErrorInfo CERTIFICATION_REGISTERED      = ErrorInfo.of(1111, "Certification %s has been registered.");
-    public static final ErrorInfo LAST_CERTIFICATION            = ErrorInfo.of(1112, "Last certification %s cannot be unbind.");
+    public static final ErrorInfo AUTHENTICATION_REQUIRED       = ErrorInfo.of(1100, "error.AUTHENTICATION_REQUIRED");
+    public static final ErrorInfo BAD_CERTIFICATION             = ErrorInfo.of(1101, "error.BAD_CERTIFICATION");
+    public static final ErrorInfo ACCESS_TOKEN_EXPIRED          = ErrorInfo.of(1102, "error.ACCESS_TOKEN_EXPIRED");
+    public static final ErrorInfo ACCESS_TOKEN_BROKEN           = ErrorInfo.of(1103, "error.ACCESS_TOKEN_BROKEN");
+    public static final ErrorInfo ACCESS_TOKEN_NOT_PROVIDED     = ErrorInfo.of(1104, "error.ACCESS_TOKEN_NOT_PROVIDED");
+    public static final ErrorInfo REFRESH_TOKEN_EXPIRED         = ErrorInfo.of(1105, "error.REFRESH_TOKEN_EXPIRED");
+    public static final ErrorInfo REFRESH_TOKEN_BROKEN          = ErrorInfo.of(1106, "error.REFRESH_TOKEN_BROKEN");
+    public static final ErrorInfo PERMISSION_DENIED             = ErrorInfo.of(1107, "error.PERMISSION_DENIED");
+    public static final ErrorInfo PERMISSION_LIMITED            = ErrorInfo.of(1108, "error.PERMISSION_LIMITED",        ErrorLevel.FATAL);
+    public static final ErrorInfo PERMISSION_NOT_FOUND          = ErrorInfo.of(1109, "error.PERMISSION_NOT_FOUND",      ErrorLevel.FATAL);
+    public static final ErrorInfo CERTIFICATION_NOT_FOUND       = ErrorInfo.of(1110, "error.CERTIFICATION_NOT_FOUND");
+    public static final ErrorInfo CERTIFICATION_REGISTERED      = ErrorInfo.of(1111, "error.CERTIFICATION_REGISTERED");
+    public static final ErrorInfo LAST_CERTIFICATION            = ErrorInfo.of(1112, "error.LAST_CERTIFICATION");
 
-    public static final ErrorInfo PERMISSION_REGISTERED         = ErrorInfo.of(1200, "Permission %s has been registered to realm %s",   ErrorLevel.FATAL);
-    public static final ErrorInfo END_POINT_REGISTERED          = ErrorInfo.of(1201, "EndPoint %s has been registered to realm %s",     ErrorLevel.FATAL);
-    public static final ErrorInfo PERMISSION_REVOKE_FAILED      = ErrorInfo.of(1202, "Permission %s is enabled in realm %s. You have to re-register this realm without this permission to disable it first.",   ErrorLevel.FATAL);
-    public static final ErrorInfo END_POINT_REVOKE_FAILED       = ErrorInfo.of(1203, "EndPoint %s is enabled in realm %s. You have to re-register this realm without this permission to disable it first.",     ErrorLevel.FATAL);
+    public static final ErrorInfo PERMISSION_REGISTERED         = ErrorInfo.of(1200, "error.PERMISSION_REGISTERED", ErrorLevel.FATAL);
+    public static final ErrorInfo END_POINT_REGISTERED          = ErrorInfo.of(1201, "error.END_POINT_REGISTERED",  ErrorLevel.FATAL);
+    public static final ErrorInfo PERMISSION_REVOKE_FAILED      = ErrorInfo.of(1202, "error.PERMISSION_REVOKE_FAILED",  ErrorLevel.FATAL);
+    public static final ErrorInfo END_POINT_REVOKE_FAILED       = ErrorInfo.of(1203, "error.END_POINT_REVOKE_FAILED",   ErrorLevel.FATAL);
 }

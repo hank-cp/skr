@@ -186,7 +186,7 @@ public class UsernamePasswordCertificationHandler
                 = usernamePasswordCertificationRepository.findByUsername(certificationIdentity);
         if (usernamePasswordCertification == null
                 || !usernamePasswordCertification.account.equals(account)) {
-            throw new AuthException(ErrorInfo.REQUIRED_PROPERTY_NOT_SET.msgArgs(certificationIdentity));
+            throw new AuthException(ErrorInfo.MISSING_PROPERTY.msgArgs(certificationIdentity));
         }
         usernamePasswordCertificationRepository.delete(usernamePasswordCertification);
     }

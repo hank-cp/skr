@@ -60,9 +60,6 @@ public class SkrSecurityProperties {
     /** Token setting for automation api invocation, like batch jobs */
     private Token ghostToken = new Token();
 
-    /** Token setting for trained api invocation */
-    private Token trainToken = new Token();
-
     @Data
     public static class Token {
         private String secret = "skr";

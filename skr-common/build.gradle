@@ -12,7 +12,7 @@ dependencies {
     compile 'com.fasterxml.jackson.datatype:jackson-datatype-jdk8'
     compile "javax.validation:validation-api"
     compile 'com.auth0:java-jwt:3.5.0'
-    compile 'com.github.hank-cp:spring-static-ctx:0.1.1'
+    compile 'com.github.hank-cp:spring-static-ctx:0.1.2'
     compile "org.apache.commons:commons-lang3"
     compile "commons-codec:commons-codec"
     compile 'org.yaml:snakeyaml'

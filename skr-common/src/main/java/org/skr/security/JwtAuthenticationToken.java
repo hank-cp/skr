@@ -93,7 +93,7 @@ public class JwtAuthenticationToken extends AbstractAuthenticationToken {
         }
 
         if (properties.getJwtPrincipalClass() == null) {
-            throw new ConfException(ErrorInfo.REQUIRED_PROPERTY_NOT_SET
+            throw new ConfException(ErrorInfo.MISSING_PROPERTY
                     .msgArgs("spring.skr.security.jwtPrincipalClass"));
         }
 

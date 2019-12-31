@@ -58,7 +58,7 @@ public abstract class AuthManager {
                                       Map<String, Object> arguments) {
         UserPrincipal principal = authenticate(certification, arguments);
         if (principal == null) throw new AuthException(
-                ErrorInfo.BAD_CERTIFICATION.msgArgs(certification.getIdentity()));
+                ErrorInfo.CERTIFICATION_NOT_FOUND.msgArgs(certification.getIdentity()));
         return principal;
     }
 
@@ -72,7 +72,7 @@ public abstract class AuthManager {
         UserPrincipal principal = authenticate(boundCertification, arguments);
         if (principal == null) {
             throw new AuthException(
-                    ErrorInfo.BAD_CERTIFICATION.msgArgs(boundCertification.getIdentity()));
+                    ErrorInfo.CERTIFICATION_NOT_FOUND.msgArgs(boundCertification.getIdentity()));
         }
         saveCertification(principal, newCertification, arguments);
     }
@@ -87,7 +87,7 @@ public abstract class AuthManager {
         UserPrincipal principal = authenticate(boundCertification, arguments);
         if (principal == null) {
             throw new AuthException(
-                    ErrorInfo.BAD_CERTIFICATION.msgArgs(boundCertification.getIdentity()));
+                    ErrorInfo.CERTIFICATION_NOT_FOUND.msgArgs(boundCertification.getIdentity()));
         }
         removeCertification(principal, removingCertification);
     }

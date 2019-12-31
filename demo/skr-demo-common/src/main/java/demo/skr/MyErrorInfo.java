@@ -23,12 +23,5 @@ import org.skr.common.exception.ErrorInfo;
 public final class MyErrorInfo {
 
     public static final ErrorInfo INVALID_SMS_CAPTCHA          = ErrorInfo.of(11104, "Invalid sms captcha.");
-    public static final ErrorInfo UNBIND_CERTIFICATION_FAILED  = ErrorInfo.of(11105, "Unbind certification %s failed.");
-
-    public static final ErrorInfo ACCOUNT_NOT_BELONG_TO_ORG    = ErrorInfo.of(11107, "Account %s does not belong to org %s.");
-    public static final ErrorInfo ACCOUNT_DISABLED             = ErrorInfo.of(11108, "Account %s is disabled.");
-    public static final ErrorInfo USER_DISABLED                = ErrorInfo.of(11109, "User %s is disabled.");
-    public static final ErrorInfo USER_NEED_APPROVAL           = ErrorInfo.of(11110, "User %s need to be approved.");
-    public static final ErrorInfo USER_REJECTED                = ErrorInfo.of(11111, "User %s joining get rejected.");
 
 }
