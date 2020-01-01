@@ -20,6 +20,7 @@ import demo.skr.model.CodeBasedEntity;
 import lombok.Getter;
 import org.skr.common.exception.ConfException;
 import org.skr.common.exception.ErrorInfo;
+import org.skr.security.GhostJwtPrincipal;
 import org.skr.registry.PermissionRegistry;
 import org.skr.registry.RealmRegistry;
 import org.skr.security.JwtPrincipal;
@@ -75,6 +76,9 @@ public class Permission extends CodeBasedEntity implements PermissionRegistry {
     @Override
     public PermissionResult checkAuthorization(JwtPrincipal principal) {
         SimpleJwtPrincipal jwtPrincipal;
+        if (principal instanceof GhostJwtPrincipal) {
+            return PermissionResult.PERMISSION_GRANTED;
+        }
         if (principal instanceof SimpleJwtPrincipal) {
             jwtPrincipal = (SimpleJwtPrincipal) principal;
         } else {

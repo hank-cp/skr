@@ -42,6 +42,8 @@ public class SkrSecurityProperties {
 
     private boolean configCors = false;
 
+    private String ghostUserName = "øSYSTEM";
+
     /** principal class name to deserialize the JWT token content */
     private Class jwtPrincipalClass;
 

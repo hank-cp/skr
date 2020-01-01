@@ -80,32 +80,43 @@ public class JwtAuthenticationToken extends AbstractAuthenticationToken {
     }
 
     public static Authentication getAuthentication(String accessToken, SkrSecurityProperties properties) {
-        String prefix;
-        String secret;
         if (accessToken.startsWith(properties.getAccessToken().getPrefix())) {
-            prefix = properties.getAccessToken().getPrefix();
-            secret = properties.getAccessToken().getSecret();
+            // decode user principal
+            String prefix = properties.getAccessToken().getPrefix();
+            String secret = properties.getAccessToken().getSecret();
+
+            if (properties.getJwtPrincipalClass() == null) {
+                throw new ConfException(ErrorInfo.MISSING_PROPERTY
+                        .msgArgs("spring.skr.security.jwtPrincipalClass"));
+            }
+
+            return Optional.of(accessToken)
+                    .map(token -> token.replace(prefix, ""))
+                    .map(token -> new Tuple2<>(JwtUtil.decode(token, secret), token))
+                    .map(decodedTuple -> {
+                        JwtPrincipal principal = JsonUtil.fromJson(
+                                properties.getJwtPrincipalClass(), decodedTuple._0);
+                        return new JwtAuthenticationToken(principal);
+                    })
+                    .orElse(null);
+
         } else if (accessToken.startsWith(properties.getGhostToken().getPrefix())) {
-            prefix = properties.getGhostToken().getPrefix();
-            secret = properties.getGhostToken().getSecret();
+            // decode ghost principal
+            String prefix = properties.getGhostToken().getPrefix();
+            String secret = properties.getGhostToken().getSecret();
+
+            return Optional.of(accessToken)
+                    .map(token -> token.replace(prefix, ""))
+                    .map(token -> new Tuple2<>(JwtUtil.decode(token, secret), token))
+                    .map(decodedTuple -> {
+                        JwtPrincipal principal = JsonUtil.fromJson(GhostJwtPrincipal.class, decodedTuple._0);
+                        return new JwtAuthenticationToken(principal);
+                    })
+                    .orElse(null);
+
         } else {
             throw new AuthException(ErrorInfo.AUTHENTICATION_REQUIRED);
         }
-
-        if (properties.getJwtPrincipalClass() == null) {
-            throw new ConfException(ErrorInfo.MISSING_PROPERTY
-                    .msgArgs("spring.skr.security.jwtPrincipalClass"));
-        }
-
-        return Optional.of(accessToken)
-                .map(token -> token.replace(prefix, ""))
-                .map(token -> new Tuple2<>(JwtUtil.decode(token, secret), token))
-                .map(decodedTuple -> {
-                    JwtPrincipal principal = JsonUtil.fromJson(
-                            properties.getJwtPrincipalClass(), decodedTuple._0);
-                    return new JwtAuthenticationToken(principal);
-                })
-                .orElse(null);
     }
 
 }
