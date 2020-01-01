@@ -27,6 +27,7 @@ import javax.validation.constraints.NotNull;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 /**
  * @author <a href="https://github.com/hank-cp">Hank CP</a>
@@ -126,7 +127,8 @@ public class ErrorInfo {
 
     @JsonProperty("msg")
     public String getMsg() {
-        return ApplicationContextProvider.getMessage(this.getClass(), msg, args);
+        return ApplicationContextProvider.getMessage(
+                Optional.ofNullable(this.classLoader).orElse(getClass().getClassLoader()), msg, args);
     }
 
     @JsonProperty("elv")
