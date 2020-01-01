@@ -1,6 +1,6 @@
 spring:
   messages:
-    basename: messages,demo
+    basename: skr-error,demo
   mvc:
     throw-exception-if-no-handler-found: true
   resources:

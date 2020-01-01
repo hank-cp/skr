@@ -8,6 +8,8 @@
     * Support multiple sign in approach
     * Support sign up abstract
     * AuthController is removed from lib projects
+* [x] Fix ValuedEnum serialization/deserialization
+* [x] error message i18n
 
 ### 0.1.0
 * [x] Unit and Integration Test
