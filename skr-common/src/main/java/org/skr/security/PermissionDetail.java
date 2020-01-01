@@ -16,7 +16,6 @@
 package org.skr.security;
 
 import org.apache.commons.lang3.NotImplementedException;
-import org.skr.config.json.IntValuedEnum;
 import org.skr.config.json.ValuedEnum;
 
 /**
@@ -24,7 +23,7 @@ import org.skr.config.json.ValuedEnum;
  */
 public interface PermissionDetail {
 
-    enum PermissionResult implements IntValuedEnum {
+    enum PermissionResult implements ValuedEnum<Integer> {
         PERMISSION_GRANTED(0), PERMISSION_DENIED(1), PERMISSION_LIMITATION(2);
 
         private final int value;
