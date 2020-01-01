@@ -21,6 +21,7 @@ import lombok.NonNull;
 import lombok.ToString;
 import org.laxture.spring.util.ApplicationContextProvider;
 import org.skr.common.util.Checker;
+import org.skr.config.json.StringValuedEnum;
 import org.skr.config.json.ValuedEnum;
 
 import javax.validation.constraints.NotNull;
@@ -35,7 +36,7 @@ import java.util.Optional;
 @ToString
 public class ErrorInfo {
 
-    public enum ErrorLevel implements ValuedEnum<String> {
+    public enum ErrorLevel implements StringValuedEnum {
         WARNING("warn"), // client should prompt user with warning message
         ERROR("error"),  // client should stop user operating, generally caused by error input or data restrictions
         FATAL("fatal");  // client should stop to be functional, shit happens...
