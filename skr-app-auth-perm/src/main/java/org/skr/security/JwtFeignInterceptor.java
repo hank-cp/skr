@@ -31,9 +31,12 @@ public class JwtFeignInterceptor implements RequestInterceptor {
     public void apply(RequestTemplate template) {
         JwtPrincipal jwtPrincipal = JwtPrincipal.getCurrentPrincipal();
         if (jwtPrincipal == null) {
-            template.header(skrSecurityProperties.getGhostToken().getHeader(),
-                Token.of(skrSecurityProperties.getGhostToken(),
-                        GhostJwtPrincipal.of(skrSecurityProperties.getGhostUserName())).encode());
+            template.header(skrSecurityProperties.getAccessToken().getHeader(),
+                Token.of(skrSecurityProperties.getAccessToken().getHeader(),
+                        GhostJwtPrincipal.of(skrSecurityProperties.getGhostUserName()),
+                        skrSecurityProperties.getGhostToken().getPrefix(),
+                        skrSecurityProperties.getGhostToken().getExpiration(),
+                        skrSecurityProperties.getGhostToken().getSecret()).encode());
         } else {
             template.header(skrSecurityProperties.getAccessToken().getHeader(),
                     jwtPrincipal.getChainAccessToken());
