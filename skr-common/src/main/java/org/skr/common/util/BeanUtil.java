@@ -39,36 +39,37 @@ public class BeanUtil {
      * {@link Collection#addAll(Collection)} to corresponding target field, instead of
      * copy the {@link Collection} reference. Hence if target's {@link Collection} is not
      * initialized and remains null, it won't be copied.
-     *
-     * @param ignoreFields fields to be ignored
      */
     public static <E> void copyFields(@NonNull E source,
-                                      @NonNull E target,
-                                      String... ignoreFields) {
-        copyIncludeOrExcludeFields(source, target, false,
-                ArrayUtils.addAll(ignoreFields, "id", "uid", "createdBy", "createdAt", "updatedBy", "updatedAt"));
+                                      @NonNull E target) {
+        copyIncludeOrExcludeFields(source, target, false);
     }
 
     /**
-     * @see #copyFields(Object, Object, String...)
+     * @see #copyFields(Object, Object)
      *
-     * @param specifiedFields fields to be copied
+     * @param fields to be excluded for copying
      */
-    public static <E> void copySpecifiedFields(@NonNull E source,
+    public static <E> void copyFieldsExcluding(@NonNull E source,
                                                @NonNull E target,
-                                               String... specifiedFields) {
-        copyIncludeOrExcludeFields(source, target, true, specifiedFields);
+                                               String... fields) {
+        copyIncludeOrExcludeFields(source, target, false, fields);
     }
 
     /**
-     * @see #copyFields(Object, Object, String...)
+     * @see #copyFields(Object, Object)
      *
-     * @param fields including or excluding fields
-     * @param isInclude
+     * @param fields to be included for copying
      */
+    public static <E> void copyFieldsIncluding(@NonNull E source,
+                                               @NonNull E target,
+                                               String... fields) {
+        copyIncludeOrExcludeFields(source, target, true, fields);
+    }
+
     private static <E> void copyIncludeOrExcludeFields(@NonNull E source,
                                                        @NonNull E target,
-                                                       boolean isInclude,
+                                                       boolean includeOrExclude,
                                                        String... fields) {
         Assert.notNull(source, "Source must not be null");
         Assert.notNull(target, "Target must not be null");
@@ -80,8 +81,8 @@ public class BeanUtil {
                 if (Modifier.isStatic(field.getModifiers())
                         || Modifier.isPrivate(field.getModifiers())
                         || Modifier.isProtected(field.getModifiers())
-                        || (isInclude && ArrayUtils.indexOf(fields, field.getName()) < 0)
-                        || (!isInclude && ArrayUtils.indexOf(fields, field.getName()) >= 0)) continue;
+                        || (includeOrExclude && ArrayUtils.indexOf(fields, field.getName()) < 0)
+                        || (!includeOrExclude && ArrayUtils.indexOf(fields, field.getName()) >= 0)) continue;
 
                 Field targetField;
                 try {

@@ -143,7 +143,7 @@ public class RegistryManagerImpl implements
                 throw new BizException(ErrorInfo.PERMISSION_REGISTERED.msgArgs(
                         existed.code, existed.getRealm().getCode()));
             }
-            BeanUtil.copyFields(permission, existed, "code", "realm");
+            BeanUtil.copyFieldsIncluding(permission, existed, "name", "vipLevel");
             permissionRepository.save(existed);
             return existed;
         }
@@ -166,7 +166,7 @@ public class RegistryManagerImpl implements
                 throw new BizException(ErrorInfo.END_POINT_REGISTERED.msgArgs(
                         endPoint.getUrl(), existed.getRealm().getCode()));
             }
-            BeanUtil.copyFields(endPoint, existed, "url", "permission");
+            BeanUtil.copyFieldsIncluding(endPoint, existed, "description", "label", "breadcrumb");
             endPointRepository.save(existed);
             return existed;
         }
