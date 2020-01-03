@@ -18,6 +18,7 @@ package org.skr.security;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
+import org.skr.common.exception.AuthException;
 import org.skr.common.exception.ConfException;
 import org.skr.common.exception.ErrorInfo;
 import org.skr.common.exception.PermissionException;
@@ -26,6 +27,8 @@ import org.skr.security.annotation.RequirePermission;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
+
+import java.util.Optional;
 
 /**
  * @author <a href="https://github.com/hank-cp">Hank CP</a>
@@ -41,14 +44,18 @@ public class PermissionCheckingAspect {
     @Around("@annotation(permission)")
     public Object check(ProceedingJoinPoint joinPoint, RequirePermission permission) throws Throwable {
         String permissionCode = permission.value();
-        JwtPrincipal jwtPrincipal = JwtPrincipal.getCurrentPrincipal();
-        PermissionDetail permissionDetail = registryService.getPermission(permissionCode);
+        Optional<JwtPrincipal> jwtPrincipal = JwtPrincipal.getCurrentPrincipal();
 
+        if (jwtPrincipal.isEmpty()) {
+            throw new AuthException(ErrorInfo.AUTHENTICATION_REQUIRED);
+        }
+
+        PermissionDetail permissionDetail = registryService.getPermission(permissionCode);
         if (permissionDetail == null) {
             throw new ConfException(ErrorInfo.PERMISSION_NOT_FOUND.msgArgs(permissionCode));
         }
 
-        switch (permissionDetail.checkAuthorization(jwtPrincipal)) {
+        switch (permissionDetail.checkAuthorization(jwtPrincipal.get())) {
             case PERMISSION_GRANTED: return joinPoint.proceed();
             case PERMISSION_DENIED:
                 throw new PermissionException(ErrorInfo.PERMISSION_DENIED);

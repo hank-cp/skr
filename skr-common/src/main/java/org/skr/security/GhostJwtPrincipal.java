@@ -36,7 +36,7 @@ public class GhostJwtPrincipal implements JwtPrincipal {
 
     @Override
     public String getIdentity() {
-        return ghostUserName;
+        return "0";
     }
 
     @Override

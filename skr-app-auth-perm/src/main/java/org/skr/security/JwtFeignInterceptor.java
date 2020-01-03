@@ -19,6 +19,8 @@ import feign.RequestInterceptor;
 import feign.RequestTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.Optional;
+
 /**
  * @author <a href="https://github.com/hank-cp">Hank CP</a>
  */
@@ -29,8 +31,8 @@ public class JwtFeignInterceptor implements RequestInterceptor {
 
     @Override
     public void apply(RequestTemplate template) {
-        JwtPrincipal jwtPrincipal = JwtPrincipal.getCurrentPrincipal();
-        if (jwtPrincipal == null) {
+        Optional<JwtPrincipal> jwtPrincipal = JwtPrincipal.getCurrentPrincipal();
+        if (jwtPrincipal.isEmpty()) {
             template.header(skrSecurityProperties.getAccessToken().getHeader(),
                 Token.of(skrSecurityProperties.getAccessToken().getHeader(),
                         GhostJwtPrincipal.of(skrSecurityProperties.getGhostUserName()),
@@ -39,7 +41,7 @@ public class JwtFeignInterceptor implements RequestInterceptor {
                         skrSecurityProperties.getGhostToken().getSecret()).encode());
         } else {
             template.header(skrSecurityProperties.getAccessToken().getHeader(),
-                    jwtPrincipal.getChainAccessToken());
+                    jwtPrincipal.get().getChainAccessToken());
         }
     }
 }
