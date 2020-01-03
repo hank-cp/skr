@@ -1,0 +1,46 @@
+@startuml
+
+skinparam class {
+	BackgroundColor<<Interface>> PaleGreen
+	BackgroundColor<<Concrete>> Tomato
+}
+
+class RegManager {
+    void register(Realm)
+    void unregister(Realm)
+}
+
+class Realm {
+    String code @unique
+    int version
+    List<Registrar> registrars
+    List<Registry> registries
+}
+
+package "api" {
+    class Registry <<Interface>> {
+        Object key @unique
+    }
+
+    class Registrar <<Interface>> {
+        String name @unique
+        --
+        void register(Registry)
+        void unregister(Registry)
+    }
+}
+
+class Permission <<Concrete>> {
+    String code (key)
+}
+
+class EndPoint <<Concrete>> {
+    String url (key)
+}
+
+Realm "1" o-- "*" Registry
+Realm "1" o-- "*" Registrar
+Registry <|-- Permission
+Registry <|-- EndPoint
+
+@enduml

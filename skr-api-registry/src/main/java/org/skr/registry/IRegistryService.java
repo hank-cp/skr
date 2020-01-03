@@ -35,7 +35,7 @@ public interface IRegistryService {
 
 	/** Get Permission */
 	@GetMapping("/registry/end-point/{url}")
-	EndPointRegistry getEndPoint(@PathVariable String url);
+    EndPointRegistry getEndPoint(@PathVariable String url);
 
 	/** Register app service */
 	@PostMapping("/registry/realm/register")

@@ -58,14 +58,14 @@ public class ValuedEnumTest {
     @Test
     @Transactional
     public void testIntegerEnumConversion() {
-        String json = JsonUtil.toJson(PermissionDetail.PermissionResult.PERMISSION_LIMITATION);
+        String json = JsonUtil.toJson(PermissionDetail.PermissionResult.PERMISSION_LIMITED);
         assertThat(json, notNullValue());
         assertThat(json, equalTo("2"));
 
         PermissionDetail.PermissionResult deserializedObj =
                 JsonUtil.fromJson(PermissionDetail.PermissionResult.class, json);
         assertThat(deserializedObj, notNullValue());
-        assertThat(deserializedObj, equalTo(PermissionDetail.PermissionResult.PERMISSION_LIMITATION));
+        assertThat(deserializedObj, equalTo(PermissionDetail.PermissionResult.PERMISSION_LIMITED));
     }
 
 }

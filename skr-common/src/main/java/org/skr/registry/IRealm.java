@@ -15,20 +15,43 @@
  */
 package org.skr.registry;
 
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
+import org.skr.config.json.ValuedEnum;
+import org.skr.security.PermissionDetail;
 
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 /**
  * @author <a href="https://github.com/hank-cp">Hank CP</a>
  */
-@AllArgsConstructor(staticName = "of")
-@NoArgsConstructor
-public class RegisterBatch {
+public interface IRealm {
 
-    public RealmRegistry realm;
-    public List<PermissionRegistry> permissions;
-    public List<EndPointRegistry> endPoints;
+    enum RealmStatus implements ValuedEnum<Integer> {
+        STOPPED(0), STARTED(1), ERROR(2);
 
+        private final int value;
+
+        RealmStatus(int value) {
+            this.value = value;
+        }
+
+        @Override
+        public Integer value() {
+            return value;
+        }
+
+        public static RealmStatus parse(int value) {
+            return ValuedEnum.parse(RealmStatus.values(), value, STOPPED);
+        }
+    }
+
+    @NotNull
+    String getName();
+
+    @NotNull
+    int getVersion();
+
+    List<IRegistrar> getRegistrars();
+
+    List<IRegistry> getRegistries();
 }

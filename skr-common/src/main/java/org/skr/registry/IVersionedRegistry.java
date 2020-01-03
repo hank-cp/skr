@@ -13,16 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.skr.common;
+package org.skr.registry;
+
 
 /**
  * @author <a href="https://github.com/hank-cp">Hank CP</a>
  */
-public interface Constants {
-
-    byte ENABLED = 0;
-    byte DISABLED = 1;
-
-    String CACHE_NAME_DEFAULT = "default";
-
+public interface IVersionedRegistry<Key> extends IRegistry<Key> {
 }

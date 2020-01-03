@@ -2,9 +2,9 @@ ext.httpPort = "${registry_httpPort}"
 
 dependencies {
     compile project(':skr-demo-common')
-    compile project(':skr-service-registry')
+    compile project(':skr-service-reg')
 
     compile "org.hsqldb:hsqldb"
-    
+
     testImplementation "org.springframework.boot:spring-boot-starter-test"
 }

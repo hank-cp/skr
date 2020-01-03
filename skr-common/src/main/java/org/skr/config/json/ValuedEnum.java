@@ -15,9 +15,12 @@
  */
 package org.skr.config.json;
 
+import org.laxture.spring.util.ApplicationContextProvider;
 import org.skr.common.exception.ConfException;
 import org.skr.common.exception.ErrorInfo;
 import org.skr.common.util.BeanUtil;
+import org.skr.config.EnumLabelMessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 
 import java.lang.reflect.Method;
 import java.util.Map;
@@ -41,6 +44,12 @@ public interface ValuedEnum<V> {
     );
 
     V value();
+
+    default String label() {
+        return ApplicationContextProvider.getBean(getClass(), EnumLabelMessageSource.class)
+                .getMessage(this.getClass().getSimpleName()+"."+value().toString(),
+                        null, LocaleContextHolder.getLocale());
+    }
 
     static <E extends ValuedEnum<V>, V> E parse(E[] values, V value, E defaultItem) {
         for (E item : values) {

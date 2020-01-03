@@ -16,7 +16,7 @@
 package demo.skr.aio;
 
 import org.skr.registry.*;
-import org.skr.registry.service.IRegistryManager;
+import org.skr.registry.service.IRegManager;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
@@ -28,7 +28,7 @@ import java.util.List;
 public class RegistryServiceMock implements RegistryServiceClient {
 
     @Autowired
-    private IRegistryManager registryManager;
+    private IRegManager registryManager;
 
     @Override
     public List<PermissionRegistry> listPermissions() {

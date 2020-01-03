@@ -13,13 +13,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.skr.registry;
+package org.skr;
 
-import org.skr.security.PermissionDetail;
+import lombok.Data;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.stereotype.Component;
 
 /**
  * @author <a href="https://github.com/hank-cp">Hank CP</a>
  */
-public interface PermissionRegistry extends PermissionDetail, IRegistry {
+@Component
+@ConfigurationProperties(prefix = "spring.skr")
+@Data
+public class SkrProperties {
+
+    private String errorMsgPropBasename = "skr-error";
+
+    private String enumLabelPropBasename = "skr-enum";
 
 }

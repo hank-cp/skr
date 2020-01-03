@@ -16,20 +16,16 @@
 package org.skr.registry;
 
 import javax.validation.constraints.NotNull;
-import java.util.List;
 
 /**
  * @author <a href="https://github.com/hank-cp">Hank CP</a>
  */
-public interface EndPointRegistry extends Registry {
+public interface EndPointRegistry extends IRegistry {
 
     String BREADCRUMB_SEPARATOR = "\\.";
 
     @NotNull
     String getUrl();
-
-    @NotNull
-    RealmRegistry getRealm();
 
     PermissionRegistry getPermission();
 

@@ -13,13 +13,28 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.skr.registry;
+package org.skr.registry.service;
 
-import org.skr.security.PermissionDetail;
+import org.skr.registry.IRealm;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 
 /**
  * @author <a href="https://github.com/hank-cp">Hank CP</a>
  */
-public interface PermissionRegistry extends PermissionDetail, IRegistry {
+public interface IRegService {
+
+	@GetMapping("/registry/realm/{code}")
+	IRealm getRealm(@PathVariable String code);
+
+	@GetMapping("/registry/realm/register")
+	boolean register(@RequestBody IRealm realm);
+
+	@GetMapping("/registry/realm/unregister")
+	boolean unregister(@RequestBody IRealm realm);
+
+	@GetMapping("/registry/realm/install")
+	boolean uninstall(@RequestBody IRealm realm);
 
 }

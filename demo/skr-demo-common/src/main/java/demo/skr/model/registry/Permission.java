@@ -89,7 +89,7 @@ public class Permission extends CodeBasedEntity implements PermissionRegistry {
         if (!granted) return PermissionResult.PERMISSION_DENIED;
 
         if (jwtPrincipal.getVipLevel() < getVipLevel())
-            return PermissionResult.PERMISSION_LIMITATION;
+            return PermissionResult.PERMISSION_LIMITED;
 
         return PermissionResult.PERMISSION_GRANTED;
     }

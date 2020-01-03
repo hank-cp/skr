@@ -1,0 +1,20 @@
+@startuml
+start
+if (RealmStatus == STARTED) then (yes)
+  end
+endif
+while (has __registrar__?)
+  if (__registrar__'s **name** is not in ~~memCache~~?) then (yes)
+    :add __registrar__ to memCache, use **name** as key;
+  endif
+
+endwhile
+while (has __registry__?)
+  :find corresponding registrar;
+  if (__registry__ has not been registered?) then (yes)
+    :add __registrar__ to memCache, use **name** as key;
+  endif
+endwhile
+:register __realm__;
+stop
+@enduml

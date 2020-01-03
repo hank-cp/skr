@@ -24,7 +24,7 @@ import org.skr.config.json.ValuedEnum;
 public interface PermissionDetail {
 
     enum PermissionResult implements ValuedEnum<Integer> {
-        PERMISSION_GRANTED(0), PERMISSION_DENIED(1), PERMISSION_LIMITATION(2);
+        PERMISSION_GRANTED(0), PERMISSION_DENIED(1), PERMISSION_LIMITED(2);
 
         private final int value;
 
@@ -41,8 +41,6 @@ public interface PermissionDetail {
             return ValuedEnum.parse(PermissionResult.values(), value, PERMISSION_DENIED);
         }
     }
-
-    String getCode();
 
     default PermissionResult checkAuthorization(JwtPrincipal principal) {
         throw new NotImplementedException("not implemented yet");

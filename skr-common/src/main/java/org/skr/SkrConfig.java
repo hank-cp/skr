@@ -17,6 +17,8 @@ package org.skr;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.skr.common.util.JsonUtil;
+import org.skr.config.EnumLabelMessageSource;
+import org.skr.config.ErrorMessageSource;
 import org.skr.config.GeneralExceptionHandler;
 import org.skr.security.SkrSecurityProperties;
 import org.springframework.beans.factory.InitializingBean;
@@ -30,7 +32,6 @@ import org.springframework.cache.interceptor.SimpleKey;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
-import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
 
 import java.util.Arrays;
 import java.util.stream.Collectors;
@@ -40,7 +41,8 @@ import java.util.stream.Collectors;
  */
 @Configuration
 @EnableConfigurationProperties
-@Import({SkrSecurityProperties.class, GeneralExceptionHandler.class})
+@Import({SkrSecurityProperties.class, GeneralExceptionHandler.class,
+        EnumLabelMessageSource.class, ErrorMessageSource.class})
 public class SkrConfig {
 
     @Bean

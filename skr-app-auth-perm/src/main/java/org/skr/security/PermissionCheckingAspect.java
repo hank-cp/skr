@@ -52,7 +52,7 @@ public class PermissionCheckingAspect {
             case PERMISSION_GRANTED: return joinPoint.proceed();
             case PERMISSION_DENIED:
                 throw new PermissionException(ErrorInfo.PERMISSION_DENIED);
-            case PERMISSION_LIMITATION:
+            case PERMISSION_LIMITED:
                 throw new PermissionException(ErrorInfo.PERMISSION_LIMITED);
             default:
                 throw new ConfException(ErrorInfo.INTERNAL_SERVER_ERROR);

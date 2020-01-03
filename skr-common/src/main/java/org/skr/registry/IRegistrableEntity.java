@@ -15,17 +15,11 @@
  */
 package org.skr.registry;
 
-import javax.validation.constraints.NotNull;
-
 /**
  * @author <a href="https://github.com/hank-cp">Hank CP</a>
  */
-public interface RealmRegistry extends Registry {
+public interface IRegistrableEntity {
 
-    @NotNull
-    String getCode();
-
-    @NotNull
-    String getName();
+    boolean isBuiltIn();
 
 }

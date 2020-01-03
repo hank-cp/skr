@@ -13,11 +13,30 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.skr.registry;
+package org.skr.common.exception;
+
+import javax.validation.constraints.NotNull;
 
 /**
  * @author <a href="https://github.com/hank-cp">Hank CP</a>
  */
-public interface Registry {
+public class RegException extends BaseException {
 
+    private ErrorInfo errorInfo;
+
+    public RegException(@NotNull ErrorInfo errorInfo) {
+        super(errorInfo.getMsg());
+        this.errorInfo = errorInfo;
+    }
+
+    public RegException(@NotNull ErrorInfo errorInfo, Throwable e) {
+        super(errorInfo.getMsg() + ": " + e.getMessage(), e);
+        this.errorInfo = errorInfo;
+    }
+
+    @Override
+    public ErrorInfo getErrorInfo() {
+        return errorInfo;
+    }
 }
+

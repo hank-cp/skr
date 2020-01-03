@@ -15,11 +15,16 @@
  */
 package org.skr.registry;
 
-import org.skr.security.PermissionDetail;
+import javax.validation.constraints.NotNull;
 
 /**
  * @author <a href="https://github.com/hank-cp">Hank CP</a>
  */
-public interface PermissionRegistry extends PermissionDetail, IRegistry {
+public interface IRegistry<Key> {
+
+    @NotNull
+    IRealm getRealm();
+
+    Key getKey();
 
 }

@@ -15,11 +15,30 @@
  */
 package org.skr.registry;
 
-import org.skr.security.PermissionDetail;
+import lombok.NonNull;
+import org.skr.common.exception.RegException;
+
+import javax.validation.constraints.NotNull;
 
 /**
  * @author <a href="https://github.com/hank-cp">Hank CP</a>
  */
-public interface PermissionRegistry extends PermissionDetail, IRegistry {
+public interface IRegistrar<Key> {
+
+    /** belongs to which realm */
+    @NotNull
+    IRealm getRealm();
+
+    /** name of this registrar, must be unique in system */
+    String getName();
+
+    /** check if this registrar could handle certain {@link IRegistry} */
+    boolean supports(@NonNull IRegistry registry);
+
+    /** register a registry */
+    void register(IRegistry<Key> registry) throws RegException;
+
+    /** unregister a registry */
+    void unregister(Key registryKey) throws RegException;
 
 }

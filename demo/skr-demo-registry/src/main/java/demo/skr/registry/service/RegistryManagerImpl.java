@@ -26,7 +26,7 @@ import org.skr.common.exception.ConfException;
 import org.skr.common.exception.ErrorInfo;
 import org.skr.common.util.BeanUtil;
 import org.skr.common.util.Checker;
-import org.skr.registry.service.IRegistryManager;
+import org.skr.registry.service.IRegManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -40,7 +40,7 @@ import java.util.Objects;
  */
 @Service
 public class RegistryManagerImpl implements
-        IRegistryManager<Realm, Permission, EndPoint> {
+        IRegManager<Realm, Permission, EndPoint> {
 
     @Autowired
     private RealmRepository realmRepository;

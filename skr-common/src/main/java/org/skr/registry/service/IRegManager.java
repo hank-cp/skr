@@ -13,13 +13,26 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.skr.registry;
+package org.skr.registry.service;
 
-import org.skr.security.PermissionDetail;
+import lombok.NonNull;
+import org.skr.common.exception.RegException;
+import org.skr.registry.IRealm;
+import org.springframework.stereotype.Service;
 
 /**
  * @author <a href="https://github.com/hank-cp">Hank CP</a>
  */
-public interface PermissionRegistry extends PermissionDetail, IRegistry {
+@Service
+public interface IRegManager<
+        Realm extends IRealm> {
+
+    Realm getRealm(String code);
+
+    boolean register(@NonNull Realm realm) throws RegException;
+
+    boolean unregister(@NonNull String realmCode) throws RegException;
+
+    boolean uninstall(@NonNull String realmCode) throws RegException;
 
 }

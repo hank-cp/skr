@@ -21,7 +21,9 @@ import lombok.NonNull;
 import lombok.ToString;
 import org.laxture.spring.util.ApplicationContextProvider;
 import org.skr.common.util.Checker;
+import org.skr.config.ErrorMessageSource;
 import org.skr.config.json.ValuedEnum;
+import org.springframework.context.i18n.LocaleContextHolder;
 
 import javax.validation.constraints.NotNull;
 import java.util.HashMap;
@@ -127,8 +129,9 @@ public class ErrorInfo {
 
     @JsonProperty("msg")
     public String getMsg() {
-        return ApplicationContextProvider.getMessage(
-                Optional.ofNullable(this.classLoader).orElse(getClass().getClassLoader()), msg, args);
+        ClassLoader classLoader = Optional.ofNullable(this.classLoader).orElse(getClass().getClassLoader());
+        return ApplicationContextProvider.getBean(classLoader, ErrorMessageSource.class)
+                .getMessage(msg, args, LocaleContextHolder.getLocale());
     }
 
     @JsonProperty("elv")

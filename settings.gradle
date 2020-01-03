@@ -1,8 +1,7 @@
 include 'skr-common',
         'skr-service-auth',
-        'skr-service-registry',
-        'skr-api-registry',
-        'skr-app-registry',
+        'skr-service-reg',
+        'skr-app-reg',
         'skr-app-auth',
         'skr-app-auth-perm',
 
