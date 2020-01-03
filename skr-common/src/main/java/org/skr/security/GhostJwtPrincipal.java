@@ -16,14 +16,17 @@
 package org.skr.security;
 
 import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Value;
 import org.skr.security.JwtPrincipal;
 
 /**
  * @author <a href="https://github.com/hank-cp">Hank CP</a>
  */
-@Value
+@Getter
 @AllArgsConstructor(staticName = "of")
+@NoArgsConstructor
 public class GhostJwtPrincipal implements JwtPrincipal {
 
     private String ghostUserName;
@@ -35,7 +38,7 @@ public class GhostJwtPrincipal implements JwtPrincipal {
 
     @Override
     public String getIdentity() {
-        return ghostUserName;
+        return "0";
     }
 
     @Override

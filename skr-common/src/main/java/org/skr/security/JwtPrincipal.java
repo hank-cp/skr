@@ -18,7 +18,10 @@ package org.skr.security;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.laxture.spring.util.ApplicationContextProvider;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
+
+import java.util.Optional;
 
 /**
  * @author <a href="https://github.com/hank-cp">Hank CP</a>
@@ -44,14 +47,13 @@ public interface JwtPrincipal extends UserPrincipal {
                 skrSecurityProperties.getAccessToken().getSecret()).encode();
     }
 
-    static <T extends JwtPrincipal> T getCurrentPrincipal() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        JwtPrincipal user = null;
-        if (authentication != null && authentication.isAuthenticated()
-                && authentication.getPrincipal() instanceof JwtPrincipal) {
-            user = (JwtPrincipal) authentication.getPrincipal();
-        }
-        //noinspection unchecked
-        return (T) user;
+    static Optional<JwtPrincipal> getCurrentPrincipal() {
+        return Optional.ofNullable(SecurityContextHolder.getContext())
+                .map(SecurityContext::getAuthentication)
+                .filter(Authentication::isAuthenticated)
+                .map(Authentication::getPrincipal)
+                .filter(principal -> principal instanceof JwtPrincipal)
+                .map(principal -> (JwtPrincipal) principal);
     }
+
 }
