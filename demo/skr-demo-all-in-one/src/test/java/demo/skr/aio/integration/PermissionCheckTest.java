@@ -71,11 +71,6 @@ public class PermissionCheckTest {
                 .header("access-token", accessToken)
                 .contentType(MediaType.APPLICATION_JSON_VALUE))
                 .andExpect(status().isOk());
-
-        mvc.perform(get("/task_record/list")
-                .header("access-token", accessToken)
-                .contentType(MediaType.APPLICATION_JSON_VALUE))
-                .andExpect(status().isOk());
     }
 
     @Test
@@ -91,11 +86,6 @@ public class PermissionCheckTest {
         assertThat(accessToken, allOf(notNullValue(), not(emptyString())));
 
         mvc.perform(get("/task/list")
-                .header("access-token", accessToken)
-                .contentType(MediaType.APPLICATION_JSON_VALUE))
-                .andExpect(status().isForbidden());
-
-        mvc.perform(get("/task_record/list")
                 .header("access-token", accessToken)
                 .contentType(MediaType.APPLICATION_JSON_VALUE))
                 .andExpect(status().isForbidden());

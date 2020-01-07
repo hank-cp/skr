@@ -22,7 +22,7 @@ import org.skr.common.exception.AuthException;
 import org.skr.common.exception.ConfException;
 import org.skr.common.exception.ErrorInfo;
 import org.skr.common.exception.PermissionException;
-import org.skr.registry.RegistryServiceClient;
+import org.skr.permission.IPermissionService;
 import org.skr.security.annotation.RequirePermission;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -39,20 +39,20 @@ import java.util.Optional;
 public class PermissionCheckingAspect {
 
     @Autowired
-    private RegistryServiceClient registryService;
+    private IPermissionService permissionService;
 
     @Around("@annotation(permission)")
     public Object check(ProceedingJoinPoint joinPoint, RequirePermission permission) throws Throwable {
-        String permissionCode = permission.value();
+        String permissionKey = permission.value();
         Optional<JwtPrincipal> jwtPrincipal = JwtPrincipal.getCurrentPrincipal();
 
         if (jwtPrincipal.isEmpty()) {
             throw new AuthException(ErrorInfo.AUTHENTICATION_REQUIRED);
         }
 
-        PermissionDetail permissionDetail = registryService.getPermission(permissionCode);
+        PermissionDetail permissionDetail = permissionService.getPermission(permissionKey);
         if (permissionDetail == null) {
-            throw new ConfException(ErrorInfo.PERMISSION_NOT_FOUND.msgArgs(permissionCode));
+            throw new ConfException(ErrorInfo.PERMISSION_NOT_FOUND.msgArgs(permissionKey));
         }
 
         switch (permissionDetail.checkAuthorization(jwtPrincipal.get())) {

@@ -200,8 +200,8 @@ public class ErrorInfo {
     public static final ErrorInfo CERTIFICATION_REGISTERED      = ErrorInfo.of(1111, "error.CERTIFICATION_REGISTERED");
     public static final ErrorInfo LAST_CERTIFICATION            = ErrorInfo.of(1112, "error.LAST_CERTIFICATION");
 
-    public static final ErrorInfo PERMISSION_REGISTERED         = ErrorInfo.of(1200, "error.PERMISSION_REGISTERED", ErrorLevel.FATAL);
-    public static final ErrorInfo END_POINT_REGISTERED          = ErrorInfo.of(1201, "error.END_POINT_REGISTERED",  ErrorLevel.FATAL);
-    public static final ErrorInfo PERMISSION_REVOKE_FAILED      = ErrorInfo.of(1202, "error.PERMISSION_REVOKE_FAILED",  ErrorLevel.FATAL);
-    public static final ErrorInfo END_POINT_REVOKE_FAILED       = ErrorInfo.of(1203, "error.END_POINT_REVOKE_FAILED",   ErrorLevel.FATAL);
+    public static final ErrorInfo REALM_NOT_REGISTERED          = ErrorInfo.of(1200, "error.REALM_NOT_REGISTERED",          ErrorLevel.FATAL);
+    public static final ErrorInfo REGISTER_REGISTRY_FAILED      = ErrorInfo.of(1202, "error.REGISTER_REGISTRAR_FAILED",     ErrorLevel.FATAL);
+    public static final ErrorInfo UNREGISTER_REGISTRY_FAILED    = ErrorInfo.of(1203, "error.UNREGISTER_REGISTRY_FAILED",    ErrorLevel.FATAL);
+    public static final ErrorInfo UNINSTALL_REGISTRY_FAILED     = ErrorInfo.of(1204, "error.UNINSTALL_REGISTRY_FAILED",     ErrorLevel.FATAL);
 }

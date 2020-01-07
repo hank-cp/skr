@@ -1,4 +1,7 @@
 dependencies {
     compile project(':skr-common')
-    compile project(':skr-app-reg')
+
+    compile "org.springframework.cloud:spring-cloud-commons"
+    compile "org.springframework.cloud:spring-cloud-context"
+    compile "org.springframework.cloud:spring-cloud-starter-openfeign"
 }

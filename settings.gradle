@@ -1,7 +1,6 @@
 include 'skr-common',
         'skr-service-auth',
         'skr-service-reg',
-        'skr-app-reg',
         'skr-app-auth',
         'skr-app-auth-perm',
 
@@ -9,15 +8,19 @@ include 'skr-common',
         'skr-cloud-spring',
 
         'skr-demo-common',
-        'skr-demo-registry',
+        'skr-demo-perm-api',
+        'skr-demo-perm',
         'skr-demo-auth',
+        'skr-demo-a-api',
         'skr-demo-a',
         'skr-demo-b',
         'skr-demo-all-in-one'
 
 project(":skr-demo-common").projectDir = file("demo/skr-demo-common")
-project(":skr-demo-registry").projectDir = file("demo/skr-demo-registry")
+project(":skr-demo-perm-api").projectDir = file("demo/skr-demo-perm-api")
+project(":skr-demo-perm").projectDir = file("demo/skr-demo-perm")
 project(":skr-demo-auth").projectDir = file("demo/skr-demo-auth")
+project(":skr-demo-a-api").projectDir = file("demo/skr-demo-a-api")
 project(":skr-demo-a").projectDir = file("demo/skr-demo-a")
 project(":skr-demo-b").projectDir = file("demo/skr-demo-b")
 project(":skr-demo-all-in-one").projectDir = file("demo/skr-demo-all-in-one")

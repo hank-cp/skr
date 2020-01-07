@@ -15,14 +15,12 @@
  */
 package demo.skr.aio.util;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import demo.skr.registry.RegistryApp;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.skr.common.exception.ErrorInfo;
 import org.skr.common.util.JsonUtil;
 import org.skr.security.PermissionDetail;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Rollback;
@@ -38,9 +36,6 @@ import static org.hamcrest.Matchers.*;
 @Transactional
 @Rollback
 public class ValuedEnumTest {
-
-    @Autowired
-    private ObjectMapper objectMapper;
 
     @Test
     @Transactional

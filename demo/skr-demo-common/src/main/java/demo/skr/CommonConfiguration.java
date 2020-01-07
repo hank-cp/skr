@@ -15,22 +15,8 @@
  */
 package demo.skr;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.module.SimpleModule;
-import demo.skr.model.registry.EndPoint;
-import demo.skr.model.registry.Permission;
-import demo.skr.model.registry.Realm;
 import org.laxture.spring.util.ApplicationContextProvider;
 import org.skr.config.YamlPropertyLoaderFactory;
-import org.skr.config.json.CustomDeserializer;
-import org.skr.registry.EndPointRegistry;
-import org.skr.registry.PermissionRegistry;
-import org.skr.registry.RealmRegistry;
-import org.springframework.beans.factory.InitializingBean;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.AutoConfigureAfter;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingClass;
-import org.springframework.boot.autoconfigure.jackson.JacksonAutoConfiguration;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.annotation.Bean;
@@ -51,22 +37,4 @@ public class CommonConfiguration {
         return ApplicationContextProvider::registerApplicationContext;
     }
 
-    @Configuration
-    @AutoConfigureAfter(JacksonAutoConfiguration.class)
-    @ConditionalOnMissingClass("org.skr.registry.controller.RegistryController")
-    public static class RegistryJsonConfigurer implements InitializingBean {
-
-        @Autowired
-        private ObjectMapper objectMapper;
-
-        @SuppressWarnings("Duplicates")
-        @Override
-        public void afterPropertiesSet() {
-            SimpleModule module = new SimpleModule();
-            module.addDeserializer(RealmRegistry.class, new CustomDeserializer<>(Realm.class));
-            module.addDeserializer(PermissionRegistry.class, new CustomDeserializer<>(Permission.class));
-            module.addDeserializer(EndPointRegistry.class, new CustomDeserializer<>(EndPoint.class));
-            objectMapper.registerModule(module);
-        }
-    }
 }

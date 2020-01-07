@@ -15,12 +15,11 @@
  */
 package demo.skr.a;
 
-import demo.skr.model.registry.EndPoint;
-import demo.skr.model.registry.Permission;
-import demo.skr.model.registry.Realm;
+import demo.skr.reg.PermRegistryPack;
+import demo.skr.reg.model.EndPoint;
+import demo.skr.reg.model.Permission;
 import lombok.extern.slf4j.Slf4j;
-import org.skr.registry.RegisterBatch;
-import org.skr.registry.RegistryServiceClient;
+import org.skr.registry.SimpleRealm;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
@@ -52,26 +51,22 @@ public class DemoA {
     public static class OnStartUpListener implements InitializingBean {
 
         @Autowired
-        private RegistryServiceClient registryService;
+        private PermRegServiceClient permRegService;
 
         @Override
         public void afterPropertiesSet() throws Exception {
             log.info("Registering Realm demo-a ......");
 
-            Realm realm = new Realm();
-            realm.name = "demo-a";
-            realm.code = "demo-a";
-            registryService.registerRealm(RegisterBatch.of(realm,
-                    List.of(
-                            Permission.of("Task", "Task"),
-                            Permission.of("Task_Create", "Task - Create"),
-                            Permission.of("Task_Edit", "Task - Edit")),
-                    List.of(
-                            EndPoint.of("Task",
-                                    "/tasks",
-                                    "Demo-a.Task")
-                    )
-            ));
+            SimpleRealm realm = SimpleRealm.of("demo-a");
+            PermRegistryPack permRegistryPack = new PermRegistryPack();
+            permRegistryPack.permissions = List.of(
+                    Permission.of("Task", "Task"),
+                    Permission.of("Task_Create", "Task - Create"),
+                    Permission.of("Task_Edit", "Task - Edit"));
+            permRegistryPack.endPoints = List.of(
+                    EndPoint.of("Task", "/tasks", "Demo-a.Task"));
+
+            permRegService.register(realm.code, realm.version, permRegistryPack);
 
             log.info("Registering realm demo-a done!");
         }

@@ -41,7 +41,8 @@ import java.util.stream.Collectors;
  */
 @Configuration
 @EnableConfigurationProperties
-@Import({SkrSecurityProperties.class, GeneralExceptionHandler.class,
+@Import({SkrSecurityProperties.class, SkrProperties.class,
+        GeneralExceptionHandler.class,
         EnumLabelMessageSource.class, ErrorMessageSource.class})
 public class SkrConfig {
 

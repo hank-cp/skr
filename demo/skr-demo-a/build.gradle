@@ -2,7 +2,9 @@ ext.httpPort = demoA_httpPort
 
 dependencies {
     compile project(':skr-demo-common')
-    compile project(':skr-app-reg')
+    compile project(':skr-demo-perm-api')
+    compile project(':skr-demo-a-api')
+    compile project(':skr-service-reg')
     compile project(':skr-app-auth')
     compile project(':skr-app-auth-perm')
 

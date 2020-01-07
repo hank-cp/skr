@@ -16,10 +16,8 @@
 package org.skr.registry;
 
 import org.skr.config.json.ValuedEnum;
-import org.skr.security.PermissionDetail;
 
 import javax.validation.constraints.NotNull;
-import java.util.List;
 
 /**
  * @author <a href="https://github.com/hank-cp">Hank CP</a>
@@ -27,7 +25,7 @@ import java.util.List;
 public interface IRealm {
 
     enum RealmStatus implements ValuedEnum<Integer> {
-        STOPPED(0), STARTED(1), ERROR(2);
+        STOPPED(0), STARTED(1), UNINSTALLED(2), ERROR(3);
 
         private final int value;
 
@@ -46,12 +44,8 @@ public interface IRealm {
     }
 
     @NotNull
-    String getName();
+    String getCode();
 
-    @NotNull
     int getVersion();
 
-    List<IRegistrar> getRegistrars();
-
-    List<IRegistry> getRegistries();
 }

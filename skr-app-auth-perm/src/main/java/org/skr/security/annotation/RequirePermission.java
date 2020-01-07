@@ -26,6 +26,7 @@ import java.lang.annotation.*;
 @Documented
 public @interface RequirePermission {
 
+    /** Permission key */
     String value();
 
 }

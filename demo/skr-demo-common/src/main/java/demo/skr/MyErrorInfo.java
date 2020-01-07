@@ -22,6 +22,8 @@ import org.skr.common.exception.ErrorInfo;
  */
 public final class MyErrorInfo {
 
-    public static final ErrorInfo INVALID_SMS_CAPTCHA          = ErrorInfo.of(11104, "Invalid sms captcha.");
+    public static final ErrorInfo END_POINT_REGISTERED          = ErrorInfo.of(11101, "error.END_POINT_REGISTERED",         ErrorInfo.ErrorLevel.FATAL);
+    public static final ErrorInfo PERMISSION_REGISTERED         = ErrorInfo.of(11102, "error.PERMISSION_REGISTERED",         ErrorInfo.ErrorLevel.FATAL);
+    public static final ErrorInfo INVALID_SMS_CAPTCHA           = ErrorInfo.of(11104, "error.INVALID_SMS_CAPTCHA");
 
 }

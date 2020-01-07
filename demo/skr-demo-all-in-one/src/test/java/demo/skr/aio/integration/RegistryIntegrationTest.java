@@ -15,17 +15,18 @@
  */
 package demo.skr.aio.integration;
 
+import demo.skr.reg.PermRegistryPack;
+import demo.skr.reg.model.EndPoint;
+import demo.skr.reg.model.Permission;
 import demo.skr.registry.RegistryApp;
-import demo.skr.registry.model.EndPoint;
-import demo.skr.registry.model.Permission;
-import demo.skr.registry.model.Realm;
+import demo.skr.registry.model.PersistedRealm;
+import demo.skr.registry.repository.EndPointRepository;
 import demo.skr.registry.repository.PermissionRepository;
 import demo.skr.registry.repository.RealmRepository;
-import demo.skr.registry.service.RegistryManagerImpl;
+import demo.skr.registry.service.PermRegHost;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.skr.common.exception.BizException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -33,7 +34,6 @@ import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.EntityManager;
 import java.util.concurrent.Callable;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -47,7 +47,7 @@ import static org.hamcrest.Matchers.*;
 public class RegistryIntegrationTest {
 
     @Autowired
-    private RegistryManagerImpl registryService;
+    private PermRegHost permRegHost;
 
     @Autowired
     private RealmRepository realmRepository;
@@ -56,78 +56,39 @@ public class RegistryIntegrationTest {
     private PermissionRepository permissionRepository;
 
     @Autowired
-    private EntityManager entityManager;
+    private EndPointRepository endPointRepository;
 
-    private Realm testRealm;
+    private PersistedRealm testRealm;
 
     @Before
     public void setup() {
-        testRealm = new Realm();
+        testRealm = new PersistedRealm();
         testRealm.code = "test";
-        testRealm.name = "test";
         realmRepository.save(testRealm);
     }
 
     @Test
-    @Transactional
-    public void testGeneratePermissionBits() {
-        Long bit = registryService.generatePermissionBits();
-        assertThat(bit, equalTo(16L));
-
+    public void testRegisterRealm() {
         Permission permission = new Permission();
-        permission.realm = testRealm;
         permission.code = "test";
         permission.name = "test";
-        permission.bit = 1L << 32;
-        permissionRepository.save(permission);
-        entityManager.flush();
 
-        // new bits generated on persistent
-        bit = registryService.generatePermissionBits();
-        assertThat(bit, equalTo(1L << 33));
-    }
-
-    @Test
-    public void testRegisterPermission() {
-        Permission permission = new Permission();
-        permission.realm = testRealm;
-        permission.code = "test";
-        permission.name = "test";
-        registryService.registerPermission(testRealm, permission);
-        assertThat(permission.bit, equalTo(16L));
-        assertThat(registryService.listPermissions(), hasSize(5));
-
-        // test save failed by define permission on another realm
-        Realm testRealm2 = new Realm();
-        testRealm2.code = "test2";
-        testRealm2.name = "test2";
-        realmRepository.save(testRealm2);
-
-        Permission permission2 = new Permission();
-        permission2.code = "test";
-        permission2.name = "test";
-        assertThat(exceptionOf(() -> registryService.registerPermission(testRealm2, permission2)),
-                instanceOf(BizException.class));
-    }
-
-    @Test
-    public void testRegisterEndPoint() {
         EndPoint endPoint = new EndPoint();
-        endPoint.realm = testRealm;
+        endPoint.permissionCode = "test";
         endPoint.url = "/test/url";
-        registryService.registerEndPoint(testRealm, endPoint);
-        assertThat(registryService.getEndPoint("/test/url"), notNullValue());
 
-        // test save failed by define endPoint on another realm
-        Realm testRealm2 = new Realm();
-        testRealm2.code = "test2";
-        testRealm2.name = "test2";
-        realmRepository.save(testRealm2);
+        PermRegistryPack regPack = new PermRegistryPack();
+        regPack.permissions.add(permission);
+        regPack.endPoints.add(endPoint);
 
-        EndPoint endPoint2 = new EndPoint();
-        endPoint2.url = "/test/url";
-        assertThat(exceptionOf(() -> registryService.registerEndPoint(testRealm2, endPoint2)),
-                instanceOf(BizException.class));
+        permRegHost.register("test", 0, regPack);
+        assertThat(permissionRepository.findById("test").orElse(null), notNullValue());
+        assertThat(endPointRepository.findById("/test/url").orElse(null), notNullValue());
+
+        // test unregister Realm
+        permRegHost.uninstall("test");
+        assertThat(permissionRepository.findById("test").get().disabled, equalTo(true));
+        assertThat(endPointRepository.findById("/test/url").get().disabled, equalTo(true));
     }
 
     public static Throwable exceptionOf(Callable<?> callable) {

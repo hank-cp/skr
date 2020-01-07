@@ -15,7 +15,6 @@
  */
 package demo.skr.aio.task;
 
-import demo.skr.aio.taskrecord.TaskRecordController;
 import org.skr.security.annotation.RequirePermission;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.Assert;
@@ -33,13 +32,9 @@ public class TaskController {
     @Autowired
     private TaskRepository taskRepository;
 
-    @Autowired
-    private TaskRecordController taskRecordController;
-
     @PostMapping
     public void addTask(@RequestBody Task task) {
         taskRepository.save(task);
-        taskRecordController.record(task.id, "new");
     }
 
     @GetMapping("/list")
@@ -50,7 +45,6 @@ public class TaskController {
 
     @GetMapping("/{id}")
     public Task getTask(@PathVariable long id) {
-        taskRecordController.welcomeToHell();
         return taskRepository.findById(id).orElse(null);
     }
 

@@ -15,18 +15,16 @@
  */
 package demo.skr.aio;
 
-import demo.skr.registry.model.EndPoint;
-import demo.skr.registry.model.Permission;
-import demo.skr.registry.model.Realm;
+import demo.skr.reg.PermRegService;
+import demo.skr.reg.PermRegistryPack;
+import demo.skr.reg.model.EndPoint;
+import demo.skr.reg.model.Permission;
 import lombok.extern.java.Log;
-import org.skr.common.Constants;
-import org.skr.registry.RegisterBatch;
-import org.skr.registry.RegistryServiceClient;
+import org.skr.registry.SimpleRealm;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -36,15 +34,10 @@ import java.util.List;
  */
 @SpringBootApplication(scanBasePackages = "demo.skr")
 @Log
-public class AioApp implements Constants {
+public class AioApp {
 
     public static void main(String[] args) {
         SpringApplication.run(AioApp.class, args);
-    }
-
-    @Bean
-    public RegistryServiceClient registryProxy() {
-        return new RegistryServiceMock();
     }
 
     //*************************************************************************
@@ -55,27 +48,22 @@ public class AioApp implements Constants {
     public static class OnStartUpListener implements InitializingBean {
 
         @Autowired
-        private RegistryServiceClient registryProxy;
+        private PermRegService permRegService;
 
         @Override
         public void afterPropertiesSet() throws Exception {
             log.info("Registering Realm aio ......");
 
-            Realm realm = new Realm();
-            realm.name = "demo-aio";
-            realm.code = "demo-aio";
-            registryProxy.registerRealm(RegisterBatch.of(realm,
-                    List.of(
-                            Permission.of("Task", "Task"),
-                            Permission.of("Task_Create", "Task - Create"),
-                            Permission.of("Task_Edit", "Task - Edit"),
-                            Permission.of("Task_Record", "Task Record")),
-                    List.of(
-                            EndPoint.of("Task",
-                                    "/tasks",
-                                    "Demo-aio.Task Management")
-                    )
-            ));
+            SimpleRealm realm = SimpleRealm.of("demo-a");
+            PermRegistryPack permRegistryPack = new PermRegistryPack();
+            permRegistryPack.permissions = List.of(
+                    Permission.of("Task", "Task"),
+                    Permission.of("Task_Create", "Task - Create"),
+                    Permission.of("Task_Edit", "Task - Edit"));
+            permRegistryPack.endPoints = List.of(
+                    EndPoint.of("Task", "/tasks", "Demo-a.Task"));
+
+            permRegService.register(realm.code, realm.version, permRegistryPack);
 
             log.info("Registering realm aio done!");
         }

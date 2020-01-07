@@ -23,8 +23,6 @@ import javax.validation.constraints.NotNull;
 public interface IRegistry<Key> {
 
     @NotNull
-    IRealm getRealm();
-
     Key getKey();
 
 }

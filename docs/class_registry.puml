@@ -1,46 +1,149 @@
 @startuml
 
 skinparam class {
-	BackgroundColor<<Interface>> PaleGreen
-	BackgroundColor<<Concrete>> Tomato
+    BackgroundColor<<Interface>> Pink
+	BackgroundColor<<Api>> PaleGreen
+	BackgroundColor<<Service>> Tomato
+    BackgroundColor<<FeignClient>> LightBlue
 }
 
-class RegManager {
-    void register(Realm)
-    void unregister(Realm)
+abstract class AbstractRegHost {
+    void register(IRealm, IRegistryPack)
+    void unregister(IRealm, IRegistryPack)
+    void uninstall(IRealm, IRegistryPack)
+    --
+    abstract void setRealmStatus(IRealm, RealmStatus)
+    abstract IRealm getRegisteredRealm()
 }
 
-class Realm {
+class IReal <<Interface>> {
     String code @unique
     int version
-    List<Registrar> registrars
-    List<Registry> registries
 }
 
-package "api" {
-    class Registry <<Interface>> {
-        Object key @unique
+class IRegistryPack <<Interface>> {
+}
+
+class IRegistry <<Interface>> {
+    Key getKey();
+}
+
+class IEntityRegistry <<Interface>> {
+    boolean isBuiltin();
+}
+
+class IPermission <<Interface>> {
+    String code @unique
+}
+
+IRegistry <|-- IEntityRegistry
+IEntityRegistry <|-- IPermission
+
+package "domainX" {
+    class XxxRegistryPack <<Api>> {
+        List<Permission> permissions;
+        List<RegistryA> registryAList;
+        List<RegistryB> registryBList;
+        List<RegistryC> registryCList;
     }
 
-    class Registrar <<Interface>> {
-        String name @unique
+    class XxxRegService <<Api>> {
         --
-        void register(Registry)
-        void unregister(Registry)
+        void register(IRealm, XxxRegistryPack)
+        void unregister(IRealm, XxxRegistryPack)
+        void uninstall(IRealm, XxxRegistryPack)
     }
+
+    class XxxRegHost <<Service>> {
+    }
+
+    class XxxRegClient <<FeignClient>> {
+    }
+
+    IRegistryPack <|-- XxxRegistryPack
+    XxxRegService <|-- XxxRegHost
+    XxxRegService <|-- XxxRegClient
+    AbstractRegHost <|-- XxxRegHost
 }
 
-class Permission <<Concrete>> {
-    String code (key)
+package "domainY" {
+    class YyyRealm {
+        code = "Yyy";
+        version = 2;
+        XxxRegistryPack = [
+            List<Permission> permissions = ...;
+            List<RegistryA> registryAList = ...;
+            List<RegistryB> registryBList = ...;
+            List<RegistryC> registryCList = ...;
+        ]
+        ----
+        void start() [
+            XxxRegClient.register(this, XxxRegistryPack);
+        ]
+        void stop() [
+            XxxRegClient.unregister(this, XxxRegistryPack);
+        ]
+        void uninstall() [
+            XxxRegClient.uninstall(this, XxxRegistryPack);
+        ]
+    }
+
+    class YyyRegistryPack <<Api>> {
+        List<RegistryD> registryDList;
+        List<RegistryE> registryEList;
+    }
+
+    class YyyRegService <<Api>> {
+        --
+        void register(YyyRealm)
+        void unregister(YyyRealm)
+        void uninstall(YyyRealm)
+    }
+
+    class YyyRegHost <<Service>> {
+    }
+
+    class YyyRegClient <<FeignClient>> {
+    }
+
+    IRealm <|-- YyyRealm
+    IRegistryPack <|-- YyyRegistryPack
+    YyyRegService <|-- YyyRegHost
+    YyyRegService <|-- YyyRegClient
+    AbstractRegHost <|-- YyyRegHost
 }
 
-class EndPoint <<Concrete>> {
-    String url (key)
-}
 
-Realm "1" o-- "*" Registry
-Realm "1" o-- "*" Registrar
-Registry <|-- Permission
-Registry <|-- EndPoint
+package "domainZ" {
+    class ZzzRealm {
+        code = "Zzz";
+        version = 5
+        XxxRegistryPack = [
+            List<Permission> permissions = ...;
+            List<RegistryA> registryAList = ...;
+            List<RegistryB> registryBList = ...;
+            List<RegistryC> registryCList = ...;
+        ]
+        YyyRegistryPack = [
+            List<RegistryD> registryDList = ...;
+            List<RegistryE> registryEList = ...;
+        ]
+        ----
+        void start() [
+            XxxRegClient.register(this, XxxRegistryPack);
+            YyyRegClient.register(this, YyyRegistryPack);
+        ]
+        void stop() [
+            XxxRegClient.unregister(this, XxxRegistryPack);
+            YyyRegClient.unregister(this, YyyRegistryPack);
+        ]
+        void uninstall() [
+            XxxRegClient.uninstall(this, XxxRegistryPack);
+            YyyRegClient.uninstall(this, YyyRegistryPack);
+        ]
+    }
+
+    IRealm <|-- ZzzRealm
+}
 
 @enduml

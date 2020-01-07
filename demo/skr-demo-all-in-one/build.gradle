@@ -5,11 +5,11 @@ dependencies {
     }
 
     compile project(':skr-demo-auth')
-    compile project(':skr-demo-registry')
+    compile project(':skr-demo-perm')
     compile project(':skr-app-auth')
     compile project(':skr-app-auth-perm')
 
     runtimeOnly "org.hsqldb:hsqldb"
-    
+
     testImplementation "org.springframework.boot:spring-boot-starter-test"
 }
