@@ -60,7 +60,8 @@ public abstract class AbstractRegHost<RegistryPack extends IRegistryPack>
             doRegister(realmCode, registryPack);
         } catch (Exception ex) {
             setRealmStatus(realmCode, IRealm.RealmStatus.ERROR, realmVersion, null);
-            throw new RegException(ErrorInfo.REGISTER_REGISTRY_FAILED, ex);
+            throw new RegException(ErrorInfo.REGISTER_REGISTRY_FAILED
+                    .msgArgs(realmCode, ex.getMessage()), ex);
         }
 
         startedRealmCache.put(realmCode, registryPack);
@@ -79,7 +80,8 @@ public abstract class AbstractRegHost<RegistryPack extends IRegistryPack>
         try {
             doUnregister(realmCode, registryPack);
         } catch (Exception ex) {
-            throw new RegException(ErrorInfo.UNREGISTER_REGISTRY_FAILED, ex);
+            throw new RegException(ErrorInfo.UNREGISTER_REGISTRY_FAILED
+                    .msgArgs(realmCode, ex.getMessage()), ex);
         }
 
         startedRealmCache.remove(realmCode);
@@ -97,7 +99,8 @@ public abstract class AbstractRegHost<RegistryPack extends IRegistryPack>
         try {
             doUninstall(realmCode);
         } catch (Exception ex) {
-            throw new RegException(ErrorInfo.UNINSTALL_REGISTRY_FAILED, ex);
+            throw new RegException(ErrorInfo.UNINSTALL_REGISTRY_FAILED
+                    .msgArgs(realmCode, ex.getMessage()), ex);
         }
 
         startedRealmCache.remove(realmCode);
