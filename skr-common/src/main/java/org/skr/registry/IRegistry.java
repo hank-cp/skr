@@ -15,14 +15,9 @@
  */
 package org.skr.registry;
 
-import javax.validation.constraints.NotNull;
-
 /**
  * @author <a href="https://github.com/hank-cp">Hank CP</a>
  */
-public interface IRegistry<Key> {
-
-    @NotNull
-    Key getKey();
+public interface IRegistry {
 
 }

@@ -29,7 +29,7 @@ public class ValidationException extends RuntimeException {
     private final List<ErrorInfo> errorInfos;
 
     public ValidationException(@NotNull List<ErrorInfo> errorInfos) {
-        super("Validation failed.\n"+errorInfos.stream()
+        super(errorInfos.stream()
                 .map(ErrorInfo::getMsg)
                 .collect(Collectors.joining("\n")));
         this.errorInfos = errorInfos;

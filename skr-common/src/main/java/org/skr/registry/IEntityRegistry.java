@@ -19,7 +19,7 @@ package org.skr.registry;
 /**
  * @author <a href="https://github.com/hank-cp">Hank CP</a>
  */
-public interface IEntityRegistry<Key> extends IRegistry<Key> {
+public interface IEntityRegistry extends IRegistry {
 
     boolean isBuiltin();
 

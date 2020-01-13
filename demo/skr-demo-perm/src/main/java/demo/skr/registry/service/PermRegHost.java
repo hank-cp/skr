@@ -33,14 +33,14 @@ import org.skr.permission.IPermissionService;
 import org.skr.registry.AbstractRegHost;
 import org.skr.registry.IRealm;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Objects;
 
 /**
  * @author <a href="https://github.com/hank-cp">Hank CP</a>
  */
-@Controller
+@RestController
 public class PermRegHost extends AbstractRegHost<PermRegistryPack>
         implements PermRegService, IPermissionService {
 

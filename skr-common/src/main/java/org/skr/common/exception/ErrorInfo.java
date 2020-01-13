@@ -23,6 +23,7 @@ import org.laxture.spring.util.ApplicationContextProvider;
 import org.skr.common.util.Checker;
 import org.skr.config.ErrorMessageSource;
 import org.skr.config.json.ValuedEnum;
+import org.springframework.context.NoSuchMessageException;
 import org.springframework.context.i18n.LocaleContextHolder;
 
 import javax.validation.constraints.NotNull;
@@ -130,8 +131,12 @@ public class ErrorInfo {
     @JsonProperty("msg")
     public String getMsg() {
         ClassLoader classLoader = Optional.ofNullable(this.classLoader).orElse(getClass().getClassLoader());
-        return ApplicationContextProvider.getBean(classLoader, ErrorMessageSource.class)
-                .getMessage(msg, args, LocaleContextHolder.getLocale());
+        try {
+            return ApplicationContextProvider.getBean(classLoader, ErrorMessageSource.class)
+                    .getMessage(msg, args, LocaleContextHolder.getLocale());
+        } catch (NoSuchMessageException ex) {
+            return msg;
+        }
     }
 
     @JsonProperty("elv")

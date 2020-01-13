@@ -21,15 +21,16 @@ import org.skr.common.util.Checker;
 import org.skr.registry.AbstractRegHost;
 import org.skr.registry.IRealm;
 import org.skr.registry.SimpleRealm;
-import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.*;
 
 /**
  * @author <a href="https://github.com/hank-cp">Hank CP</a>
  */
-@Controller
-public class TaskRegHost extends AbstractRegHost<TaskRegistryPack> {
+@RestController
+public class TaskRegHost extends AbstractRegHost<TaskRegistryPack>
+        implements TaskRegService {
 
     private volatile static Map<String, TaskExtension> extensions
             = Collections.synchronizedMap(new HashMap<>());

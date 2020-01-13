@@ -15,6 +15,7 @@
  */
 package demo.skr.a;
 
+import demo.skr.reg.PermRegService;
 import demo.skr.reg.PermRegistryPack;
 import demo.skr.reg.model.EndPoint;
 import demo.skr.reg.model.Permission;
@@ -24,8 +25,10 @@ import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.cloud.openfeign.EnableFeignClients;
+import org.springframework.context.ApplicationListener;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -48,13 +51,13 @@ public class DemoA {
     //*************************************************************************
 
     @Component
-    public static class OnStartUpListener implements InitializingBean {
+    public static class OnStartUpListener implements ApplicationListener<ApplicationReadyEvent> {
 
         @Autowired
-        private PermRegServiceClient permRegService;
+        private PermRegService permRegService;
 
         @Override
-        public void afterPropertiesSet() throws Exception {
+        public void onApplicationEvent(ApplicationReadyEvent event) {
             log.info("Registering Realm demo-a ......");
 
             SimpleRealm realm = SimpleRealm.of("demo-a");

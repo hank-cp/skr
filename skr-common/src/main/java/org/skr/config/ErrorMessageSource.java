@@ -31,7 +31,7 @@ import java.time.Duration;
 @Component
 public class ErrorMessageSource extends ResourceBundleMessageSource implements InitializingBean {
 
-    @Autowired
+    @Autowired(required = false)
     private MessageSourceProperties messageSourceProperties;
 
     @Autowired
@@ -39,6 +39,10 @@ public class ErrorMessageSource extends ResourceBundleMessageSource implements I
 
     @Override
     public void afterPropertiesSet() {
+        if (messageSourceProperties == null) {
+            messageSourceProperties = new MessageSourceProperties();
+        }
+
         if (StringUtils.hasText(skrProperties.getErrorMsgPropBasename())) {
             setBasenames(StringUtils
                     .commaDelimitedListToStringArray(StringUtils.trimAllWhitespace(skrProperties.getErrorMsgPropBasename())));

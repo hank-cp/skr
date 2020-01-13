@@ -21,10 +21,11 @@ import demo.skr.reg.model.EndPoint;
 import demo.skr.reg.model.Permission;
 import lombok.extern.java.Log;
 import org.skr.registry.SimpleRealm;
-import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.context.event.ApplicationReadyEvent;
+import org.springframework.context.ApplicationListener;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -45,13 +46,13 @@ public class AioApp {
     //*************************************************************************
 
     @Component
-    public static class OnStartUpListener implements InitializingBean {
+    public static class OnStartUpListener implements ApplicationListener<ApplicationReadyEvent> {
 
         @Autowired
         private PermRegService permRegService;
 
         @Override
-        public void afterPropertiesSet() throws Exception {
+        public void onApplicationEvent(ApplicationReadyEvent event) {
             log.info("Registering Realm aio ......");
 
             SimpleRealm realm = SimpleRealm.of("demo-a");

@@ -21,6 +21,6 @@ import org.skr.security.PermissionDetail;
 /**
  * @author <a href="https://github.com/hank-cp">Hank CP</a>
  */
-public interface IPermission extends PermissionDetail, IEntityRegistry<String> {
+public interface IPermission extends PermissionDetail, IEntityRegistry {
 
 }

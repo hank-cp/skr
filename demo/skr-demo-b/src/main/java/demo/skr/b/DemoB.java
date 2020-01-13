@@ -15,19 +15,22 @@
  */
 package demo.skr.b;
 
+import demo.skr.a.TaskRegService;
 import demo.skr.a.TaskRegistryPack;
 import demo.skr.a.model.TaskExtension;
+import demo.skr.reg.PermRegService;
 import demo.skr.reg.PermRegistryPack;
 import demo.skr.reg.model.EndPoint;
 import demo.skr.reg.model.Permission;
 import lombok.extern.slf4j.Slf4j;
 import org.skr.registry.SimpleRealm;
-import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.cloud.openfeign.EnableFeignClients;
+import org.springframework.context.ApplicationListener;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -46,16 +49,16 @@ public class DemoB {
     }
 
     @Component
-    public static class OnStartUpListener implements InitializingBean {
+    public static class OnStartUpListener implements ApplicationListener<ApplicationReadyEvent> {
 
         @Autowired
-        private PermRegServiceClient permRegService;
+        private PermRegService permRegService;
 
         @Autowired
-        private TaskRegServiceClient taskRegService;
+        private TaskRegService taskRegService;
 
         @Override
-        public void afterPropertiesSet() throws Exception {
+        public void onApplicationEvent(ApplicationReadyEvent event) {
             log.info("Registering Realm demo-b ......");
 
             SimpleRealm realm = SimpleRealm.of("demo-b");
@@ -63,7 +66,7 @@ public class DemoB {
             permRegistryPack.permissions = List.of(
                     Permission.of("Task_Record", "Task Record"));
             permRegistryPack.endPoints = List.of(
-                    EndPoint.of("Task_Record", "/tasks", "Demo-a.Task Record"));
+                    EndPoint.of("Task_Record", "/task-records", "Demo-a.Task Record"));
             permRegService.register(realm.code, realm.version, permRegistryPack);
 
             TaskRegistryPack taskRegistryPack = new TaskRegistryPack();

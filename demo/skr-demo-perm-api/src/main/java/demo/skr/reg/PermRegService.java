@@ -15,11 +15,28 @@
  */
 package demo.skr.reg;
 
+import lombok.NonNull;
 import org.skr.registry.IRegService;
+import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 
 /**
  * @author <a href="https://github.com/hank-cp">Hank CP</a>
  */
+@FeignClient(name = "perm", qualifier = "permRegService", primary = false)
 public interface PermRegService extends IRegService<PermRegistryPack> {
+
+    @PostMapping("/registry/register/{realmCode}/{realmVersion}")
+    void register(@PathVariable @NonNull String realmCode,
+                  @PathVariable int realmVersion,
+                  @RequestBody @NonNull PermRegistryPack registryPack);
+
+    @PostMapping("/registry/unregister/{realmCode}")
+    void unregister(@PathVariable @NonNull String realmCode);
+
+    @PostMapping("/registry/uninstall/{realmCode}")
+    void uninstall(@PathVariable @NonNull String realmCode);
 
 }

@@ -26,13 +26,9 @@ import javax.validation.constraints.NotNull;
  */
 @AllArgsConstructor(staticName = "of")
 @NoArgsConstructor
-public class TaskExtension implements IRegistry<String> {
+public class TaskExtension implements IRegistry {
 
     @NotNull
     public String name;
 
-    @Override
-    public String getKey() {
-        return name;
-    }
 }

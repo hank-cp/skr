@@ -15,24 +15,19 @@
  */
 package org.skr.registry;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
+import lombok.NonNull;
 
 /**
  * @author <a href="https://github.com/hank-cp">Hank CP</a>
  */
 public interface IRegService<RegistryPack extends IRegistryPack> {
 
-	@GetMapping("${spring.skr.reg.base-url:/registry}/register/{realmCode}/{realmVersion}")
-	void register(@PathVariable String realmCode,
-				  @PathVariable int realmVersion,
-				  @RequestBody RegistryPack realm);
+	void register(@NonNull String realmCode,
+				  int realmVersion,
+				  @NonNull RegistryPack registryPack);
 
-	@GetMapping("${spring.skr.reg.base-url:/registry}/unregister/{realmCode}")
-	void unregister(String realmCode);
+	void unregister(@NonNull String realmCode);
 
-	@GetMapping("${spring.skr.reg.base-url:/registry}/uninstall/{realmCode}")
-	void uninstall(String realmCode);
+	void uninstall(@NonNull String realmCode);
 
 }

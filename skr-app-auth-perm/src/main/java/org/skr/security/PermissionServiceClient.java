@@ -21,7 +21,7 @@ import org.springframework.cloud.openfeign.FeignClient;
 /**
  * @author <a href="https://github.com/hank-cp">Hank CP</a>
  */
-@FeignClient(name = "${spring.skr.registry.host:registry}", qualifier = "permissionService")
+@FeignClient(name = "${spring.skr.registry.host:registry}", qualifier = "permissionService", primary = false)
 public interface PermissionServiceClient extends IPermissionService {
 
 }
