@@ -18,6 +18,12 @@ Project based on skr skeleton could define its own implementation
     * [Self-Setup Spring Cloud](https://spring.io/projects/spring-cloud)
     * [Tencent TSF](https://cloud.tencent.com/product/tsf)
     
+## How to run (as micro-service)
+* Start skr-demo-auth
+* Start skr-demo-perm
+* Start skr-demo-a
+* Start skr-demo-b
+    
 ## Authentication flows
 ![](docs/sign_up.png)
 ![](docs/sign_in.png)
