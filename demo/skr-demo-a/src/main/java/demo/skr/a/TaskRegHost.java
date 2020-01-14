@@ -56,7 +56,9 @@ public class TaskRegHost extends AbstractRegHost<TaskRegistryPack>
     }
 
     @Override
-    protected void doRegister(@NonNull String realmCode, @NonNull TaskRegistryPack registryPack) {
+    protected void doRegister(@NonNull String realmCode,
+                              int realmVersion,
+                              @NonNull TaskRegistryPack registryPack) {
         if (!Checker.isEmpty(registryPack.taskExtensions)) {
             registryPack.taskExtensions.forEach(taskExtension -> {
                 extensions.put(taskExtension.name, taskExtension);
