@@ -15,13 +15,19 @@
  */
 package org.skr.security;
 
+import org.skr.permission.IPermission;
 import org.skr.permission.IPermissionService;
 import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 
 /**
  * @author <a href="https://github.com/hank-cp">Hank CP</a>
  */
-@FeignClient(name = "${spring.skr.registry.host:registry}", qualifier = "permissionService", primary = false)
+@FeignClient(name = "${spring.skr.perm.host:registry}", qualifier = "permissionService", primary = false)
 public interface PermissionServiceClient extends IPermissionService {
 
+    @Override
+    @GetMapping("${${spring.skr.perm.base-url:/registry}/permission/{code}")
+    IPermission getPermission(@PathVariable String code);
 }

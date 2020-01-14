@@ -19,13 +19,16 @@ import demo.skr.reg.PermRegService;
 import demo.skr.reg.PermRegistryPack;
 import demo.skr.reg.model.EndPoint;
 import demo.skr.reg.model.Permission;
+import demo.skr.registry.service.PermRegHost;
 import lombok.extern.java.Log;
 import org.skr.registry.SimpleRealm;
+import org.skr.security.PermissionServiceClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.ApplicationListener;
+import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -44,6 +47,14 @@ public class AioApp {
     //*************************************************************************
     // Application Startup Listener
     //*************************************************************************
+
+    @Autowired
+    private PermRegHost permRegHost;
+
+    @Bean
+    public PermissionServiceClient permissionService() {
+        return code -> permRegHost.getPermission(code);
+    }
 
     @Component
     public static class OnStartUpListener implements ApplicationListener<ApplicationReadyEvent> {

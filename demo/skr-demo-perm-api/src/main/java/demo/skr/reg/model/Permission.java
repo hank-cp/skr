@@ -44,11 +44,6 @@ public class Permission extends CodeBasedEntity implements IPermission {
     public long bit = 1;
 
     @Override
-    public String getKey() {
-        return code;
-    }
-
-    @Override
     public boolean isBuiltin() {
         return true;
     }

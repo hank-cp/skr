@@ -15,7 +15,6 @@
  */
 package org.skr.permission;
 
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
 /**
@@ -23,7 +22,6 @@ import org.springframework.web.bind.annotation.PathVariable;
  */
 public interface IPermissionService {
 
-	@GetMapping("${${spring.skr.perm.base-url:/registry}/permission/{code}")
 	IPermission getPermission(@PathVariable String code);
 
 }

@@ -29,7 +29,7 @@ import javax.validation.constraints.NotNull;
  */
 @MappedSuperclass
 @Getter
-public class EndPoint extends BaseEntity implements IEntityRegistry<String> {
+public class EndPoint extends BaseEntity implements IEntityRegistry {
 
     public static final String BREADCRUMB_SEPARATOR = "\\.";
 
@@ -47,11 +47,6 @@ public class EndPoint extends BaseEntity implements IEntityRegistry<String> {
     public String label;
 
     public String description;
-
-    @Override
-    public String getKey() {
-        return url;
-    }
 
     @Override
     public boolean isBuiltin() {

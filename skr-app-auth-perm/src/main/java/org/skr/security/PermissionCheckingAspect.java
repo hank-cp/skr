@@ -22,7 +22,6 @@ import org.skr.common.exception.AuthException;
 import org.skr.common.exception.ConfException;
 import org.skr.common.exception.ErrorInfo;
 import org.skr.common.exception.PermissionException;
-import org.skr.permission.IPermissionService;
 import org.skr.security.annotation.RequirePermission;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -39,7 +38,7 @@ import java.util.Optional;
 public class PermissionCheckingAspect {
 
     @Autowired
-    private IPermissionService permissionService;
+    private PermissionServiceClient permissionService;
 
     @Around("@annotation(permission)")
     public Object check(ProceedingJoinPoint joinPoint, RequirePermission permission) throws Throwable {
