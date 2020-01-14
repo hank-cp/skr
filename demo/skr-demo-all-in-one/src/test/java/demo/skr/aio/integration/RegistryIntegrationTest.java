@@ -15,10 +15,10 @@
  */
 package demo.skr.aio.integration;
 
+import demo.skr.aio.AioApp;
 import demo.skr.reg.PermRegistryPack;
 import demo.skr.reg.model.EndPoint;
 import demo.skr.reg.model.Permission;
-import demo.skr.registry.RegistryApp;
 import demo.skr.registry.model.PersistedRealm;
 import demo.skr.registry.repository.EndPointRepository;
 import demo.skr.registry.repository.PermissionRepository;
@@ -39,8 +39,11 @@ import java.util.concurrent.Callable;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 
+/**
+ * @author <a href="https://github.com/hank-cp">Hank CP</a>
+ */
 @RunWith(SpringRunner.class)
-@SpringBootTest(classes = RegistryApp.class)
+@SpringBootTest(classes = AioApp.class)
 @AutoConfigureMockMvc
 @Transactional
 @Rollback

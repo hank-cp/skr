@@ -15,7 +15,7 @@
  */
 package demo.skr.aio.integration;
 
-import demo.skr.auth.AuthApp;
+import demo.skr.aio.AioApp;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
@@ -41,7 +41,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  * @author <a href="https://github.com/hank-cp">Hank CP</a>
  */
 @RunWith(SpringRunner.class)
-@SpringBootTest(classes = AuthApp.class)
+@SpringBootTest(classes = AioApp.class)
 @AutoConfigureMockMvc
 @Transactional
 @Rollback

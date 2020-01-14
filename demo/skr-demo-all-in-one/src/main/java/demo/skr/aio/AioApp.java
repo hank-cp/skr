@@ -26,7 +26,7 @@ import org.skr.security.PermissionServiceClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.context.event.ApplicationReadyEvent;
+import org.springframework.boot.context.event.ApplicationStartedEvent;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
@@ -57,16 +57,16 @@ public class AioApp {
     }
 
     @Component
-    public static class OnStartUpListener implements ApplicationListener<ApplicationReadyEvent> {
+    public static class OnStartUpListener implements ApplicationListener<ApplicationStartedEvent> {
 
         @Autowired
         private PermRegService permRegService;
 
         @Override
-        public void onApplicationEvent(ApplicationReadyEvent event) {
+        public void onApplicationEvent(ApplicationStartedEvent event) {
             log.info("Registering Realm aio ......");
 
-            SimpleRealm realm = SimpleRealm.of("demo-a");
+            SimpleRealm realm = SimpleRealm.of("demo");
             PermRegistryPack permRegistryPack = new PermRegistryPack();
             permRegistryPack.permissions = List.of(
                     Permission.of("Task", "Task"),

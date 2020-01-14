@@ -16,7 +16,7 @@ abstract class AbstractRegHost {
     abstract IRealm getRegisteredRealm()
 }
 
-class IReal <<Interface>> {
+class IRealm <<Interface>> {
     String code @unique
     int version
 }

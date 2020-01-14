@@ -21,11 +21,10 @@ import demo.skr.reg.model.EndPoint;
 import demo.skr.reg.model.Permission;
 import lombok.extern.slf4j.Slf4j;
 import org.skr.registry.SimpleRealm;
-import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.context.event.ApplicationReadyEvent;
+import org.springframework.boot.context.event.ApplicationStartedEvent;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.context.ApplicationListener;
@@ -51,13 +50,13 @@ public class DemoA {
     //*************************************************************************
 
     @Component
-    public static class OnStartUpListener implements ApplicationListener<ApplicationReadyEvent> {
+    public static class OnStartUpListener implements ApplicationListener<ApplicationStartedEvent> {
 
         @Autowired
         private PermRegService permRegService;
 
         @Override
-        public void onApplicationEvent(ApplicationReadyEvent event) {
+        public void onApplicationEvent(ApplicationStartedEvent event) {
             log.info("Registering Realm demo-a ......");
 
             SimpleRealm realm = SimpleRealm.of("demo-a");

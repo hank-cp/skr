@@ -15,7 +15,7 @@
  */
 package demo.skr.aio.util;
 
-import demo.skr.registry.RegistryApp;
+import demo.skr.aio.AioApp;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.skr.common.exception.ErrorInfo;
@@ -31,7 +31,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest(classes = RegistryApp.class)
+@SpringBootTest(classes = AioApp.class)
 @AutoConfigureMockMvc
 @Transactional
 @Rollback
