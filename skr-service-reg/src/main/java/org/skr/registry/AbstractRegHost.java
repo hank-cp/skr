@@ -61,7 +61,7 @@ public abstract class AbstractRegHost<RegistryPack extends IRegistryPack>
         } catch (Exception ex) {
             setRealmStatus(realmCode, IRealm.RealmStatus.ERROR, realmVersion, null);
             throw new RegException(ErrorInfo.REGISTER_REGISTRY_FAILED
-                    .msgArgs(realmCode), ex);
+                    .msgArgs(realmCode, ex.getMessage()), ex);
         }
 
         startedRealmCache.put(realmCode, registryPack);
