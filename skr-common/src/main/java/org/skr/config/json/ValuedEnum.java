@@ -20,35 +20,39 @@ import org.skr.common.exception.ConfException;
 import org.skr.common.exception.ErrorInfo;
 import org.skr.common.util.BeanUtil;
 import org.skr.config.EnumLabelMessageSource;
+import org.springframework.context.NoSuchMessageException;
 import org.springframework.context.i18n.LocaleContextHolder;
 
 import java.lang.reflect.Method;
-import java.util.Map;
 import java.util.Objects;
+
+import static org.skr.common.util.BeanUtil.PRIMITIVE_TYPES;
 
 /**
  * @author <a href="https://github.com/hank-cp">Hank CP</a>
  */
 public interface ValuedEnum<V> {
 
-    Map<Class<?>, Class<?>> PRIMITIVE_TYPES = Map.of(
-            Boolean.class,      boolean.class,
-            Byte.class,         byte.class,
-            Character.class,    char.class,
-            Double.class,       double.class,
-            Float.class,        float.class,
-            Integer.class,      int.class,
-            Long.class,         long.class,
-            Short.class,        short.class,
-            Void.class,         void.class
-    );
-
     V value();
 
-    default String label() {
-        return ApplicationContextProvider.getBean(getClass(), EnumLabelMessageSource.class)
-                .getMessage(this.getClass().getSimpleName()+"."+value().toString(),
-                        null, LocaleContextHolder.getLocale());
+    default String enumLabel() {
+        try {
+            return ApplicationContextProvider.getBean(getClass(), EnumLabelMessageSource.class)
+                    .getMessage(this.getClass().getSimpleName(),
+                            null, LocaleContextHolder.getLocale());
+        } catch (NoSuchMessageException ex) {
+            return this.getClass().getSimpleName();
+        }
+    }
+
+    default String valueLabel() {
+        try {
+            return ApplicationContextProvider.getBean(getClass(), EnumLabelMessageSource.class)
+                    .getMessage(this.getClass().getSimpleName()+"."+value().toString(),
+                            null, LocaleContextHolder.getLocale());
+        } catch (NoSuchMessageException ex) {
+            return this.getClass().getSimpleName();
+        }
     }
 
     static <E extends ValuedEnum<V>, V> E parse(E[] values, V value, E defaultItem) {

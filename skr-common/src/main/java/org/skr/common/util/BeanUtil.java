@@ -22,15 +22,30 @@ import org.springframework.util.Assert;
 import javax.validation.constraints.NotNull;
 import java.io.*;
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.Map;
 
 /**
  * @author <a href="https://github.com/hank-cp">Hank CP</a>
  */
 @SuppressWarnings("unchecked")
 public class BeanUtil {
+
+    public static Map<Class<?>, Class<?>> PRIMITIVE_TYPES = Map.of(
+            Boolean.class,      boolean.class,
+            Byte.class,         byte.class,
+            Character.class,    char.class,
+            Double.class,       double.class,
+            Float.class,        float.class,
+            Integer.class,      int.class,
+            Long.class,         long.class,
+            Short.class,        short.class,
+            Void.class,         void.class
+    );
 
     /**
      * Copy Object <code>source</code> to Object <code>target</code>. This coping is
@@ -76,24 +91,30 @@ public class BeanUtil {
 
         if (source == target) return;
 
-        for (Field field : source.getClass().getFields()) {
+        for (Field sourceField : source.getClass().getFields()) {
             try {
-                if (Modifier.isStatic(field.getModifiers())
-                        || Modifier.isPrivate(field.getModifiers())
-                        || Modifier.isProtected(field.getModifiers())
-                        || (includeOrExclude && ArrayUtils.indexOf(fields, field.getName()) < 0)
-                        || (!includeOrExclude && ArrayUtils.indexOf(fields, field.getName()) >= 0)) continue;
+                if (Modifier.isStatic(sourceField.getModifiers())
+                        || Modifier.isPrivate(sourceField.getModifiers())
+                        || Modifier.isProtected(sourceField.getModifiers())
+                        || (includeOrExclude && ArrayUtils.indexOf(fields, sourceField.getName()) < 0)
+                        || (!includeOrExclude && ArrayUtils.indexOf(fields, sourceField.getName()) >= 0)) continue;
 
                 Field targetField;
                 try {
-                    targetField = target.getClass().getField(field.getName());
+                    targetField = target.getClass().getField(sourceField.getName());
                 } catch (NoSuchFieldException e) {
                     continue;
                 }
 
-                if (Collection.class.isAssignableFrom(field.getType())) {
-                    Collection srcCollection = (Collection) field.get(source);
-                    Collection targetCollection = (Collection) targetField.get(target);
+                // deep copy collection
+                if (Collection.class.isAssignableFrom(sourceField.getType())) {
+                    Collection srcCollection = (Collection) sourceField.get(source);
+                    Collection targetCollection;
+                    try {
+                        targetCollection = (Collection) targetField.get(target);
+                    } catch (ClassCastException ex) {
+                        continue;
+                    }
                     if (srcCollection == null && targetCollection == null) continue;
                     if (srcCollection == null) {
                         targetCollection.clear();
@@ -103,20 +124,46 @@ public class BeanUtil {
                         } else {
                             // Overcome immutable collection
                             try {
-                            targetCollection.clear();
-                            targetCollection.addAll(srcCollection);
+                                targetCollection.clear();
+                                targetCollection.addAll(srcCollection);
                             } catch (UnsupportedOperationException e) {
                                 targetField.set(target, srcCollection);
                             }
                         }
                     }
 
+                // deep copy map
+                } else if (Map.class.isAssignableFrom(sourceField.getType())) {
+                    Map srcMap = (Map) sourceField.get(source);
+                    Map targetMap;
+                    try {
+                        targetMap = (Map) targetField.get(target);
+                    } catch (ClassCastException ex) {
+                        continue;
+                    }
+                    if (srcMap == null && targetMap == null) continue;
+                    if (srcMap == null) {
+                        targetMap.clear();
+                    } else {
+                        if (targetMap == null) {
+                            targetField.set(target, srcMap);
+                        } else {
+                            // Overcome immutable collection
+                            try {
+                                targetMap.clear();
+                                targetMap.putAll(srcMap);
+                            } catch (UnsupportedOperationException e) {
+                                targetField.set(target, srcMap);
+                            }
+                        }
+                    }
+
                 } else {
-                    targetField.set(target, field.get(source));
+                    targetField.set(target, sourceField.get(source));
                 }
             } catch (Exception e) {
                 throw new RuntimeException(
-                        "Copy field "+ field.getName()+" failed.", e);
+                        "Copy field "+ sourceField.getName()+" failed.", e);
             }
         }
     }
@@ -135,7 +182,7 @@ public class BeanUtil {
         return (T) obj;
     }
 
-    public static Class getFieldClass(@NonNull Object target,
+    public static Class<?> getFieldClass(@NonNull Object target,
                                       @NonNull String fieldName) {
         try {
             return target.getClass().getDeclaredField(fieldName).getType();
@@ -145,7 +192,7 @@ public class BeanUtil {
     }
 
     private static Object getFieldValue(@NonNull Object target,
-                                        @NonNull Class clazz,
+                                        @NonNull Class<?> clazz,
                                         @NonNull String fieldName) {
         try {
             Field field = clazz.getDeclaredField(fieldName);
@@ -202,7 +249,7 @@ public class BeanUtil {
 
     public static Method getDeclaredMethod(@NonNull Class<?> clazz,
                                            @NonNull String methodName,
-                                           Class... parameterTypes) {
+                                           Class<?>... parameterTypes) {
         Method method;
         try {
             method = parameterTypes.length > 0
@@ -217,7 +264,7 @@ public class BeanUtil {
 
     public static Method getMethod(@NonNull Class<?> clazz,
                                    @NonNull String methodName,
-                                   Class... parameterTypes) {
+                                   Class<?>... parameterTypes) {
         Method method;
         try {
             method = parameterTypes.length > 0
@@ -228,6 +275,55 @@ public class BeanUtil {
         }
         if (method != null) method.setAccessible(true);
         return method;
+    }
+
+    public static <R, O> R callMethod(O object,
+                                      @NonNull String methodName,
+                                      Object... parameters) {
+        Class<O> clazz = (Class<O>) object.getClass();
+        return callMethod(clazz, object, methodName, parameters);
+    }
+
+    /**
+     * This method doesn't always function as expected. Be 100% sure
+     * and tested when you use it.
+     *
+     * As known, this method is not worked for following case:
+     * * parameter type is primitive number, e.g. int.class
+     * * parameter type is general type, e.g. Object.class
+     */
+    public static <R> R callMethod(Class<?> clazz,
+                                   Object object,
+                                   @NonNull String methodName,
+                                   Object... parameters) {
+        if (object == null) return null;
+
+        Method method;
+        // try get method from `getMethod`
+        if (Checker.isEmpty(parameters)) {
+            method = getMethod(clazz, methodName);
+        } else {
+            method = getMethod(clazz, methodName,
+                    Arrays.stream(parameters).map(Object::getClass).toArray(Class[]::new));
+        }
+
+        // try get method from `getDeclaredMethod`
+        if (method == null) {
+            if (Checker.isEmpty(parameters)) {
+                method = getDeclaredMethod(clazz, methodName);
+            } else {
+                method = getDeclaredMethod(clazz, methodName,
+                        Arrays.stream(parameters).map(Object::getClass).toArray(Class[]::new));
+            }
+        }
+
+        if (method == null) return null;
+
+        try {
+            return (R) method.invoke(object, parameters);
+        } catch (IllegalAccessException | InvocationTargetException ignore) {
+        }
+        return null;
     }
 
 }
