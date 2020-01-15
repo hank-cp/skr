@@ -33,7 +33,7 @@ import org.skr.permission.IPermissionService;
 import org.skr.registry.AbstractRegHost;
 import org.skr.registry.IRealm;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Locale;
 import java.util.Objects;
@@ -94,7 +94,9 @@ public class PermRegHost extends AbstractRegHost<PermRegistryPack>
     }
 
     @Override
-    protected void doRegister(@NonNull String realmCode, @NonNull PermRegistryPack registryPack) {
+    protected void doRegister(@NonNull String realmCode,
+                              int realmVersion,
+                              @NonNull PermRegistryPack registryPack) {
         PersistedRealm realm = getRealm(realmCode);
 
         permissionRepository.findByRealm(realm).forEach(permission -> {

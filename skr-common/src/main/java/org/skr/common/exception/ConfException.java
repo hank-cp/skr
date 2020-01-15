@@ -30,7 +30,7 @@ public class ConfException extends BaseException {
     }
 
     public ConfException(@NotNull ErrorInfo errorInfo, Throwable e) {
-        super(errorInfo.getMsg() + ": " + e.getMessage(), e);
+        super(errorInfo.getMsg(), e);
         this.errorInfo = errorInfo;
     }
 

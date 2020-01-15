@@ -19,7 +19,6 @@ import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import org.skr.common.exception.ErrorInfo;
 import org.skr.common.exception.RegException;
-import org.springframework.transaction.annotation.Transactional;
 
 import javax.validation.constraints.NotNull;
 import java.util.Collections;
@@ -42,6 +41,7 @@ public abstract class AbstractRegHost<RegistryPack extends IRegistryPack>
                                            RegistryPack registryPack);
 
     protected abstract void doRegister(@NonNull String realmCode,
+                                       int realmVersion,
                                        @NonNull RegistryPack registryPack);
 
     protected abstract void doUnregister(@NonNull String realmCode,
@@ -50,14 +50,14 @@ public abstract class AbstractRegHost<RegistryPack extends IRegistryPack>
     protected abstract void doUninstall(@NonNull String realmCode);
 
     @Override
-    public void register(@NonNull String realmCode,
+    public final void register(@NonNull String realmCode,
                          int realmVersion,
                          @NonNull RegistryPack registryPack) {
         // if realm has been started, return
         if (startedRealmCache.containsKey(realmCode)) return;
 
         try {
-            doRegister(realmCode, registryPack);
+            doRegister(realmCode, realmVersion, registryPack);
         } catch (Exception ex) {
             setRealmStatus(realmCode, IRealm.RealmStatus.ERROR, realmVersion, null);
             throw new RegException(ErrorInfo.REGISTER_REGISTRY_FAILED
@@ -70,8 +70,7 @@ public abstract class AbstractRegHost<RegistryPack extends IRegistryPack>
 
     @SuppressWarnings("unchecked")
     @Override
-    @Transactional
-    public void unregister(@NonNull String realmCode) throws RegException {
+    public final void unregister(@NonNull String realmCode) throws RegException {
         RegistryPack registryPack = (RegistryPack) startedRealmCache.get(realmCode);
         if (registryPack == null) {
             throw new RegException(ErrorInfo.REALM_NOT_REGISTERED.msgArgs(realmCode));
@@ -90,8 +89,7 @@ public abstract class AbstractRegHost<RegistryPack extends IRegistryPack>
 
     @SuppressWarnings("unchecked")
     @Override
-    @Transactional
-    public void uninstall(@NotNull String realmCode) throws RegException {
+    public final void uninstall(@NotNull String realmCode) throws RegException {
         if (startedRealmCache.containsKey(realmCode)) {
             unregister(realmCode);
         }

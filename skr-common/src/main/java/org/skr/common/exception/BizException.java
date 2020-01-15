@@ -30,7 +30,7 @@ public class BizException extends BaseException {
     }
 
     public BizException(@NotNull ErrorInfo errorInfo, Throwable e) {
-        super(errorInfo.getMsg() + ": " + e.getMessage(), e);
+        super(errorInfo.getMsg(), e);
         this.errorInfo = errorInfo;
     }
 

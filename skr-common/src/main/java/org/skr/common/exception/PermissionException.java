@@ -30,7 +30,7 @@ public class PermissionException extends AuthenticationException {
     }
 
     public PermissionException(ErrorInfo errorInfo, Throwable e) {
-        super(errorInfo.getMsg() + ": " + e.getMessage(), e);
+        super(errorInfo.getMsg(), e);
         this.errorInfo = errorInfo;
     }
 
