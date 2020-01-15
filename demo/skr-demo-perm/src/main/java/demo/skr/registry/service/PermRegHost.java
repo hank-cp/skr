@@ -33,9 +33,9 @@ import org.skr.permission.IPermissionService;
 import org.skr.registry.AbstractRegHost;
 import org.skr.registry.IRealm;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Locale;
 import java.util.Objects;
 
 /**
