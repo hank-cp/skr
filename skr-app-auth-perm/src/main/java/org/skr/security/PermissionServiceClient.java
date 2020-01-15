@@ -28,6 +28,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 public interface PermissionServiceClient extends IPermissionService {
 
     @Override
-    @GetMapping("${${spring.skr.perm.base-url:/registry}/permission/{code}")
+    @GetMapping("${spring.skr.perm.base-url:/registry}/permission/{code}")
     IPermission getPermission(@PathVariable String code);
 }

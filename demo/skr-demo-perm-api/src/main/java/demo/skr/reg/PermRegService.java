@@ -25,7 +25,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 /**
  * @author <a href="https://github.com/hank-cp">Hank CP</a>
  */
-@FeignClient(name = "perm", qualifier = "permRegService", primary = false)
+@FeignClient(name = "registry", qualifier = "permRegService", primary = false)
 public interface PermRegService extends IRegService<PermRegistryPack> {
 
     @PostMapping("/registry/register/{realmCode}/{realmVersion}")

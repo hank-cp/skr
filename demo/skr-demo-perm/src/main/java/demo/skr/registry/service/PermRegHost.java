@@ -35,6 +35,7 @@ import org.skr.registry.IRealm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Locale;
 import java.util.Objects;
 
 /**
@@ -70,8 +71,9 @@ public class PermRegHost extends AbstractRegHost<PermRegistryPack>
     }
 
     @Override
-    public PersistedPermission getPermission(String permissionCode) {
-        return permissionRepository.findById(permissionCode).orElse(null);
+    @GetMapping("${spring.skr.perm.base-url:/registry}/permission/{code}")
+    public PersistedPermission getPermission(String code) {
+        return permissionRepository.findById(code).orElse(null);
     }
 
     public PersistedEndPoint getEndPoint(String url) {
