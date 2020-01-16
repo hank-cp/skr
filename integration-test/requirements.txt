@@ -1,3 +1,5 @@
+# https://github.com/h2non/jsonpath-ng
+# https://docs.python.org/3/library/unittest.html
+
 jsonpath
 requests
-jsonpath-ng
