@@ -59,6 +59,10 @@ TBD
 * [ConfException](skr-common/src/main/java/org/skr/common/exception/ConfException.java)
 
 ## Test
+### Python测试套件
+* 将所需测试案例添加到[suite_test.py](/integration-test/suite_test.py)文件中
+* 运行文件[suite_test.py](/integration-test/suite_test.py)即可测试套件中的测试案例
+
 ### Python测试命令
 #### unittest 支持用例自动（递归）发现：
 * 默认发现当前目录下所有符合 test*.py 测试用例
