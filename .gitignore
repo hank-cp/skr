@@ -11,3 +11,4 @@ logs/
 .gradletasknamecache
 /tmp
 /local.properties
+/integration-test/integration-test.iml
