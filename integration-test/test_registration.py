@@ -1,3 +1,5 @@
+# coding=UTF-8
+
 import json
 import unittest
 
@@ -7,7 +9,7 @@ from jsonpath import jsonpath
 
 class TaskControllerTest(unittest.TestCase):
 
-    def test_permission_granted(self):
+    def test_registration(self):
         headers = {'Content-type': 'application/x-www-form-urlencoded'}
         payload = {'username': 'dev', 'password': 'dev', 'tenentCode': 'org'}
         response = requests.post('http://127.0.0.1:8002/auth/sign-in', headers=headers, data=payload)
