@@ -12,13 +12,13 @@ class AuthSignInTest(unittest.TestCase):
         self.assertTrue(response.status_code == requests.codes.ok)
         content_json_data = json.loads(response.content)
         # 数据不存在时，会返回False，确保数据存在，不能等于False
-        self.assertNotEqual(jsonpath(content_json_data, 'access-token'), False)
+        self.assertTrue(jsonpath(content_json_data, 'access-token'))
         self.assertIsNotNone(jsonpath(content_json_data, 'access-token')[0])
-        self.assertNotEqual(jsonpath(content_json_data, 'refresh-token'), False)
+        self.assertTrue(jsonpath(content_json_data, 'refresh-token'))
         self.assertIsNotNone(jsonpath(content_json_data, 'refresh-token')[0])
-        self.assertNotEqual(jsonpath(content_json_data, 'login-token'), False)
+        self.assertTrue(jsonpath(content_json_data, 'login-token'))
         self.assertIsNotNone(jsonpath(content_json_data, 'login-token')[0])
-        self.assertNotEqual(jsonpath(content_json_data, 'principal'), False)
+        self.assertTrue(jsonpath(content_json_data, 'principal'))
         self.assertIsNotNone(jsonpath(content_json_data, 'principal')[0])
         self.assertFalse(jsonpath(content_json_data, 'principal.tenentCode'))
 

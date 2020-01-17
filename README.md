@@ -57,3 +57,28 @@ TBD
 * [AuthException](skr-common/src/main/java/org/skr/common/exception/AuthException.java)
 * [BizException](skr-common/src/main/java/org/skr/common/exception/BizException.java)
 * [ConfException](skr-common/src/main/java/org/skr/common/exception/ConfException.java)
+
+## Test
+### Python测试套件
+* 将所需测试案例添加到[suite_test.py](/integration-test/suite_test.py)文件中
+* 运行文件[suite_test.py](/integration-test/suite_test.py)即可测试套件中的测试案例
+
+### Python测试命令
+#### unittest 支持用例自动（递归）发现：
+* 默认发现当前目录下所有符合 test*.py 测试用例
+    * 使用 python -m unittest 或 python -m unittest discover
+* 通过 -s 参数指定要自动发现的目录， -p 参数指定用例文件的名称模式
+    * python -m unittest discover -s project_directory -p "test_*.py"
+* 通过位置参数指定自动发现的目录和用例文件的名称模式
+    * python -m unittest discover project_directory "test_*.py"
+    
+#### unittest 支持执行指定用例：
+* 指定测试模块
+    * python -m unittest test_module1 test_module2
+* 指定测试类
+    * python -m unittest test_module.TestClass
+* 指定测试方法
+    * python -m unittest test_module.TestClass.test_method
+* 指定测试文件路径（仅 Python 3）
+    * python -m unittest tests/test_something.py
+
