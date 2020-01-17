@@ -28,7 +28,6 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
 import org.springframework.boot.autoconfigure.jackson.JacksonAutoConfiguration;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.cache.interceptor.KeyGenerator;
-import org.springframework.cache.interceptor.SimpleKey;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -51,17 +50,13 @@ public class SkrConfig {
     public KeyGenerator keyGenerator() {
         return (target, method, params) -> {
             String targetClass = method.getDeclaringClass().getName();
-            String methodPrefix = targetClass + "∆" + method.getName() + "∆";
-            if (params.length == 0) {
-                return methodPrefix + SimpleKey.EMPTY;
-            } else {
-                return methodPrefix + Arrays.stream(params)
-                        .map(param -> {
-                            if (param == null) return "null";
-                            if (param.getClass().isArray()) return "array";
-                            return param.toString();
-                        }).collect(Collectors.joining("∆"));
-            }
+            String methodPrefix = targetClass + "." + method.getName() + "∆";
+            return methodPrefix + Arrays.stream(params)
+                    .map(param -> {
+                        if (param == null) return "null";
+                        if (param.getClass().isArray()) return "array";
+                        return param.toString();
+                    }).collect(Collectors.joining("∆"));
         };
     }
 
