@@ -24,7 +24,7 @@ class AuthSignUpTest(unittest.TestCase):
 
     def test_sign_up_without_tenant(self):
         # 生成随机账号
-        username = random.sample('abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789', 5)
+        username = ''.join(random.sample('abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789', 8))
         payload_test = {'username': username, 'password': 'asdf'}
         self.post_sign_up(payload_test)
 
