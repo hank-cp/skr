@@ -195,7 +195,7 @@ public class JsonUtil {
         return getObjectMapper().getSerializationConfig().getTypeFactory().constructType(clazz);
     }
 
-    public static JavaType getCollectionJavaType(Class<? extends Collection<?>> collectionClass, Class<?> elementClass) {
+    public static JavaType getCollectionJavaType(Class<? extends Collection> collectionClass, Class<?> elementClass) {
         return getObjectMapper().getSerializationConfig().getTypeFactory().constructCollectionType(collectionClass, elementClass);
     }
 
