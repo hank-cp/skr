@@ -111,6 +111,7 @@ public class JsonUtil {
     public static <T> T fromJson(ObjectMapper objectMapper,
                                  final Class<?> type,
                                  final String json) {
+        if (json == null) return null;
         try {
             return (T) objectMapper.readValue(json, type);
         } catch (IOException e) {
@@ -121,6 +122,7 @@ public class JsonUtil {
     public static <T> T fromJson(ObjectMapper objectMapper,
                                  final TypeReference<T> type,
                                  final String json) {
+        if (json == null) return null;
         try {
             return objectMapper.readValue(json, type);
         } catch (IOException e) {
@@ -131,6 +133,7 @@ public class JsonUtil {
     public static <T> T fromJson(ObjectMapper objectMapper,
                                  JavaType javaType,
                                  String json) {
+        if (json == null) return null;
         try {
             return objectMapper.readValue(json, javaType);
         } catch (IOException e) {
@@ -142,23 +145,27 @@ public class JsonUtil {
     public static <T> T fromJson(ObjectMapper objectMapper,
                                  final Class<?> type,
                                  final JsonNode jsonNode) {
+        if (jsonNode == null) return null;
         return (T) objectMapper.convertValue(jsonNode, type);
     }
 
     public static <T> T fromJson(ObjectMapper objectMapper,
                                  final TypeReference<T> type,
                                  final JsonNode jsonNode) {
+        if (jsonNode == null) return null;
         return objectMapper.convertValue(jsonNode, type);
     }
 
     public static <T> T fromJson(ObjectMapper objectMapper,
                                  JavaType javaType,
                                  JsonNode jsonNode) {
+        if (jsonNode == null) return null;
         return objectMapper.convertValue(jsonNode, javaType);
     }
 
     public static String toJson(ObjectMapper objectMapper,
                                 Object obj, Class<?> jsonViewClazz) {
+        if (obj == null) return null;
         try {
             return objectMapper.writerWithView(jsonViewClazz).writeValueAsString(obj);
         } catch (Exception e) {
@@ -167,6 +174,7 @@ public class JsonUtil {
     }
 
     public static String toJson(ObjectMapper objectMapper, Object obj) {
+        if (obj == null) return null;
         try {
             return objectMapper.writeValueAsString(obj);
         } catch (Exception e) {
@@ -175,6 +183,7 @@ public class JsonUtil {
     }
 
     public static JsonNode toJsonNode(ObjectMapper objectMapper, Object obj) {
+        if (obj == null) return null;
         try {
             return objectMapper.valueToTree(obj);
         } catch (Exception e) {
@@ -186,7 +195,7 @@ public class JsonUtil {
         return getObjectMapper().getSerializationConfig().getTypeFactory().constructType(clazz);
     }
 
-    public static JavaType getCollectionJavaType(Class<? extends Collection> collectionClass, Class<?> elementClass) {
+    public static JavaType getCollectionJavaType(Class<? extends Collection<?>> collectionClass, Class<?> elementClass) {
         return getObjectMapper().getSerializationConfig().getTypeFactory().constructCollectionType(collectionClass, elementClass);
     }
 

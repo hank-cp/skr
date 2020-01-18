@@ -12,3 +12,5 @@ logs/
 /tmp
 /local.properties
 /integration-test/integration-test.iml
+/integration-test/__pycache__
+/integration-test/*.pyc
