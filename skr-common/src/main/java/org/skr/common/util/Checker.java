@@ -104,6 +104,11 @@ public final class Checker {
         return map == null || map.isEmpty();
     }
 
+    @SuppressWarnings("rawtypes")
+    public static boolean containsKey(Map map, Object key) {
+        return map != null && map.containsKey(key);
+    }
+
     public static boolean isEmpty(Date date) {
         return date == null || date.getTime() == 0;
     }
