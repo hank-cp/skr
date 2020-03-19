@@ -15,8 +15,11 @@
  */
 package demo.skr.b;
 
+import demo.skr.a.TaskRegService;
 import org.skr.security.annotation.RequirePermission;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cloud.openfeign.FeignClientBuilder;
+import org.springframework.context.ApplicationContext;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -25,13 +28,15 @@ import java.util.List;
  * @author <a href="https://github.com/hank-cp">Hank CP</a>
  */
 @RestController
-@RequestMapping("/task_record")
 public class TaskRecordController {
 
     @Autowired
     private TaskRecordRepository taskRecordRepository;
 
-    @PostMapping("/{taskId}")
+    @Autowired
+    private ApplicationContext applicationContext;
+
+    @PostMapping("/task_record/{taskId}")
     @RequirePermission("Task_Record")
     public void record(@PathVariable long taskId,
                        @RequestParam String operation) {
@@ -41,15 +46,21 @@ public class TaskRecordController {
         taskRecordRepository.save(taskRecord);
     }
 
-    @GetMapping("/list")
+    @GetMapping("/task_record/list")
     @RequirePermission("Task_Record")
     public List<TaskRecord> getTaskRecords() {
         return taskRecordRepository.findAll();
     }
 
-    @GetMapping("/welcome_to_hell")
+    @GetMapping("/task_record/welcome_to_hell")
     public void welcomeToHell() {
         throw new RuntimeException("This is a test exception");
+    }
+
+    @GetMapping("/delegate-extensions")
+    public @ResponseBody List<String> extensions() {
+        TaskRegService client = new FeignClientBuilder(applicationContext).forType(TaskRegService.class, "demo-a").build();
+        return client.extensions();
     }
 
 }

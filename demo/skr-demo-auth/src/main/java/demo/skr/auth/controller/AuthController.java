@@ -214,4 +214,9 @@ public class AuthController extends AuthManager {
                 certification, null);
         return Map.of();
     }
+
+    @GetMapping("/test-r")
+    public @ResponseBody Map<String, Object> test() {
+        return Map.of("ret", 1);
+    }
 }

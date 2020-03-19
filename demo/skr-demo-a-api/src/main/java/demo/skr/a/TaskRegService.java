@@ -19,10 +19,9 @@ import lombok.NonNull;
 import org.skr.common.exception.RegException;
 import org.skr.registry.IRegService;
 import org.springframework.cloud.openfeign.FeignClient;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /**
  * @author <a href="https://github.com/hank-cp">Hank CP</a>
@@ -43,5 +42,8 @@ public interface TaskRegService extends IRegService<TaskRegistryPack> {
     @Override
     @PostMapping("/task-ext/uninstall/{realmCode}")
     void uninstall(@PathVariable @NonNull String realmCode);
+
+    @GetMapping("/task-ext/extensions")
+    @ResponseBody List<String> extensions();
 
 }

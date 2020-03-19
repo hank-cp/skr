@@ -83,4 +83,9 @@ public class TaskRegHost extends AbstractRegHost<TaskRegistryPack>
     public List<TaskExtension> getExtensions() {
         return List.copyOf(extensions.values());
     }
+
+    @Override
+    public List<String> extensions() {
+        return new ArrayList<>(extensions.keySet());
+    }
 }
