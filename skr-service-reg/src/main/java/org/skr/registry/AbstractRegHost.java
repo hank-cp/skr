@@ -50,7 +50,7 @@ public abstract class AbstractRegHost<RegistryPack extends IRegistryPack>
     protected abstract void doUninstall(@NonNull String realmCode);
 
     @Override
-    public final void register(@NonNull String realmCode,
+    public void register(@NonNull String realmCode,
                          int realmVersion,
                          @NonNull RegistryPack registryPack) {
         // if realm has been started, return
@@ -70,7 +70,7 @@ public abstract class AbstractRegHost<RegistryPack extends IRegistryPack>
 
     @SuppressWarnings("unchecked")
     @Override
-    public final void unregister(@NonNull String realmCode) throws RegException {
+    public void unregister(@NonNull String realmCode) {
         RegistryPack registryPack = (RegistryPack) startedRealmCache.get(realmCode);
         if (registryPack == null) {
             throw new RegException(ErrorInfo.REALM_NOT_REGISTERED.msgArgs(realmCode));
@@ -87,9 +87,8 @@ public abstract class AbstractRegHost<RegistryPack extends IRegistryPack>
         setRealmStatus(realmCode, IRealm.RealmStatus.STOPPED, null, null);
     }
 
-    @SuppressWarnings("unchecked")
     @Override
-    public final void uninstall(@NotNull String realmCode) throws RegException {
+    public void uninstall(@NotNull String realmCode) {
         if (startedRealmCache.containsKey(realmCode)) {
             unregister(realmCode);
         }
