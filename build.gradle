@@ -1,11 +1,11 @@
-def checkProperty(String propName) {
+def checkProperty(Project project, String propName) {
     if (!project.hasProperty(propName)) return false
     String prop = project.property(propName)
     return prop != null && prop.length() > 0
 }
 
-def getPropertyOrElse(String propName, String alternative) {
-    if (!checkProperty(propName)) return alternative
+def getPropertyOrElse(Project project, String propName, String alternative) {
+    if (!checkProperty(project, propName)) return alternative
     return project.property(propName)
 }
 
@@ -83,11 +83,10 @@ subprojects {
     try {
         localProp.load(project.rootProject.file('local.properties').newDataInputStream())
     } catch(Exception ignored) {}
-    ext.sonatypeUsername = localProp.getProperty('sonatypeUsername')
-    ext.sonatypePassword = localProp.getProperty('sonatypePassword')
-    ext."signing.keyId" = localProp.getProperty('signing.keyId')
-    ext."signing.password" = localProp.getProperty('signing.password')
-    ext."signing.secretKeyRingFile" = localProp.getProperty('signing.secretKeyRingFile')
+    for (String propKey in localProp.keys()) {
+        ext.set(propKey, localProp.get(propKey))
+    }
+    ext."signing.secretKeyRingFile" = rootProject.file('publish.gpg')
 
     task setProperties {
         doFirst {
@@ -220,8 +219,8 @@ subprojects {
                             def stagingRepoUrl = "https://oss.sonatype.org/service/local/staging/deploy/maven2"
                             url = version.endsWith('SNAPSHOT') ? snapshotsRepoUrl : stagingRepoUrl
                             credentials {
-                                username sonatypeUsername
-                                password sonatypePassword
+                                username getPropertyOrElse(project, 'sonatypeUsername', '')
+                                password getPropertyOrElse(project, 'sonatypePassword', '')
                             }
                         }
                     }
