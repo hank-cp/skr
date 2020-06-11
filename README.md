@@ -13,16 +13,11 @@ Project based on skr skeleton could define its own implementation
 * Modular registration abstraction
     * Permission registration
     * EndPoint registration
+    * Extensible registration
 * Spring Boot Starter 
 * Switchable Spring Cloud platform
     * [Self-Setup Spring Cloud](https://spring.io/projects/spring-cloud)
     * [Tencent TSF](https://cloud.tencent.com/product/tsf)
-    
-## How to run (as micro-service)
-* Start skr-demo-auth
-* Start skr-demo-perm
-* Start skr-demo-a
-* Start skr-demo-b
     
 ## Authentication flows
 ![](docs/sign_up.png)
@@ -64,4 +59,4 @@ TBD
     2. RegistryApp
     3. DemoA
     4. DemoB
-2. run ` integration-test/run_test.sh`
+2. run `integration-test/run_test.sh`

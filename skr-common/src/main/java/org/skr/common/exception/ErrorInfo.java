@@ -115,12 +115,19 @@ public class ErrorInfo {
     }
 
     public ErrorInfo extra(String key, Object value) {
-        ErrorInfo errorInfo = getOrCopy(this);
-        if (errorInfo.extra == null) {
-            errorInfo.extra = new HashMap<>();
+        return this.extra(key, value, true);
+    }
+
+    public ErrorInfo extra(String key, Object value, boolean shouldBeAdded) {
+        if (shouldBeAdded) {
+            ErrorInfo errorInfo = getOrCopy(this);
+            if (errorInfo.extra == null) {
+                errorInfo.extra = new HashMap<>();
+            }
+            errorInfo.extra.put(key, value);
+            return errorInfo;
         }
-        errorInfo.extra.put(key, value);
-        return errorInfo;
+        return this;
     }
 
     @JsonProperty("ec")
