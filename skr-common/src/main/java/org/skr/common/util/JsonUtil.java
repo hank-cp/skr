@@ -20,6 +20,8 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.*;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import org.laxture.spring.util.ApplicationContextProvider;
 import org.skr.config.json.ExtendableLocalDateTimeDeserializer;
 import org.skr.config.json.ValuedEnumModule;
@@ -27,6 +29,7 @@ import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Collection;
 
 /**
@@ -51,6 +54,8 @@ public class JsonUtil {
         objectMapper.configure(MapperFeature.IGNORE_DUPLICATE_MODULE_REGISTRATIONS, false);
         JavaTimeModule javaTimeModule = new JavaTimeModule();
         javaTimeModule.addDeserializer(LocalDateTime.class, ExtendableLocalDateTimeDeserializer.INSTANCE);
+        javaTimeModule.addSerializer(LocalDateTime.class, new LocalDateTimeSerializer(
+                DateTimeFormatter.ofPattern(ExtendableLocalDateTimeDeserializer.FORMAT_DEFAULT)));
         objectMapper.registerModule(javaTimeModule);
 
         objectMapper.setVisibility(objectMapper.getSerializationConfig()
