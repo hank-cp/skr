@@ -223,6 +223,17 @@ public class AuthSignInTest {
                 )))))
                 .andExpect(status().isUnauthorized())
                 .andExpect(jsonPath("ec", equalTo(ErrorInfo.CERTIFICATION_NOT_FOUND.getCode())));
+
+
+        // binding same identity for different certification scope should be supported.
+        mvc.perform(post("/auth/bind-mobile")
+                .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+                .content(EntityUtils.toString(new UrlEncodedFormEntity(List.of(
+                        new BasicNameValuePair("loginToken", response.get("login-token").asText()),
+                        new BasicNameValuePair("mobile", "test"),
+                        new BasicNameValuePair("captcha", "qwerty")
+                )))))
+                .andExpect(status().isOk());
     }
 
     @Test

@@ -106,7 +106,8 @@ public abstract class AuthManager {
                                               Map<String, Object> arguments) {
         // certification identity must be unique
         for (CertificationHandler handler : certificationHandlers) {
-            if (handler.findByIdentity(certification.getIdentity()) != null) {
+            if (handler.supports(certification)
+                    && handler.findByIdentity(certification.getIdentity()) != null) {
                 throw new AuthException(
                         ErrorInfo.CERTIFICATION_REGISTERED.msgArgs(certification.getIdentity()));
             }

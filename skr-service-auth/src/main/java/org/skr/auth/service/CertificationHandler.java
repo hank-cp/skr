@@ -46,7 +46,7 @@ public interface CertificationHandler<Cert extends Certification> {
 
     /**
      * Find {@link Certification} by given certificationIdentity.
-     * {@link Certification#getIdentity()} should be unique.
+     * {@link Certification#getIdentity()} should be unique per certification scope.
      *
      * @return {@link Certification} that has <code>certificationIdentity</code>
      */
