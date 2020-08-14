@@ -48,4 +48,9 @@ public class SmsCertification extends IdBasedEntity implements Certification {
     public String getIdentity() {
         return mobilePhone;
     }
+
+    @Override
+    public String getUserPrincipalIdentity() {
+        return account.getIdentity();
+    }
 }

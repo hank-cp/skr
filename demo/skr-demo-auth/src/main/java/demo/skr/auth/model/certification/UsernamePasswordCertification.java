@@ -47,4 +47,8 @@ public class UsernamePasswordCertification extends IdBasedEntity implements Cert
         return username;
     }
 
+    @Override
+    public String getUserPrincipalIdentity() {
+        return account.getIdentity();
+    }
 }

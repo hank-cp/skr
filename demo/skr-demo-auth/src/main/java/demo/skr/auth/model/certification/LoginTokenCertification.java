@@ -34,4 +34,9 @@ public class LoginTokenCertification implements Certification {
     public String getIdentity() {
         return loginToken;
     }
+
+    @Override
+    public String getUserPrincipalIdentity() {
+        return loginToken;
+    }
 }

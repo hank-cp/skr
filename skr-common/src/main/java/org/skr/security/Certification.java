@@ -28,6 +28,10 @@ package org.skr.security;
  */
 public interface Certification {
 
+    /** identity for this Certification, e.g. username, phone number, email address, etc. */
     String getIdentity();
+
+    /** identity for the user principle that this certification is binding to, e.g. account.id / user.id */
+    String getUserPrincipalIdentity();
 
 }

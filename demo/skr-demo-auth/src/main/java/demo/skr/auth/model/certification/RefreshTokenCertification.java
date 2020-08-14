@@ -34,4 +34,9 @@ public class RefreshTokenCertification implements Certification {
     public String getIdentity() {
         return refreshToken;
     }
+
+    @Override
+    public String getUserPrincipalIdentity() {
+        return refreshToken;
+    }
 }
