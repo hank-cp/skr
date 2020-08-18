@@ -21,6 +21,7 @@ import demo.skr.reg.model.EndPoint;
 import demo.skr.reg.model.Permission;
 import demo.skr.registry.service.PermRegHost;
 import lombok.extern.java.Log;
+import org.skr.config.ErrorOccurredEvent;
 import org.skr.registry.SimpleRealm;
 import org.skr.security.PermissionServiceClient;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -78,6 +79,15 @@ public class AioApp {
             permRegService.register(realm.code, realm.version, permRegistryPack);
 
             log.info("Registering realm aio done!");
+        }
+    }
+
+    @Component
+    public static class OnErrorOccurredListener implements ApplicationListener<ErrorOccurredEvent> {
+
+        @Override
+        public void onApplicationEvent(ErrorOccurredEvent event) {
+            log.throwing("ErrorOccurredEvent", "", (Throwable) event.getSource());
         }
     }
 //

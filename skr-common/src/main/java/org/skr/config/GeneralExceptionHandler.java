@@ -17,6 +17,8 @@ package org.skr.config;
 
 import lombok.extern.slf4j.Slf4j;
 import org.skr.common.exception.*;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpHeaders;
@@ -39,11 +41,15 @@ import static org.apache.commons.lang3.exception.ExceptionUtils.getStackTrace;
 @Slf4j
 public class GeneralExceptionHandler extends ResponseEntityExceptionHandler {
 
+    @Autowired
+    private ApplicationContext applicationContext;
+
     @Override
     protected ResponseEntity<Object> handleExceptionInternal(Exception ex, Object body,
                                                              HttpHeaders headers,
                                                              HttpStatus status,
                                                              WebRequest request) {
+        applicationContext.publishEvent(new ErrorOccurredEvent(ex));
         Object standerBody = Optional.ofNullable(body)
                 .orElse(ErrorInfo.INTERNAL_SERVER_ERROR.msgArgs(ex.getMessage()));
         return super.handleExceptionInternal(ex, standerBody, headers, status, request);
@@ -105,5 +111,7 @@ public class GeneralExceptionHandler extends ResponseEntityExceptionHandler {
                 HttpStatus.INTERNAL_SERVER_ERROR,
                 request);
     }
+
+
 
 }
