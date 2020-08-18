@@ -16,6 +16,7 @@
 package org.skr.config;
 
 import org.springframework.context.ApplicationEvent;
+import org.springframework.web.context.request.WebRequest;
 
 /**
  * This event will be published when exception occurred.
@@ -26,7 +27,14 @@ public class ErrorOccurredEvent extends ApplicationEvent {
 
     private static final long serialVersionUID = -8780401612862384173L;
 
-    public ErrorOccurredEvent(Throwable throwable) {
+    private final WebRequest request;
+
+    public ErrorOccurredEvent(Throwable throwable, WebRequest request) {
         super(throwable);
+        this.request = request;
+    }
+
+    public WebRequest getRequest() {
+        return request;
     }
 }

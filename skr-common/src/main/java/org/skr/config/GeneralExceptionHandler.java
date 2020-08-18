@@ -49,7 +49,7 @@ public class GeneralExceptionHandler extends ResponseEntityExceptionHandler {
                                                              HttpHeaders headers,
                                                              HttpStatus status,
                                                              WebRequest request) {
-        applicationContext.publishEvent(new ErrorOccurredEvent(ex));
+        applicationContext.publishEvent(new ErrorOccurredEvent(ex, request));
         Object standerBody = Optional.ofNullable(body)
                 .orElse(ErrorInfo.INTERNAL_SERVER_ERROR.msgArgs(ex.getMessage()));
         return super.handleExceptionInternal(ex, standerBody, headers, status, request);
