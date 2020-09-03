@@ -17,6 +17,7 @@ package demo.skr.registry.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import demo.skr.reg.model.Permission;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
@@ -35,6 +36,7 @@ public class PersistedPermission extends Permission {
     @JoinColumn(foreignKey = @ForeignKey(name="none", value = ConstraintMode.NO_CONSTRAINT))
     public PersistedRealm realm;
 
+    @Getter
     public boolean disabled;
 
 }

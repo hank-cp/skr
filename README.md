@@ -35,17 +35,32 @@ Project based on skr skeleton could define its own implementation
     * login-token:
     * robot-token:
     * train-token:
+* Realm
+* Permission
+* EndPoint
 
-## Auth Service
+## Libraries
+* skr-common: Common model and utils.
+* skr-cloud-spring: Default official Spring-Cloud implementation
+    * skr-cloud-tsf: Tencent Spring-Cloud implementation
+    
+### Security
+* skr-service-auth: Authentication manager service depends on this. 
+* skr-app-auth: Services need authentication depend on this.
+* skr-app-auth-perm: Services need permission checking depend on this.
+
+### Registration
+* skr-service-reg: Registration center service depends on this.
+
+## How To
+### Auth Service
 TBD
 
-## Registry Service
+### Registry Service
 TBD
 
-## Switch Spring Cloud provider
+### Switch Spring Cloud provider
 TBD
-
-## Convention
 
 #### Exception
 * [ErrorInfo](skr-common/src/main/java/org/skr/common/exception/ErrorInfo.java)

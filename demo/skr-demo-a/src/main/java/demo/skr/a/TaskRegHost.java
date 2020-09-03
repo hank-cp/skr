@@ -21,6 +21,7 @@ import org.skr.common.util.Checker;
 import org.skr.registry.AbstractRegHost;
 import org.skr.registry.IRealm;
 import org.skr.registry.SimpleRealm;
+import org.skr.registry.StartedRealmStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.*;
@@ -32,32 +33,35 @@ import java.util.*;
 public class TaskRegHost extends AbstractRegHost<TaskRegistryPack>
         implements TaskRegService {
 
-    private volatile static Map<String, TaskExtension> extensions
+    protected volatile static Map<String, StartedRealmStatus<TaskRegistryPack>> startedRealmCache
             = Collections.synchronizedMap(new HashMap<>());
 
-    private volatile static Set<IRealm> registeredRealm
-            = Collections.synchronizedSet(new HashSet<>());
-
-    public IRealm getRealm(String realmCode) {
-        return registeredRealm.stream().filter(realm -> realm.getCode().equals(realmCode)).findAny().orElse(null);
-    }
+    private volatile static Map<String, TaskExtension> extensions
+            = Collections.synchronizedMap(new HashMap<>());
 
     @Override
     protected void setRealmStatus(@NonNull String realmCode,
                                   IRealm.@NonNull RealmStatus status,
-                                  Integer realmVersion,
+                                  String realmVersion,
                                   TaskRegistryPack registryPack) {
         if (status == IRealm.RealmStatus.STARTED) {
             SimpleRealm realm = SimpleRealm.of(realmCode);
-            registeredRealm.add(realm);
+            startedRealmCache.put(realm.code, StartedRealmStatus.of(
+                    IRealm.RealmStatus.STARTED,
+                    realmVersion, registryPack));
         } else {
-            registeredRealm.removeIf(realm -> realm.getCode().equals(realmCode));
+            startedRealmCache.remove(realmCode);
         }
     }
 
     @Override
+    protected StartedRealmStatus<TaskRegistryPack> getRealmStatus(@NonNull String realmCode) {
+        return startedRealmCache.get(realmCode);
+    }
+
+    @Override
     protected void doRegister(@NonNull String realmCode,
-                              int realmVersion,
+                              String realmVersion,
                               @NonNull TaskRegistryPack registryPack) {
         if (!Checker.isEmpty(registryPack.taskExtensions)) {
             registryPack.taskExtensions.forEach(taskExtension -> {
@@ -68,16 +72,12 @@ public class TaskRegHost extends AbstractRegHost<TaskRegistryPack>
 
     @Override
     protected void doUnregister(@NonNull String realmCode,
-                                @NonNull TaskRegistryPack taskRegistryPack) {
+                                TaskRegistryPack taskRegistryPack) {
         if (!Checker.isEmpty(taskRegistryPack.taskExtensions)) {
             taskRegistryPack.taskExtensions.forEach(taskExtension -> {
                 extensions.remove(taskExtension.name);
             });
         }
-    }
-
-    @Override
-    protected void doUninstall(@NonNull String realmCode) {
     }
 
     public List<TaskExtension> getExtensions() {

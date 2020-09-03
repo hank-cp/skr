@@ -21,6 +21,7 @@ import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 
 /**
  * @author <a href="https://github.com/hank-cp">Hank CP</a>
@@ -28,15 +29,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 @FeignClient(name = "registry", qualifier = "permRegService", primary = false)
 public interface PermRegService extends IRegService<PermRegistryPack> {
 
-    @PostMapping("/registry/register/{realmCode}/{realmVersion}")
+    @PostMapping("/registry/register/{realmCode}")
     void register(@PathVariable @NonNull String realmCode,
-                  @PathVariable int realmVersion,
-                  @RequestBody @NonNull PermRegistryPack registryPack);
+                  @RequestParam(required = false) String realmVersion,
+                  @RequestBody PermRegistryPack registryPack);
 
     @PostMapping("/registry/unregister/{realmCode}")
     void unregister(@PathVariable @NonNull String realmCode);
-
-    @PostMapping("/registry/uninstall/{realmCode}")
-    void uninstall(@PathVariable @NonNull String realmCode);
 
 }

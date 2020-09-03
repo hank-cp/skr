@@ -17,6 +17,7 @@ package demo.skr.registry.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import demo.skr.reg.model.EndPoint;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
@@ -38,6 +39,7 @@ public class PersistedEndPoint extends EndPoint {
     @JoinColumn(foreignKey = @ForeignKey(name="none", value = ConstraintMode.NO_CONSTRAINT))
     public PersistedPermission permission;
 
+    @Getter
     public boolean disabled;
 
     @PostLoad

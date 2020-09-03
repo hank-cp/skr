@@ -34,7 +34,7 @@ public class SimpleRealm implements IRealm {
     @NonNull
     public String code;
 
-    public int version;
+    public String version;
 
     public IRealm.RealmStatus status;
 

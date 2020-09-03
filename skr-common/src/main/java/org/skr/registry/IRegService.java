@@ -22,12 +22,13 @@ import lombok.NonNull;
  */
 public interface IRegService<RegistryPack extends IRegistryPack> {
 
+	/**
+	 * register realm. This method should be idempotent
+	 */
 	void register(@NonNull String realmCode,
-				  int realmVersion,
+				  String realmVersion,
 				  @NonNull RegistryPack registryPack);
 
+	/** unregister real. This method should be idempotent */
 	void unregister(@NonNull String realmCode);
-
-	void uninstall(@NonNull String realmCode);
-
 }

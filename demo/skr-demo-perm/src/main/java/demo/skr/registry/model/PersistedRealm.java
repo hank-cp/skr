@@ -29,7 +29,7 @@ import javax.validation.constraints.NotNull;
 @NoArgsConstructor
 public class PersistedRealm extends CodeBasedEntity implements IRealm {
 
-    public int version;
+    public String version;
 
     public int status;
 
@@ -39,7 +39,7 @@ public class PersistedRealm extends CodeBasedEntity implements IRealm {
     }
 
     @Override
-    public int getVersion() {
+    public String getVersion() {
         return version;
     }
 }

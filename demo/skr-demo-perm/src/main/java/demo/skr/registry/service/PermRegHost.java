@@ -32,7 +32,9 @@ import org.skr.common.util.BeanUtil;
 import org.skr.permission.IPermissionService;
 import org.skr.registry.AbstractRegHost;
 import org.skr.registry.IRealm;
+import org.skr.registry.StartedRealmStatus;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -83,7 +85,7 @@ public class PermRegHost extends AbstractRegHost<PermRegistryPack>
     @Override
     protected void setRealmStatus(@NonNull String realmCode,
                                   IRealm.@NonNull RealmStatus status,
-                                  Integer realmVersion,
+                                  String realmVersion,
                                   PermRegistryPack registryPack) {
         PersistedRealm realm = getRealm(realmCode);
         if (realmVersion != null) {
@@ -94,8 +96,17 @@ public class PermRegHost extends AbstractRegHost<PermRegistryPack>
     }
 
     @Override
+    protected StartedRealmStatus<PermRegistryPack> getRealmStatus(@NonNull String realmCode) {
+        PersistedRealm realm = realmRepository.findByCode(realmCode);
+        if (realm == null) return null;
+        return StartedRealmStatus.of(
+                IRealm.RealmStatus.parse(realm.status), realm.version, null);
+    }
+
+    @Override
+    @Transactional
     protected void doRegister(@NonNull String realmCode,
-                              int realmVersion,
+                              String realmVersion,
                               @NonNull PermRegistryPack registryPack) {
         PersistedRealm realm = getRealm(realmCode);
 
@@ -161,12 +172,9 @@ public class PermRegHost extends AbstractRegHost<PermRegistryPack>
     }
 
     @Override
+    @Transactional
     protected void doUnregister(@NonNull String realmCode,
-                                @NonNull PermRegistryPack permRegistryPack) {
-    }
-
-    @Override
-    protected void doUninstall(@NonNull String realmCode) {
+                                PermRegistryPack permRegistryPack) {
         PersistedRealm realm = getRealm(realmCode);
         if (realm == null) return;
         realmRepository.save(realm);

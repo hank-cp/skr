@@ -137,26 +137,74 @@ public class RegistryIntegrationTest {
 
     @Test
     public void testRegisterRealm() {
-        Permission permission = new Permission();
-        permission.code = "test";
-        permission.name = "test";
-
-        EndPoint endPoint = new EndPoint();
-        endPoint.permissionCode = "test";
-        endPoint.url = "/test/url";
-
         PermRegistryPack regPack = new PermRegistryPack();
-        regPack.permissions.add(permission);
-        regPack.endPoints.add(endPoint);
+        regPack.permissions.add(Permission.of("test", "test"));
+        regPack.endPoints.add(EndPoint.of("test", "/test/url", ""));
 
-        permRegHost.register("test", 0, regPack);
+        permRegHost.register("test", null, regPack);
         assertThat(permissionRepository.findById("test").orElse(null), notNullValue());
         assertThat(endPointRepository.findById("/test/url").orElse(null), notNullValue());
 
         // test unregister Realm
-        permRegHost.uninstall("test");
+        permRegHost.unregister("test");
         assertThat(permissionRepository.findById("test").get().disabled, equalTo(true));
         assertThat(endPointRepository.findById("/test/url").get().disabled, equalTo(true));
+    }
+
+    @Test
+    public void testRegisterContinually() {
+        PermRegistryPack regPack = new PermRegistryPack();
+        regPack.permissions.add(Permission.of("test", "test"));
+        regPack.endPoints.add(EndPoint.of("test", "/test/url", ""));
+
+        permRegHost.register("test", null, regPack);
+        assertThat(permissionRepository.countByRealmCode("test"), equalTo(1));
+        assertThat(endPointRepository.countByRealmCode("test"), equalTo(1));
+        assertThat(permissionRepository.findById("test").orElse(null), allOf(
+                notNullValue(),
+                hasProperty("disabled", equalTo(false))
+        ));
+        assertThat(endPointRepository.findById("/test/url").orElse(null), allOf(
+                notNullValue(),
+                hasProperty("disabled", equalTo(false))
+        ));
+
+        // register new permission and endPoint
+        regPack.permissions.clear();
+        regPack.endPoints.clear();
+        regPack.permissions.add(Permission.of("test2", "test2"));
+        regPack.endPoints.add(EndPoint.of("test2", "/test/url2", ""));
+
+        permRegHost.register("test", "1", regPack);
+        assertThat(permissionRepository.countByRealmCode("test"), equalTo(2));
+        assertThat(endPointRepository.countByRealmCode("test"), equalTo(2));
+        assertThat(permissionRepository.findById("test").orElse(null), allOf(
+                notNullValue(),
+                hasProperty("disabled", equalTo(true)) // old permission should be disabled
+        ));
+        assertThat(endPointRepository.findById("/test/url").orElse(null), allOf(
+                notNullValue(),
+                hasProperty("disabled", equalTo(true)) // old endPoint should be disabled
+        ));
+        assertThat(permissionRepository.findById("test2").orElse(null), allOf(
+                notNullValue(),
+                hasProperty("disabled", equalTo(false)) // new permission
+        ));
+        assertThat(endPointRepository.findById("/test/url2").orElse(null), allOf(
+                notNullValue(),
+                hasProperty("disabled", equalTo(false)) // old endPoint
+        ));
+
+        // register new permission and endPoint
+        regPack.permissions.clear();
+        regPack.endPoints.clear();
+        regPack.permissions.add(Permission.of("test3", "test3"));
+        regPack.endPoints.add(EndPoint.of("test3", "/test/url3", ""));
+
+        // provides version, registration should be skipped because realm has no change
+        permRegHost.register("test", "1", regPack);
+        assertThat(permissionRepository.countByRealmCode("test"), equalTo(2));
+        assertThat(endPointRepository.countByRealmCode("test"), equalTo(2));
     }
 
     @Test

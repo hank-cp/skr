@@ -60,6 +60,7 @@ public class DemoA {
             log.info("Registering Realm demo-a ......");
 
             SimpleRealm realm = SimpleRealm.of("demo-a");
+            realm.version = "1";
             PermRegistryPack permRegistryPack = new PermRegistryPack();
             permRegistryPack.permissions = List.of(
                     Permission.of("Task", "Task"),

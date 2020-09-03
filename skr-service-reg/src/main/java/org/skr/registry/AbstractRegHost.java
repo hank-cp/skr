@@ -20,10 +20,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.skr.common.exception.ErrorInfo;
 import org.skr.common.exception.RegException;
 
-import javax.validation.constraints.NotNull;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.Objects;
+import java.util.Optional;
 
 /**
  * @author <a href="https://github.com/hank-cp">Hank CP</a>
@@ -32,29 +30,48 @@ import java.util.Map;
 public abstract class AbstractRegHost<RegistryPack extends IRegistryPack>
         implements IRegService<RegistryPack> {
 
-    protected volatile static Map<String, IRegistryPack> startedRealmCache
-            = Collections.synchronizedMap(new HashMap<>());
+    protected abstract StartedRealmStatus<RegistryPack> getRealmStatus(@NonNull String realmCode);
 
+    /**
+     * Manage realm status
+     *
+     * @param registryPack if it's persisted and retrieved by {@link #getRealmStatus(String)},
+     *                     it will be available for {@link #doUnregister(String, IRegistryPack)}
+     *                     as the second argument.
+     */
     protected abstract void setRealmStatus(@NonNull String realmCode,
                                            @NonNull IRealm.RealmStatus status,
-                                           Integer realmVersion,
+                                           String realmVersion,
                                            RegistryPack registryPack);
 
     protected abstract void doRegister(@NonNull String realmCode,
-                                       int realmVersion,
+                                       String realmVersion,
                                        @NonNull RegistryPack registryPack);
 
     protected abstract void doUnregister(@NonNull String realmCode,
-                                         @NonNull RegistryPack registryPack);
-
-    protected abstract void doUninstall(@NonNull String realmCode);
+                                         RegistryPack registryPack);
 
     @Override
     public void register(@NonNull String realmCode,
-                         int realmVersion,
+                         String realmVersion,
                          @NonNull RegistryPack registryPack) {
-        // if realm has been started, return
-        if (startedRealmCache.containsKey(realmCode)) return;
+        StartedRealmStatus<RegistryPack> realmStatus = getRealmStatus(realmCode);
+        if (realmStatus != null && realmStatus.status == IRealm.RealmStatus.STARTED) {
+            if (realmStatus.realmVersion != null && realmVersion != null
+                    && Objects.equals(realmStatus.realmVersion, realmVersion)) {
+                // if realm has no changes, return
+                // if realmVersion is not provided, always re-register
+                return;
+            } else {
+                // version changed, unregister first before register again
+                try {
+                    doUnregister(realmCode, registryPack);
+                } catch (Exception ex) {
+                    throw new RegException(ErrorInfo.UNREGISTER_REGISTRY_FAILED
+                            .msgArgs(realmCode, ex.getMessage()), ex);
+                }
+            }
+        }
 
         try {
             doRegister(realmCode, realmVersion, registryPack);
@@ -64,43 +81,25 @@ public abstract class AbstractRegHost<RegistryPack extends IRegistryPack>
                     .msgArgs(realmCode, ex.getMessage()), ex);
         }
 
-        startedRealmCache.put(realmCode, registryPack);
         setRealmStatus(realmCode, IRealm.RealmStatus.STARTED, realmVersion, registryPack);
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     public void unregister(@NonNull String realmCode) {
-        RegistryPack registryPack = (RegistryPack) startedRealmCache.get(realmCode);
-        if (registryPack == null) {
-            throw new RegException(ErrorInfo.REALM_NOT_REGISTERED.msgArgs(realmCode));
+        StartedRealmStatus<RegistryPack> realmStatus = getRealmStatus(realmCode);
+        if (realmStatus == null || realmStatus.status != IRealm.RealmStatus.STARTED) {
+            // if realm is not started, return
         }
 
         try {
-            doUnregister(realmCode, registryPack);
+            doUnregister(realmCode,
+                    Optional.ofNullable(realmStatus).map(status -> status.registryPack).orElse(null));
         } catch (Exception ex) {
             throw new RegException(ErrorInfo.UNREGISTER_REGISTRY_FAILED
                     .msgArgs(realmCode, ex.getMessage()), ex);
         }
 
-        startedRealmCache.remove(realmCode);
         setRealmStatus(realmCode, IRealm.RealmStatus.STOPPED, null, null);
     }
 
-    @Override
-    public void uninstall(@NotNull String realmCode) {
-        if (startedRealmCache.containsKey(realmCode)) {
-            unregister(realmCode);
-        }
-
-        try {
-            doUninstall(realmCode);
-        } catch (Exception ex) {
-            throw new RegException(ErrorInfo.UNINSTALL_REGISTRY_FAILED
-                    .msgArgs(realmCode, ex.getMessage()), ex);
-        }
-
-        startedRealmCache.remove(realmCode);
-        setRealmStatus(realmCode, IRealm.RealmStatus.UNINSTALLED, null, null);
-    }
 }

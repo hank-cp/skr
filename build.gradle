@@ -141,6 +141,7 @@ subprojects {
 
     dependencies {
         compile "org.projectlombok:lombok:${lombokVersion}"
+        annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
         annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
         testAnnotationProcessor "org.projectlombok:lombok:${lombokVersion}"
     }

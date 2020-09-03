@@ -13,26 +13,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package demo.skr.registry.repository;
+package org.skr.registry;
 
-import demo.skr.registry.model.PersistedEndPoint;
-import demo.skr.registry.model.PersistedRealm;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.stereotype.Repository;
+import lombok.AllArgsConstructor;
 
-import java.util.List;
+import javax.validation.constraints.NotNull;
+import java.io.Serializable;
 
 /**
  * @author <a href="https://github.com/hank-cp">Hank CP</a>
  */
-@Repository
-public interface EndPointRepository extends JpaRepository<PersistedEndPoint, String> {
+@AllArgsConstructor(staticName = "of")
+public class StartedRealmStatus<RegistryPack extends IRegistryPack> implements Serializable {
 
-    List<PersistedEndPoint> findByRealm(PersistedRealm realm);
+    @NotNull
+    IRealm.RealmStatus status;
 
-    int countByRealmCode(String realmCode);
+    String realmVersion;
 
-    @Query("SELECT e FROM PersistedEndPoint e WHERE e.disabled = false")
-    List<PersistedEndPoint> findEnabledEndPoints();
+    RegistryPack registryPack;
+
 }

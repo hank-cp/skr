@@ -25,4 +25,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface RealmRepository extends JpaRepository<PersistedRealm, String> {
 
+    PersistedRealm findByCode(String code);
+
 }

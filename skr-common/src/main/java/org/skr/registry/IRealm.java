@@ -25,7 +25,7 @@ import javax.validation.constraints.NotNull;
 public interface IRealm {
 
     enum RealmStatus implements ValuedEnum<Integer> {
-        STOPPED(0), STARTED(1), UNINSTALLED(2), ERROR(3);
+        STOPPED(0), STARTED(1), ERROR(3);
 
         private final int value;
 
@@ -46,6 +46,6 @@ public interface IRealm {
     @NotNull
     String getCode();
 
-    int getVersion();
+    String getVersion();
 
 }

@@ -30,18 +30,14 @@ import java.util.List;
 public interface TaskRegService extends IRegService<TaskRegistryPack> {
 
     @Override
-    @PostMapping("/task-ext/register/{realmCode}/{realmVersion}")
+    @PostMapping("/task-ext/register/{realmCode}")
     void register(@PathVariable @NonNull String realmCode,
-                  @PathVariable int realmVersion,
-                  @RequestBody @NonNull TaskRegistryPack realm);
+                  @RequestParam(required = false) String realmVersion,
+                  @RequestBody TaskRegistryPack realm);
 
     @Override
     @PostMapping("/task-ext/unregister/{realmCode}")
     void unregister(@PathVariable @NonNull String realmCode) throws RegException;
-
-    @Override
-    @PostMapping("/task-ext/uninstall/{realmCode}")
-    void uninstall(@PathVariable @NonNull String realmCode);
 
     @GetMapping("/task-ext/extensions")
     @ResponseBody List<String> extensions();

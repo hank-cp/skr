@@ -43,6 +43,8 @@ public interface PermissionRepository extends JpaRepository<PersistedPermission,
 
     List<PersistedPermission> findByRealm(PersistedRealm realm);
 
+    int countByRealmCode(String realmCode);
+
     @Query("SELECT p FROM PersistedPermission p WHERE p.disabled = false")
     List<PersistedPermission> findEnabledPermissions();
 
