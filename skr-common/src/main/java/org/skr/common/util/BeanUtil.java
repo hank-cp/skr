@@ -21,10 +21,7 @@ import org.springframework.util.Assert;
 
 import javax.validation.constraints.NotNull;
 import java.io.*;
-import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
+import java.lang.reflect.*;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Map;
@@ -46,6 +43,20 @@ public class BeanUtil {
             Short.class,        short.class,
             Void.class,         void.class
     );
+
+    public static boolean isPrimitive(Object val) {
+        if (val == null) return false;
+        return PRIMITIVE_TYPES.containsKey(val.getClass())
+                || PRIMITIVE_TYPES.containsValue(val.getClass())
+                || String.class.isAssignableFrom(val.getClass());
+    }
+
+    public static Class<?> getCollectionParameterizeType(@NonNull Parameter parameter) {
+        if (!Collection.class.isAssignableFrom(parameter.getType())) return null;
+        if (!(parameter.getParameterizedType() instanceof ParameterizedType)) return null;
+        Type parameterizedType = ((ParameterizedType) parameter.getParameterizedType()).getActualTypeArguments()[0];
+        return parameterizedType instanceof Class ? (Class<?>) parameterizedType : null;
+    }
 
     /**
      * Copy Object <code>source</code> to Object <code>target</code>. This coping is
