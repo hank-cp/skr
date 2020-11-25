@@ -46,9 +46,13 @@ public class BeanUtil {
 
     public static boolean isPrimitive(Object val) {
         if (val == null) return false;
-        return PRIMITIVE_TYPES.containsKey(val.getClass())
-                || PRIMITIVE_TYPES.containsValue(val.getClass())
-                || String.class.isAssignableFrom(val.getClass());
+        return isPrimitive(val.getClass());
+    }
+
+    public static boolean isPrimitive(@NonNull Class<?> clazz) {
+        return PRIMITIVE_TYPES.containsKey(clazz)
+                || PRIMITIVE_TYPES.containsValue(clazz)
+                || String.class.isAssignableFrom(clazz);
     }
 
     public static Class<?> getCollectionParameterizeType(@NonNull Parameter parameter) {
