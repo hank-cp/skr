@@ -19,11 +19,17 @@ import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.*;
+import com.fasterxml.jackson.databind.ser.BeanPropertyWriter;
+import com.fasterxml.jackson.databind.ser.PropertyFilter;
+import com.fasterxml.jackson.databind.ser.PropertyWriter;
+import com.fasterxml.jackson.databind.ser.impl.SimpleBeanPropertyFilter;
+import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import org.laxture.spring.util.ApplicationContextProvider;
 import org.skr.config.json.ExtendableLocalDateTimeDeserializer;
+import org.skr.config.json.JsonSkipPersistence;
 import org.skr.config.json.ValuedEnumModule;
 import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
 
@@ -65,6 +71,24 @@ public class JsonUtil {
                 .withGetterVisibility(JsonAutoDetect.Visibility.PUBLIC_ONLY)
                 .withSetterVisibility(JsonAutoDetect.Visibility.PUBLIC_ONLY));
         return objectMapper;
+    }
+
+    public static ObjectMapper setupPersistentObjectMapper(ObjectMapper objectMapper) {
+        PropertyFilter ignoreFilter = new SimpleBeanPropertyFilter() {
+            @Override
+            protected boolean include(BeanPropertyWriter writer) {
+                return writer.getAnnotation(JsonSkipPersistence.class) == null;
+            }
+
+            @Override
+            protected boolean include(PropertyWriter writer) {
+                // ignore getter
+                return writer.getAnnotation(JsonSkipPersistence.class) == null;
+            }
+        };
+        return objectMapper.configure(MapperFeature.REQUIRE_SETTERS_FOR_GETTERS, true)
+                .setFilterProvider(new SimpleFilterProvider()
+                .addFilter("skipPersistence", ignoreFilter));
     }
 
     //*************************************************************************
