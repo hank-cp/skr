@@ -27,6 +27,8 @@ import org.springframework.stereotype.Component;
 @Data
 public class SkrProperties {
 
+    private boolean forceRegister = false;
+
     private String errorMsgPropBasename = "skr-error";
 
     private String enumLabelPropBasename = "skr-enum";

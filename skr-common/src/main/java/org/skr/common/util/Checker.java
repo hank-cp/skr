@@ -145,4 +145,8 @@ public final class Checker {
                         .msgArgs(violation.getMessage())
         ).collect(Collectors.toList());
     }
+
+    public static boolean equalsAndNotNull(Object lhs, Object rhs) {
+        return lhs != null && rhs != null && Objects.equals(lhs, rhs);
+    }
 }

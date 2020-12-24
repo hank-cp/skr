@@ -17,8 +17,11 @@ package org.skr.registry;
 
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
+import org.skr.SkrProperties;
 import org.skr.common.exception.ErrorInfo;
 import org.skr.common.exception.RegException;
+import org.skr.common.util.Checker;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Objects;
 import java.util.Optional;
@@ -29,6 +32,9 @@ import java.util.Optional;
 @Slf4j
 public abstract class AbstractRegHost<RegistryPack extends IRegistryPack>
         implements IRegService<RegistryPack> {
+
+    @Autowired
+    private SkrProperties properties;
 
     protected abstract StartedRealmStatus<RegistryPack> getRealmStatus(@NonNull String realmCode);
 
@@ -57,8 +63,8 @@ public abstract class AbstractRegHost<RegistryPack extends IRegistryPack>
                          @NonNull RegistryPack registryPack) {
         StartedRealmStatus<RegistryPack> realmStatus = getRealmStatus(realmCode);
         if (realmStatus != null && realmStatus.status == IRealm.RealmStatus.STARTED) {
-            if (realmStatus.realmVersion != null && realmVersion != null
-                    && Objects.equals(realmStatus.realmVersion, realmVersion)) {
+            if (Checker.equalsAndNotNull(realmStatus.realmVersion, realmVersion)
+                && !properties.isForceRegister()) {
                 // if realm has no changes, return
                 // if realmVersion is not provided, always re-register
                 return;
