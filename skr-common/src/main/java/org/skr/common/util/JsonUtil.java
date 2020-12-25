@@ -69,7 +69,9 @@ public class JsonUtil {
                 .withFieldVisibility(JsonAutoDetect.Visibility.PUBLIC_ONLY)
                 .withIsGetterVisibility(JsonAutoDetect.Visibility.PUBLIC_ONLY)
                 .withGetterVisibility(JsonAutoDetect.Visibility.PUBLIC_ONLY)
-                .withSetterVisibility(JsonAutoDetect.Visibility.PUBLIC_ONLY));
+                .withSetterVisibility(JsonAutoDetect.Visibility.PUBLIC_ONLY))
+                .setFilterProvider(new SimpleFilterProvider()
+                    .addFilter("ignorePersistence", SimpleBeanPropertyFilter.serializeAll()));
         return objectMapper;
     }
 
