@@ -43,6 +43,8 @@ import java.util.Collection;
  */
 public class JsonUtil {
 
+    public static final String JSON_FILTER_SKIP_PERSISTENCE = "skipPersistence";
+
     public static ObjectMapper getObjectMapper() {
         ObjectMapper objectMapper = ApplicationContextProvider.getBean(ObjectMapper.class);
         if (objectMapper == null) {
@@ -71,7 +73,7 @@ public class JsonUtil {
                 .withGetterVisibility(JsonAutoDetect.Visibility.PUBLIC_ONLY)
                 .withSetterVisibility(JsonAutoDetect.Visibility.PUBLIC_ONLY))
                 .setFilterProvider(new SimpleFilterProvider()
-                    .addFilter("skipPersistence", SimpleBeanPropertyFilter.serializeAll()));
+                    .addFilter(JSON_FILTER_SKIP_PERSISTENCE, SimpleBeanPropertyFilter.serializeAll()));
         return objectMapper;
     }
 
@@ -90,7 +92,7 @@ public class JsonUtil {
         };
         return objectMapper.configure(MapperFeature.REQUIRE_SETTERS_FOR_GETTERS, true)
                 .setFilterProvider(new SimpleFilterProvider()
-                .addFilter("skipPersistence", ignoreFilter));
+                .addFilter(JSON_FILTER_SKIP_PERSISTENCE, ignoreFilter));
     }
 
     //*************************************************************************
