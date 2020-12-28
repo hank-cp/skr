@@ -90,7 +90,7 @@ public class JsonUtil {
                 return writer.getAnnotation(JsonSkipPersistence.class) == null;
             }
         };
-        return objectMapper.configure(MapperFeature.REQUIRE_SETTERS_FOR_GETTERS, true)
+        return objectMapper.copy().configure(MapperFeature.REQUIRE_SETTERS_FOR_GETTERS, true)
                 .setFilterProvider(new SimpleFilterProvider()
                 .addFilter(JSON_FILTER_SKIP_PERSISTENCE, ignoreFilter));
     }
