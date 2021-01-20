@@ -1,16 +1,14 @@
 package org.skr.common.util;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.hamcrest.Matcher;
 import org.junit.Test;
 import org.skr.common.exception.ErrorInfo;
 import org.skr.config.json.ValuedEnum;
 
 import java.lang.reflect.Array;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertThat;
@@ -68,5 +66,47 @@ public class BeanUtilTest {
 
     public void testMethod3(List<?> param) {
         // do nothing
+    }
+
+    public static class A {
+        Map<String, String> map = new HashMap<>();
+        B b = new B();
+        C c = new C();
+    }
+
+    public static class B {
+        Map<String, C> map = new HashMap<>();
+        List<String> list = new ArrayList<>();
+        List<C> cList = new ArrayList<>();
+    }
+
+    public static class C {
+        String d;
+    }
+
+    @Test
+    public void testGetFieldValue() {
+        A a = new A();
+        a.map.put("key", "value");
+        a.b.list.add("li1");
+        a.c.d = "c0";
+        C c1 = new C();
+        c1.d = "c1";
+        a.b.cList.add(c1);
+        C c2 = new C();
+        c2.d = "c2";
+        a.b.map.put("c2", c2);
+        C c3 = new C();
+        c3.d = "c3";
+        a.b.map.put("c3", c3);
+
+        assertThat(BeanUtil.getFieldValue(a, "c.d"), equalTo("c0"));
+        assertThat(BeanUtil.getFieldValue(a, "map.*"), hasItem("value"));
+        assertThat(BeanUtil.getFieldValue(a, "map.key"), equalTo("value"));
+        assertThat(BeanUtil.getFieldValue(a, "b.list"), hasItem("li1"));
+        assertThat(BeanUtil.getFieldValue(a, "b.cList.d"), hasItem("c1"));
+        assertThat(BeanUtil.getFieldValue(a, "b.cList.*.d"), hasItem("c1"));
+        assertThat(BeanUtil.getFieldValue(a, "b.map.*.d"), allOf(
+                (Matcher) hasSize(2), hasItem("c2"), hasItem("c3")));
     }
 }

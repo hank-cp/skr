@@ -22,9 +22,7 @@ import org.springframework.util.Assert;
 import javax.validation.constraints.NotNull;
 import java.io.*;
 import java.lang.reflect.*;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author <a href="https://github.com/hank-cp">Hank CP</a>
@@ -184,16 +182,36 @@ public class BeanUtil {
     }
 
     public static <T> T getFieldValue(@NotNull Object target,
-                                      @NonNull String fieldName) {
-        String[] fieldPath = fieldName.split("\\.");
+                                      @NonNull String path) {
+        String[] fieldPath = path.split("\\.");
         Object obj = target;
         int i=0;
         while (i<fieldPath.length) {
             if (obj == null) break;
-            obj = getFieldValue(obj, obj.getClass(), fieldPath[i]);
+            if ("*".equals(fieldPath[i])) {
+                // merge map
+                if (obj instanceof Map) {
+                    obj = ((Map<?, ?>) obj).values();
+                } else if (obj instanceof Collection) {
+                    obj = obj;
+                } else {
+                    // non-support object fields
+                    return null;
+                }
+            } else {
+                if (obj instanceof Collection) {
+                    List<Object> values = new ArrayList<>();
+                    for (Object item : (Collection<?>) obj) {
+                        Object value = getFieldValue(item, item.getClass(), fieldPath[i]);
+                        values.add(value);
+                    }
+                    obj = values;
+                } else {
+                    obj = getFieldValue(obj, obj.getClass(), fieldPath[i]);
+                }
+            }
             i++;
         }
-
         return (T) obj;
     }
 
@@ -209,6 +227,10 @@ public class BeanUtil {
     private static Object getFieldValue(@NonNull Object target,
                                         @NonNull Class<?> clazz,
                                         @NonNull String fieldName) {
+        if (Map.class.isAssignableFrom(clazz)) {
+            return ((Map<?, ?>) target).get(fieldName);
+        }
+
         try {
             Field field = clazz.getDeclaredField(fieldName);
             field.setAccessible(true);
