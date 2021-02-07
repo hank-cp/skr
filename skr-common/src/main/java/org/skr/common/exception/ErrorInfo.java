@@ -27,6 +27,7 @@ import org.springframework.context.NoSuchMessageException;
 import org.springframework.context.i18n.LocaleContextHolder;
 
 import javax.validation.constraints.NotNull;
+import java.lang.annotation.Annotation;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -89,6 +90,14 @@ public class ErrorInfo {
         ErrorInfo errorInfo = of(code, msg, level);
         errorInfo.classLoader = classLoader;
         return errorInfo;
+    }
+
+    public static ErrorInfo fromJsr303(Class<?> annotation) {
+        if (!annotation.getName().startsWith("javax.validation.constraints")) {
+            throw new ConfException(ErrorInfo.INVALID_CONFIGURATION.msgArgs("Only accept javax.validation.constraints.* annotations"));
+        }
+
+        return of(INVALID_SUBMITTED_DATA.getCode(), annotation.getName()+".message");
     }
 
     private static ErrorInfo getOrCopy(@NonNull ErrorInfo target) {
