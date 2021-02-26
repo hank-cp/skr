@@ -216,7 +216,7 @@ public class BeanUtil {
     }
 
     public static Class<?> getFieldClass(@NonNull Object target,
-                                      @NonNull String fieldName) {
+                                         @NonNull String fieldName) {
         try {
             return target.getClass().getDeclaredField(fieldName).getType();
         } catch (Exception e) {
@@ -232,12 +232,16 @@ public class BeanUtil {
         }
 
         try {
-            Field field = clazz.getDeclaredField(fieldName);
+            Field field = target instanceof Class
+                    ? ((Class<?>) target).getDeclaredField(fieldName)
+                    : clazz.getDeclaredField(fieldName);
             field.setAccessible(true);
             return field.get(target);
         } catch (NoSuchFieldException nsfe) {
             if (clazz.getSuperclass() != null) {
-                return getFieldValue(target, clazz.getSuperclass(), fieldName);
+                return target instanceof Class
+                        ? getFieldValue(((Class<?>) target).getSuperclass(), clazz, fieldName)
+                        : getFieldValue(target, clazz.getSuperclass(), fieldName);
             } else {
                 return null;
             }

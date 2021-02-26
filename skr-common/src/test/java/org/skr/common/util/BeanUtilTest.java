@@ -69,6 +69,7 @@ public class BeanUtilTest {
     }
 
     public static class A {
+        static int s = -1;
         Map<String, String> map = new HashMap<>();
         B b = new B();
         C c = new C();
@@ -82,6 +83,10 @@ public class BeanUtilTest {
 
     public static class C {
         String d;
+    }
+
+    public static class D extends A {
+
     }
 
     @Test
@@ -108,5 +113,11 @@ public class BeanUtilTest {
         assertThat(BeanUtil.getFieldValue(a, "b.cList.*.d"), hasItem("c1"));
         assertThat(BeanUtil.getFieldValue(a, "b.map.*.d"), allOf(
                 (Matcher) hasSize(2), hasItem("c2"), hasItem("c3")));
+    }
+
+    @Test
+    public void testGetStaticValue() {
+        assertThat(BeanUtil.getFieldValue(A.class, "s"), equalTo(-1));
+        assertThat(BeanUtil.getFieldValue(D.class, "s"), equalTo(-1));
     }
 }
