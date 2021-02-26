@@ -148,8 +148,9 @@ public class ErrorInfo {
     public String getMsg() {
         ClassLoader classLoader = Optional.ofNullable(this.classLoader).orElse(getClass().getClassLoader());
         try {
-            return ApplicationContextProvider.getBean(classLoader, ErrorMessageSource.class)
-                    .getMessage(msg, args, LocaleContextHolder.getLocale());
+            ErrorMessageSource msgSource = ApplicationContextProvider.getBean(classLoader, ErrorMessageSource.class);
+            if (msgSource == null) return msg;
+            return msgSource.getMessage(msg, args, LocaleContextHolder.getLocale());
         } catch (NoSuchMessageException ex) {
             return msg;
         }
@@ -206,7 +207,8 @@ public class ErrorInfo {
     public static final ErrorInfo MISSING_PROPERTY          = ErrorInfo.of(1009, "error.MISSING_PROPERTY",          ErrorLevel.FATAL);
     public static final ErrorInfo MISSING_ARGUMENT          = ErrorInfo.of(1016, "error.MISSING_ARGUMENT",          ErrorLevel.FATAL);
     public static final ErrorInfo PARSE_METHOD_NOT_FOUND    = ErrorInfo.of(1017, "error.PARSE_METHOD_NOT_FOUND",    ErrorLevel.FATAL);
-    public static final ErrorInfo INVALID_CONFIGURATION     = ErrorInfo.of(1019, "error.INVALID_CONFIGURATION",    ErrorLevel.FATAL);
+    public static final ErrorInfo INVALID_CONFIGURATION     = ErrorInfo.of(1019, "error.INVALID_CONFIGURATION",     ErrorLevel.FATAL);
+    public static final ErrorInfo BAD_IMPLEMENTATION        = ErrorInfo.of(1020, "error.BAD_IMPLEMENTATION",        ErrorLevel.FATAL);
 
     public static final ErrorInfo AUTHENTICATION_REQUIRED       = ErrorInfo.of(1100, "error.AUTHENTICATION_REQUIRED");
     public static final ErrorInfo BAD_CERTIFICATION             = ErrorInfo.of(1101, "error.BAD_CERTIFICATION");
