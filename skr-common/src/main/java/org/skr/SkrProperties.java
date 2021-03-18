@@ -27,6 +27,10 @@ import org.springframework.stereotype.Component;
 @Data
 public class SkrProperties {
 
+    private boolean dev = true;
+
+    private boolean debug = true;
+
     private boolean forceRegister = false;
 
     private String errorMsgPropBasename = "skr-error";

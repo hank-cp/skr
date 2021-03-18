@@ -44,6 +44,9 @@ public class GeneralExceptionHandler extends ResponseEntityExceptionHandler {
     @Autowired
     private ApplicationContext applicationContext;
 
+    @Autowired
+    private ExceptionFormatter exceptionFormatter;
+
     @Override
     protected ResponseEntity<Object> handleExceptionInternal(Exception ex, Object body,
                                                              HttpHeaders headers,
@@ -51,7 +54,7 @@ public class GeneralExceptionHandler extends ResponseEntityExceptionHandler {
                                                              WebRequest request) {
         applicationContext.publishEvent(new ErrorOccurredEvent(ex, request));
         Object standerBody = Optional.ofNullable(body)
-                .orElse(ErrorInfo.INTERNAL_SERVER_ERROR.msgArgs(ex.getMessage()));
+                .orElse(exceptionFormatter.convert(ex));
         return super.handleExceptionInternal(ex, standerBody, headers, status, request);
     }
 
@@ -103,10 +106,7 @@ public class GeneralExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(Exception.class)
     public ResponseEntity<Object> handleUncaughtException(Exception ex, WebRequest request) {
         log.error(getStackTrace(ex));
-        return handleExceptionInternal(ex,
-                ErrorInfo.INTERNAL_SERVER_ERROR
-                        .msgArgs(ex.getMessage())
-                        .exception(ex),
+        return handleExceptionInternal(ex, null,
                 new HttpHeaders(),
                 HttpStatus.INTERNAL_SERVER_ERROR,
                 request);

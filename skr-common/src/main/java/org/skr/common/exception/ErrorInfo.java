@@ -27,7 +27,6 @@ import org.springframework.context.NoSuchMessageException;
 import org.springframework.context.i18n.LocaleContextHolder;
 
 import javax.validation.constraints.NotNull;
-import java.lang.annotation.Annotation;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -113,7 +112,7 @@ public class ErrorInfo {
 
     public ErrorInfo exception(Throwable ex) {
         ErrorInfo errorInfo = getOrCopy(this);
-        errorInfo.exception = ex.getLocalizedMessage();
+        errorInfo.exception = BaseException.getStackTrace(ex);
         return errorInfo;
     }
 

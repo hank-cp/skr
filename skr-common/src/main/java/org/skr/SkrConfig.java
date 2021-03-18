@@ -19,6 +19,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.skr.common.util.JsonUtil;
 import org.skr.config.EnumLabelMessageSource;
 import org.skr.config.ErrorMessageSource;
+import org.skr.config.ExceptionFormatter;
 import org.skr.config.GeneralExceptionHandler;
 import org.skr.security.SkrSecurityProperties;
 import org.springframework.beans.factory.InitializingBean;
@@ -58,6 +59,12 @@ public class SkrConfig {
                         return param.toString();
                     }).collect(Collectors.joining("∆"));
         };
+    }
+
+    @Bean
+    @ConditionalOnMissingBean
+    public ExceptionFormatter exceptionFormatter() {
+        return new ExceptionFormatter();
     }
 
     @Configuration
