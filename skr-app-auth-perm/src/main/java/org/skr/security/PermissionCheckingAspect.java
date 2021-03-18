@@ -22,12 +22,18 @@ import org.skr.common.exception.AuthException;
 import org.skr.common.exception.ConfException;
 import org.skr.common.exception.ErrorInfo;
 import org.skr.common.exception.PermissionException;
+import org.skr.common.util.Checker;
 import org.skr.security.annotation.RequirePermission;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
 
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.Objects;
 import java.util.Optional;
+
+import static org.skr.security.PermissionDetail.PermissionResult.PERMISSION_DENIED;
 
 /**
  * @author <a href="https://github.com/hank-cp">Hank CP</a>
@@ -42,20 +48,23 @@ public class PermissionCheckingAspect {
 
     @Around("@annotation(permission)")
     public Object check(ProceedingJoinPoint joinPoint, RequirePermission permission) throws Throwable {
-        String permissionKey = permission.value();
+        String[] permissionKeys = permission.value();
         Optional<JwtPrincipal> jwtPrincipal = JwtPrincipal.getCurrentPrincipal();
 
         if (jwtPrincipal.isEmpty()) {
             throw new AuthException(ErrorInfo.AUTHENTICATION_REQUIRED);
         }
 
-        PermissionDetail permissionDetail = permissionService.getPermission(permissionKey);
-        if (permissionDetail == null) {
-            throw new ConfException(ErrorInfo.PERMISSION_NOT_FOUND.msgArgs(permissionKey));
-        }
+        PermissionDetail.PermissionResult checkResult = Arrays.stream(permissionKeys)
+            .map(permissionKey -> {
+                return permissionService.getPermission(permissionKey);
+            }).filter(Objects::nonNull).map(permissionDetail -> {
+                return permissionDetail.checkAuthorization(jwtPrincipal.get());
+            }).max(Comparator.comparing(PermissionDetail.PermissionResult::value)).orElse(PERMISSION_DENIED);
 
-        switch (permissionDetail.checkAuthorization(jwtPrincipal.get())) {
-            case PERMISSION_GRANTED: return joinPoint.proceed();
+        switch (checkResult) {
+            case PERMISSION_GRANTED:
+                return joinPoint.proceed();
             case PERMISSION_DENIED:
                 throw new PermissionException(ErrorInfo.PERMISSION_DENIED);
             case PERMISSION_LIMITED:

@@ -71,6 +71,11 @@ public class PermissionCheckTest {
                 .header("access-token", accessToken)
                 .contentType(MediaType.APPLICATION_JSON_VALUE))
                 .andExpect(status().isOk());
+
+        mvc.perform(get("/task/secret-list")
+            .header("access-token", accessToken)
+            .contentType(MediaType.APPLICATION_JSON_VALUE))
+            .andExpect(status().isForbidden());
     }
 
     @Test
@@ -89,5 +94,10 @@ public class PermissionCheckTest {
                 .header("access-token", accessToken)
                 .contentType(MediaType.APPLICATION_JSON_VALUE))
                 .andExpect(status().isForbidden());
+
+        mvc.perform(get("/task/secret-list")
+            .header("access-token", accessToken)
+            .contentType(MediaType.APPLICATION_JSON_VALUE))
+            .andExpect(status().isForbidden());
     }
 }

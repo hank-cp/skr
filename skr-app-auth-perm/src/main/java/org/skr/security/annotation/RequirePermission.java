@@ -26,7 +26,11 @@ import java.lang.annotation.*;
 @Documented
 public @interface RequirePermission {
 
-    /** Permission key */
-    String value();
+    /**
+     * Permission keys.
+     * Any provided key matches user granted permission will allow user access the method.
+     * Provides empty will block all user access.
+     */
+    String[] value() default {};
 
 }

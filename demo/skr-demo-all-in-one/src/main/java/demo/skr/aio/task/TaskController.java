@@ -38,8 +38,14 @@ public class TaskController {
     }
 
     @GetMapping("/list")
-    @RequirePermission("Task")
+    @RequirePermission({"Task", "non-existed-permission"})
     public @ResponseBody List<Task> getTasks() {
+        return taskRepository.findAll();
+    }
+
+    @GetMapping("/secret-list")
+    @RequirePermission
+    public @ResponseBody List<Task> getSecretTasks() {
         return taskRepository.findAll();
     }
 

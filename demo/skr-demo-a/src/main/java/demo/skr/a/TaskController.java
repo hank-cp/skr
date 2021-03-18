@@ -48,6 +48,12 @@ public class TaskController {
         return taskRepository.findAll();
     }
 
+    @GetMapping("/secret-list")
+    @RequirePermission({})
+    public @ResponseBody List<Task> getSecretTasks() {
+        return taskRepository.findAll();
+    }
+
     @GetMapping("/{id}")
     public Task getTask(@PathVariable long id) {
         return taskRepository.findById(id).orElse(null);
