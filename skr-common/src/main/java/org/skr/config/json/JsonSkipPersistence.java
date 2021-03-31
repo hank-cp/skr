@@ -10,7 +10,7 @@ import java.lang.annotation.Target;
  * {@link org.skr.common.util.JsonUtil#setupPersistentObjectMapper}, annotated
  * field will be ignored in serialization.
  */
-@Target(ElementType.FIELD)
+@Target({ElementType.FIELD, ElementType.METHOD})
 @Retention(RetentionPolicy.RUNTIME)
 public @interface JsonSkipPersistence {
 

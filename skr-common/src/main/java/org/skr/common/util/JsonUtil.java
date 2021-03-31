@@ -86,10 +86,10 @@ public class JsonUtil {
 
             @Override
             protected boolean include(PropertyWriter writer) {
-                // ignore getter
                 return writer.getAnnotation(JsonSkipPersistence.class) == null;
             }
         };
+        // REQUIRE_SETTERS_FOR_GETTERS causes ignoring getter
         return objectMapper.copy().configure(MapperFeature.REQUIRE_SETTERS_FOR_GETTERS, true)
                 .setFilterProvider(new SimpleFilterProvider()
                 .addFilter(JSON_FILTER_SKIP_PERSISTENCE, ignoreFilter));

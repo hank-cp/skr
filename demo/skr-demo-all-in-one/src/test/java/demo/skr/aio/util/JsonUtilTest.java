@@ -33,14 +33,28 @@ import org.springframework.transaction.annotation.Transactional;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
+import static org.skr.common.util.JsonUtil.JSON_FILTER_SKIP_PERSISTENCE;
 
 public class JsonUtilTest {
 
-    @JsonFilter("skipPersistence")
+    @JsonFilter(JSON_FILTER_SKIP_PERSISTENCE)
     public static class A {
         public int a;
         @JsonSkipPersistence
         public int b;
+
+        public String getC() {
+            return "c";
+        }
+        public void setC(String value) {
+        }
+
+        @JsonSkipPersistence
+        public String getD() {
+            return "d";
+        }
+        public void setD(String value) {
+        }
     }
 
     @Test
@@ -52,5 +66,7 @@ public class JsonUtilTest {
         JsonNode json = JsonUtil.toJsonNode(objectMapper, a);
         assertThat(json.get("a"), notNullValue());
         assertThat(json.get("b"), nullValue());
+        assertThat(json.get("c"), notNullValue());
+        assertThat(json.get("d"), nullValue());
     }
 }
