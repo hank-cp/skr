@@ -82,7 +82,13 @@ public abstract class AbstractRegHost<RegistryPack extends IRegistryPack>
         try {
             doRegister(realmCode, realmVersion, registryPack);
         } catch (Exception ex) {
+            log.error("[Skr] doRegister failed...{}", ex.getMessage());
             setRealmStatus(realmCode, IRealm.RealmStatus.ERROR, realmVersion, null);
+            try {
+                doUnregister(realmCode, registryPack); // cancel
+            } catch (Exception exx) {
+                log.error("[Skr] Release resource for doRegister() failed...{}", ex.getMessage(), exx);
+            }
             throw new RegException(ErrorInfo.REGISTER_REGISTRY_FAILED
                     .msgArgs(realmCode, ex.getMessage()), ex);
         }
