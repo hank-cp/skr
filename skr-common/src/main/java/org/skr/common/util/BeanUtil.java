@@ -70,7 +70,7 @@ public class BeanUtil {
      */
     public static <E> void copyFields(@NonNull E source,
                                       @NonNull E target) {
-        copyIncludeOrExcludeFields(source, target, false);
+        copyFields(source, target, false, false);
     }
 
     /**
@@ -81,7 +81,7 @@ public class BeanUtil {
     public static <E> void copyFieldsExcluding(@NonNull E source,
                                                @NonNull E target,
                                                String... fields) {
-        copyIncludeOrExcludeFields(source, target, false, fields);
+        copyFields(source, target, false, false, fields);
     }
 
     /**
@@ -92,13 +92,14 @@ public class BeanUtil {
     public static <E> void copyFieldsIncluding(@NonNull E source,
                                                @NonNull E target,
                                                String... fields) {
-        copyIncludeOrExcludeFields(source, target, true, fields);
+        copyFields(source, target, false, true, fields);
     }
 
-    private static <E> void copyIncludeOrExcludeFields(@NonNull E source,
-                                                       @NonNull E target,
-                                                       boolean includeOrExclude,
-                                                       String... fields) {
+    public static <E> void copyFields(@NonNull E source,
+                                      @NonNull E target,
+                                      boolean ignoreNullField,
+                                      boolean includeOrExclude,
+                                      String... fields) {
         Assert.notNull(source, "Source must not be null");
         Assert.notNull(target, "Target must not be null");
 
@@ -116,6 +117,10 @@ public class BeanUtil {
                 try {
                     targetField = target.getClass().getField(sourceField.getName());
                 } catch (NoSuchFieldException e) {
+                    continue;
+                }
+
+                if (ignoreNullField && targetField.get(source) == null) {
                     continue;
                 }
 
