@@ -94,6 +94,15 @@ public class GeneralExceptionHandler extends ResponseEntityExceptionHandler {
                 request);
     }
 
+    @ExceptionHandler(ValidationException.class)
+    public ResponseEntity<Object> handleException(ValidationException ex, WebRequest request) {
+        return handleExceptionInternal(ex,
+            ex.getErrorInfos(),
+            new HttpHeaders(),
+            HttpStatus.FORBIDDEN,
+            request);
+    }
+
     @ExceptionHandler(UnvarnishedFeignException.class)
     public ResponseEntity<Object> handleException(UnvarnishedFeignException ex, WebRequest request) {
         return handleExceptionInternal(ex,
