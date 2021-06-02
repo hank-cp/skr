@@ -35,10 +35,10 @@ public class JwtFeignInterceptor implements RequestInterceptor {
         if (jwtPrincipal.isEmpty()) {
             template.header(skrSecurityProperties.getAccessToken().getHeader(),
                 Token.of(skrSecurityProperties.getAccessToken().getHeader(),
-                        GhostJwtPrincipal.of(skrSecurityProperties.getGhostUserName()),
-                        skrSecurityProperties.getGhostToken().getPrefix(),
-                        skrSecurityProperties.getGhostToken().getExpiration(),
-                        skrSecurityProperties.getGhostToken().getSecret()).encode());
+                    GhostJwtPrincipal.of(skrSecurityProperties.getGhostUserName()),
+                    skrSecurityProperties.getGhostToken().getPrefix(),
+                    skrSecurityProperties.getGhostToken().getExpiration(),
+                    skrSecurityProperties.getGhostToken().getSecret()).encode());
         } else {
             template.header(skrSecurityProperties.getAccessToken().getHeader(),
                     jwtPrincipal.get().getChainAccessToken());

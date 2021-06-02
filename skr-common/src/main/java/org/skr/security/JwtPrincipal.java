@@ -39,7 +39,12 @@ public interface JwtPrincipal extends UserPrincipal {
     default String getChainAccessToken() {
         SkrSecurityProperties skrSecurityProperties = ApplicationContextProvider
                 .getBean(SkrSecurityProperties.class);
-        return Token.of(
+        return isGhost() ? Token.of(skrSecurityProperties.getAccessToken().getHeader(),
+                GhostJwtPrincipal.of(skrSecurityProperties.getGhostUserName()),
+                skrSecurityProperties.getGhostToken().getPrefix(),
+                skrSecurityProperties.getGhostToken().getExpiration(),
+                skrSecurityProperties.getGhostToken().getSecret()).encode()
+            : Token.of(
                 skrSecurityProperties.getAccessToken().getHeader(),
                 this,
                 skrSecurityProperties.getAccessToken().getPrefix(),
