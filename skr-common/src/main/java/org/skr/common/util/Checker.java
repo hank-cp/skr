@@ -77,6 +77,10 @@ public final class Checker {
         return array == null || array.length == 0;
     }
 
+    public static boolean isEmpty(long[] array) {
+        return array == null || array.length == 0;
+    }
+
     public static boolean isEmpty(double[] array) {
         return array == null || array.length == 0;
     }
