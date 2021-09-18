@@ -51,10 +51,10 @@ public class UnvarnishedFeignException extends BaseException {
                     errorInfo.extra("failedRpc", methodKey);
                 }
             }
-            exception = new UnvarnishedFeignException(errorInfo.getMsg());
+            exception = new UnvarnishedFeignException(errorInfo.getMessage());
         } catch (Exception ex) {
             errorInfo = ErrorInfo.INTERNAL_SERVER_ERROR.msgArgs(ex.getLocalizedMessage());
-            exception = new UnvarnishedFeignException(errorInfo.getMsg(), ex);
+            exception = new UnvarnishedFeignException(errorInfo.getMessage(), ex);
         }
         exception.responseStatus = responseStatus;
         exception.errorInfo = errorInfo;

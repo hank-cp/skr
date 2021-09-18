@@ -25,12 +25,12 @@ public class AuthException extends AuthenticationException {
     private ErrorInfo errorInfo;
 
     public AuthException(ErrorInfo errorInfo) {
-        super(errorInfo.getMsg());
+        super(errorInfo.getMessage());
         this.errorInfo = errorInfo;
     }
 
     public AuthException(ErrorInfo errorInfo, Throwable e) {
-        super(errorInfo.getMsg(), e);
+        super(errorInfo.getMessage(), e);
         this.errorInfo = errorInfo;
     }
 

@@ -25,12 +25,12 @@ public class PermissionException extends AuthenticationException {
     private ErrorInfo errorInfo;
 
     public PermissionException(ErrorInfo errorInfo) {
-        super(errorInfo.getMsg());
+        super(errorInfo.getMessage());
         this.errorInfo = errorInfo;
     }
 
     public PermissionException(ErrorInfo errorInfo, Throwable e) {
-        super(errorInfo.getMsg(), e);
+        super(errorInfo.getMessage(), e);
         this.errorInfo = errorInfo;
     }
 

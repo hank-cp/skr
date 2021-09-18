@@ -187,6 +187,14 @@ public class ErrorInfo {
                         .findAny().orElse(ErrorInfo.ErrorLevel.WARNING));
     }
 
+    public String getMessage() {
+        String fieldName = getExtra("fieldName");
+        if (fieldName == null) fieldName = getExtra("path");
+        if (fieldName != null) fieldName += ": ";
+        else fieldName = "";
+        return fieldName + getMsg();
+    }
+
     //*************************************************************************
     // Common Errors Definition
     //*************************************************************************

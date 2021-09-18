@@ -15,8 +15,6 @@
  */
 package org.skr.common.exception;
 
-import org.skr.common.util.Checker;
-
 import javax.validation.constraints.NotNull;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -32,13 +30,7 @@ public class ValidationException extends RuntimeException {
 
     public ValidationException(@NotNull List<ErrorInfo> errorInfos) {
         super(errorInfos.stream()
-                .map(errorInfo -> {
-                    if (Checker.containsKey(errorInfo.getExtra(), "path")) {
-                        return errorInfo.getExtra().get("path")+errorInfo.getMsg();
-                    } else {
-                        return errorInfo.getMsg();
-                    }
-                })
+                .map(ErrorInfo::getMessage)
                 .collect(Collectors.joining("\n")));
         this.errorInfos = errorInfos;
     }

@@ -25,12 +25,12 @@ public class ConfException extends BaseException {
     private ErrorInfo errorInfo;
 
     public ConfException(@NotNull ErrorInfo errorInfo) {
-        super(errorInfo.getMsg());
+        super(errorInfo.getMessage());
         this.errorInfo = errorInfo;
     }
 
     public ConfException(@NotNull ErrorInfo errorInfo, Throwable e) {
-        super(errorInfo.getMsg(), e);
+        super(errorInfo.getMessage(), e);
         this.errorInfo = errorInfo;
     }
 
