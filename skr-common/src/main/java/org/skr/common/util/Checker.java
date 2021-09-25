@@ -133,6 +133,11 @@ public final class Checker {
         return str.matches("\\d+");
     }
 
+    public static boolean isTrue(String boolStr) {
+        if (Checker.isEmpty(boolStr)) return false;
+        return "1".equals(boolStr) || "true".equals(boolStr);
+    }
+
     public static boolean isTrue(Boolean bool) {
         return bool != null && bool;
     }
