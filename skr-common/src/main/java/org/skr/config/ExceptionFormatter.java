@@ -36,12 +36,16 @@ public class ExceptionFormatter {
     }
 
     public ErrorInfo convert(Throwable ex, ErrorInfo templateErrorInfo) {
+        return convert(ex, templateErrorInfo, skrProperties.isDebug());
+    }
+
+    public ErrorInfo convert(Throwable ex, ErrorInfo templateErrorInfo, boolean debug) {
         ErrorInfo errorInfo = handleSpecificException(ex, skrProperties.isDebug());
 
         // general handling
         if (errorInfo == null) {
             errorInfo = Optional.ofNullable(templateErrorInfo).orElse(ErrorInfo.INTERNAL_SERVER_ERROR);
-            if (skrProperties.isDebug()) {
+            if (debug) {
                 String errorMessage = ex.getMessage();
                 if (Checker.isEmpty(errorMessage)) {
                     errorMessage = ex.getClass().getSimpleName();
@@ -50,7 +54,7 @@ public class ExceptionFormatter {
             }
         }
 
-        if (skrProperties.isDebug() && Checker.isEmpty(errorInfo.getException())) {
+        if (debug && Checker.isEmpty(errorInfo.getException())) {
             errorInfo = errorInfo.exception(ex);
         }
         return errorInfo;
