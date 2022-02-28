@@ -16,6 +16,7 @@
 package org.skr.security;
 
 import lombok.extern.slf4j.Slf4j;
+import org.skr.common.util.Checker;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import javax.servlet.FilterChain;
@@ -42,8 +43,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request,
                                     HttpServletResponse response,
                                     FilterChain filterChain) throws IOException, ServletException {
-        JwtAuthenticationToken.authenticate(request.getHeader(
-                skrSecurityProperties.getAccessToken().getHeader()), skrSecurityProperties);
+        String accessToken = request.getHeader(skrSecurityProperties.getAccessToken().getHeader());
+        if (Checker.isEmpty(accessToken)) {
+            // resolve access token from websocket headers
+            accessToken = request.getHeader("Sec-WebSocket-Protocol");
+        }
+        JwtAuthenticationToken.authenticate(accessToken, skrSecurityProperties);
         filterChain.doFilter(request, response);
     }
 
