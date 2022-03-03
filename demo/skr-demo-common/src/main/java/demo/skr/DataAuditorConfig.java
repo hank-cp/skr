@@ -51,7 +51,7 @@ class DataAuditorConfig {
 
             if (authentication.getPrincipal() instanceof JwtPrincipal) {
                 JwtPrincipal principal = (JwtPrincipal) authentication.getPrincipal();
-                return Optional.of(principal.getDisplayName());
+                return Optional.of(principal.getName());
 
             } else {
                 throw new ConfException(ErrorInfo.INCOMPATIBLE_TYPE.msgArgs(

@@ -54,7 +54,7 @@ public class User extends IdBasedEntity implements UserPrincipal {
     }
 
     @Override
-    public @NotNull String getDisplayName() {
+    public @NotNull String getName() {
         return username;
     }
 }

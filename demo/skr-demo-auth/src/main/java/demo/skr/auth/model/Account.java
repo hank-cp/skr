@@ -36,7 +36,7 @@ public class Account extends IdBasedEntity implements UserPrincipal {
     }
 
     @Override
-    public @NotNull String getDisplayName() {
+    public @NotNull String getName() {
         return uid.toString();
     }
 }

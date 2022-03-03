@@ -40,7 +40,7 @@ public class GhostJwtPrincipal implements JwtPrincipal {
     }
 
     @Override
-    public String getDisplayName() {
+    public String getName() {
         return ghostUserName;
     }
 

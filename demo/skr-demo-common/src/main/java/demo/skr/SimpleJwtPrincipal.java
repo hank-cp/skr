@@ -51,7 +51,7 @@ public class SimpleJwtPrincipal implements JwtPrincipal {
     }
 
     @Override
-    public @NotNull String getDisplayName() {
+    public @NotNull String getName() {
         return username;
     }
 

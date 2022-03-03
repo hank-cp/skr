@@ -58,7 +58,7 @@ public class JwtAuthenticationToken extends AbstractAuthenticationToken {
         return this.principal;
     }
 
-    public static void authenticate(String accessToken, SkrSecurityProperties properties) {
+    public static Authentication authenticate(String accessToken, SkrSecurityProperties properties) {
         try {
             if (Checker.isEmpty(accessToken)) {
                 throw new AuthException(ErrorInfo.ACCESS_TOKEN_NOT_PROVIDED);
@@ -69,6 +69,7 @@ public class JwtAuthenticationToken extends AbstractAuthenticationToken {
                 throw new AuthException(ErrorInfo.AUTHENTICATION_REQUIRED);
             }
             SecurityContextHolder.getContext().setAuthentication(authentication);
+            return authentication;
         } catch (TokenExpiredException ex) {
             throw new AuthException(ErrorInfo.ACCESS_TOKEN_EXPIRED);
         } catch (JWTVerificationException ex) {
