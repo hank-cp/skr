@@ -44,10 +44,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                                     HttpServletResponse response,
                                     FilterChain filterChain) throws IOException, ServletException {
         String accessToken = request.getHeader(skrSecurityProperties.getAccessToken().getHeader());
-        if (Checker.isEmpty(accessToken)) {
-            // resolve access token from websocket headers
-            accessToken = request.getHeader("Sec-WebSocket-Protocol");
-        }
         JwtAuthenticationToken.authenticate(accessToken, skrSecurityProperties);
         filterChain.doFilter(request, response);
     }

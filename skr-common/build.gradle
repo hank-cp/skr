@@ -1,6 +1,5 @@
 dependencies {
     compile "org.springframework.boot:spring-boot-starter-web"
-    compile "org.springframework.boot:spring-boot-starter-websocket"
     compile "org.springframework.boot:spring-boot-starter-aop"
     compile "org.springframework.boot:spring-boot-configuration-processor"
     compile "org.springframework:spring-tx"
@@ -8,8 +7,6 @@ dependencies {
     compile "io.github.openfeign:feign-core"
     compile "org.springframework.security:spring-security-core"
     compile "org.springframework:spring-context-support"
-    compile 'org.springframework:spring-websocket'
-    compile 'org.springframework:spring-messaging'
 
     compile 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310'
     compile 'com.fasterxml.jackson.datatype:jackson-datatype-jdk8'

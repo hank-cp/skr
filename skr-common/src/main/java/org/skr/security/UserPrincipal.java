@@ -15,14 +15,12 @@
  */
 package org.skr.security;
 
-import java.security.Principal;
-
 /**
  * User identification in the actual system
  *
  * @author <a href="https://github.com/hank-cp">Hank CP</a>
  */
-public interface UserPrincipal extends Principal {
+public interface UserPrincipal {
 
     /**
      * Unique identity of this principal. Authentication
@@ -30,4 +28,9 @@ public interface UserPrincipal extends Principal {
      * User principal via this identity.
      */
     String getIdentity();
+
+    /**
+     * Human friendly user name for this principal.
+     */
+    String getName();
 }
