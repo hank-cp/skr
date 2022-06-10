@@ -62,6 +62,8 @@ public class SkrSecurityProperties {
     /** Token setting for automation api invocation, like batch jobs */
     private Token ghostToken = new Token();
 
+    private List<String> ghostWhitelistIps;
+
     @Data
     public static class Token {
         private String secret = "skr";

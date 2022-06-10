@@ -16,14 +16,21 @@
 package org.skr.security;
 
 import lombok.extern.slf4j.Slf4j;
+import org.skr.common.exception.AuthException;
+import org.skr.common.exception.ErrorInfo;
 import org.skr.common.util.Checker;
+import org.springframework.security.web.util.matcher.IpAddressMatcher;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Resolve {@link JwtAuthenticationToken} from request header
@@ -35,8 +42,14 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private SkrSecurityProperties skrSecurityProperties;
 
+    private final List<IpAddressMatcher> ipAddressMatchers;
+
     public JwtAuthenticationFilter(SkrSecurityProperties skrSecurityProperties) {
         this.skrSecurityProperties = skrSecurityProperties;
+        this.ipAddressMatchers = skrSecurityProperties.getGhostWhitelistIps() != null
+            ? skrSecurityProperties.getGhostWhitelistIps()
+                .stream().map(IpAddressMatcher::new)
+                .collect(Collectors.toList()) : List.of();
     }
 
     @Override
@@ -47,9 +60,26 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         if (request.getHeader("sec-websocket-protocol") == null
                 && request.getHeader("sec-websocket-key") == null) {
             String accessToken = request.getHeader(skrSecurityProperties.getAccessToken().getHeader());
+            if (accessToken == null) {
+                // get access token from cookies
+                accessToken = Arrays.stream(request.getCookies())
+                    .filter(cookie -> cookie.getName().equals(skrSecurityProperties.getAccessToken().getHeader()))
+                    .map(Cookie::getValue).findAny().orElse(null);
+            }
+
+            if (!Checker.isEmpty(accessToken)
+                && accessToken.startsWith(skrSecurityProperties.getGhostToken().getPrefix())
+                && !validateRemoteIp(request.getRemoteAddr())) {
+                // validate whether ip using ghost token is valid.
+                throw new AuthException(ErrorInfo.CLIENT_IP_NOT_ALLOWED.msgArgs(request.getRemoteAddr()));
+            }
             JwtAuthenticationToken.authenticate(accessToken, skrSecurityProperties);
         }
         filterChain.doFilter(request, response);
+    }
+
+    public boolean validateRemoteIp(String remoteIp) {
+        return this.ipAddressMatchers.stream().anyMatch(matcher -> matcher.matches(remoteIp));
     }
 
 }

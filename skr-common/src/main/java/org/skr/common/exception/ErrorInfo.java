@@ -230,6 +230,7 @@ public class ErrorInfo {
     public static final ErrorInfo CERTIFICATION_NOT_FOUND       = ErrorInfo.of(1110, "error.CERTIFICATION_NOT_FOUND");
     public static final ErrorInfo CERTIFICATION_REGISTERED      = ErrorInfo.of(1111, "error.CERTIFICATION_REGISTERED");
     public static final ErrorInfo LAST_CERTIFICATION            = ErrorInfo.of(1112, "error.LAST_CERTIFICATION");
+    public static final ErrorInfo CLIENT_IP_NOT_ALLOWED         = ErrorInfo.of(1100, "error.CLIENT_IP_NOT_ALLOWED");
 
     public static final ErrorInfo REALM_NOT_REGISTERED          = ErrorInfo.of(1200, "error.REALM_NOT_REGISTERED",          ErrorLevel.FATAL);
     public static final ErrorInfo REGISTER_REGISTRY_FAILED      = ErrorInfo.of(1202, "error.REGISTER_REGISTRY_FAILED",     ErrorLevel.FATAL);
