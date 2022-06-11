@@ -60,7 +60,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         if (request.getHeader("sec-websocket-protocol") == null
                 && request.getHeader("sec-websocket-key") == null) {
             String accessToken = request.getHeader(skrSecurityProperties.getAccessToken().getHeader());
-            if (accessToken == null) {
+            if (accessToken == null && !Checker.isEmpty(request.getCookies())) {
                 // get access token from cookies
                 accessToken = Arrays.stream(request.getCookies())
                     .filter(cookie -> cookie.getName().equals(skrSecurityProperties.getAccessToken().getHeader()))
