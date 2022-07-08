@@ -18,7 +18,6 @@ package org.skr.security;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.exceptions.TokenExpiredException;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.skr.common.exception.AuthException;
 import org.skr.common.exception.ConfException;
 import org.skr.common.exception.ErrorInfo;
@@ -80,7 +79,6 @@ public class JwtAuthenticationToken extends AbstractAuthenticationToken {
         } catch (JWTVerificationException ex) {
             throw new AuthException(ErrorInfo.ACCESS_TOKEN_BROKEN);
         } catch (Exception ex) {
-            log.error(ExceptionUtils.getStackTrace(ex));
             throw new AuthException(ErrorInfo.AUTHENTICATION_REQUIRED);
         }
     }
