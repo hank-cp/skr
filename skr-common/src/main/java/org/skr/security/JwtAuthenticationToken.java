@@ -59,7 +59,7 @@ public class JwtAuthenticationToken extends AbstractAuthenticationToken {
 
     @Override
     public String getName() {
-        return this.principal.getName();
+        return this.principal.getIdentity();
     }
 
     public static Authentication authenticate(String accessToken, SkrSecurityProperties properties) {
