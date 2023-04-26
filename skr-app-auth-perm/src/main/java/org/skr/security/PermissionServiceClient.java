@@ -24,7 +24,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 /**
  * @author <a href="https://github.com/hank-cp">Hank CP</a>
  */
-@FeignClient(name = "${spring.skr.perm.host:registry}", qualifier = "permissionService", primary = false)
+@FeignClient(name = "${spring.skr.perm.host:registry}", qualifiers = "permissionService", primary = false)
 public interface PermissionServiceClient extends IPermissionService {
 
     @Override

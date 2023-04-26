@@ -19,7 +19,7 @@ import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import org.skr.registry.IRegistry;
 
-import javax.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotNull;
 
 /**
  * @author <a href="https://github.com/hank-cp">Hank CP</a>

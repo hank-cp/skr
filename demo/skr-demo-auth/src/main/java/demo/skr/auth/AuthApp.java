@@ -15,6 +15,7 @@
  */
 package demo.skr.auth;
 
+import com.github.mwarc.embeddedmemcached.JMemcachedServer;
 import com.pszymczyk.consul.ConsulProcess;
 import com.pszymczyk.consul.ConsulStarterBuilder;
 import org.apache.commons.io.FileUtils;
@@ -46,7 +47,7 @@ public class AuthApp {
     public static void main(String[] args) {
         new SpringApplicationBuilder()
                 .sources(AuthApp.class)
-                .initializers(new EmbeddedConsul()).run(args);
+                .initializers(new EmbeddedConsul(), new EmbeddedMemcached()).run(args);
     }
 
 //    @Configuration
@@ -98,6 +99,32 @@ public class AuthApp {
         @Override
         public void destroy() {
             if (consul != null) consul.close();
+        }
+    }
+
+    @Configuration
+    @ConditionalOnProperty(value = "lolth.embedded-consul", havingValue = "true")
+    public static class EmbeddedMemcached implements
+        ApplicationContextInitializer<ConfigurableApplicationContext>, DisposableBean, Ordered {
+
+        private JMemcachedServer memcached;
+
+        @Override
+        public int getOrder() {
+            return Ordered.HIGHEST_PRECEDENCE;
+        }
+
+        @Override
+        public void initialize(ConfigurableApplicationContext applicationContext) {
+            if (!Objects.equals(applicationContext.getEnvironment()
+                .getProperty("lolth.embedded-memcached"), "true")) return;
+            memcached = new JMemcachedServer();
+            memcached.start("127.0.0.1", 11211);
+        }
+
+        @Override
+        public void destroy() {
+            if (memcached != null) memcached.clean();
         }
     }
 }

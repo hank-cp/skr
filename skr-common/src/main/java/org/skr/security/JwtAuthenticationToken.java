@@ -17,6 +17,7 @@ package org.skr.security;
 
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.exceptions.TokenExpiredException;
+import jakarta.validation.constraints.NotNull;
 import lombok.extern.slf4j.Slf4j;
 import org.skr.common.exception.AuthException;
 import org.skr.common.exception.ConfException;
@@ -29,7 +30,6 @@ import org.springframework.security.authentication.AbstractAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 
-import javax.validation.constraints.NotNull;
 import java.util.Collections;
 import java.util.Optional;
 
@@ -63,11 +63,11 @@ public class JwtAuthenticationToken extends AbstractAuthenticationToken {
     }
 
     public static Authentication authenticate(String accessToken, SkrSecurityProperties properties) {
-        try {
-            if (Checker.isEmpty(accessToken)) {
-                throw new AuthException(ErrorInfo.ACCESS_TOKEN_NOT_PROVIDED);
-            }
+        if (Checker.isEmpty(accessToken)) {
+            throw new AuthException(ErrorInfo.ACCESS_TOKEN_NOT_PROVIDED);
+        }
 
+        try {
             Authentication authentication = getAuthentication(accessToken, properties);
             if (!authentication.isAuthenticated()) {
                 throw new AuthException(ErrorInfo.AUTHENTICATION_REQUIRED);

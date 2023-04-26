@@ -11,7 +11,8 @@ spring:
       jwtPrincipalClass: demo.skr.SimpleJwtPrincipal
 
 memcached.cache:
-  servers: 192.168.1.120:11211
+  enabled: false
+  servers: 127.0.0.1:11211
   mode: static
   expirations: 86400, cache_name1:3600, cache_name2:108000
 

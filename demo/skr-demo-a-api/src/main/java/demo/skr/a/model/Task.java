@@ -17,7 +17,7 @@ package demo.skr.a.model;
 
 import demo.skr.model.IdBasedEntity;
 
-import javax.persistence.Entity;
+import jakarta.persistence.Entity;
 
 /**
  * @author <a href="https://github.com/hank-cp">Hank CP</a>

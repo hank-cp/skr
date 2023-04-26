@@ -14,14 +14,9 @@ def isLibraryProject(String projectName) {
 }
 
 buildscript {
-    ext.springBootVersion = '2.2.0.RELEASE'
-    ext.springCloudVersion = 'Hoxton.RELEASE'
-    ext.lombokVersion = '1.18.8'
-
     repositories {
-        jcenter()
         mavenCentral()
-        maven { url 'http://repo.spring.io/plugins-release' }
+        maven { url 'https://repo.spring.io/plugins-release' }
     }
     dependencies {
 //        classpath 'ch.raffael.markdown-doclet:markdown-doclet:1.4' // TODO this plugin is not worked since JDK 11
@@ -31,7 +26,27 @@ buildscript {
 
 plugins {
     id 'idea'
-    id 'org.jetbrains.gradle.plugin.idea-ext' version '0.5'
+    id 'org.jetbrains.gradle.plugin.idea-ext' version '1.1.7'
+}
+
+//*************************************************************************
+// Versioning
+//*************************************************************************
+
+task(release) {
+    doLast {
+        if (getPropertyOrElse(project, 'newVersion', '') == '') {
+            throw new IllegalArgumentException("Argument 'newVersion' is not specified. Please carry '-PnewVersion=x.x.x' as argument.")
+        }
+        def currentVersion = "${version}"
+        def newVersion = getPropertyOrElse(project, 'newVersion')
+        println "Setting version from $currentVersion to $newVersion"
+
+        ant.replaceregexp(match:currentVersion, replace:newVersion, flags:'g', byline:true, file:'README.md')
+        ant.replaceregexp(match:currentVersion, replace:newVersion, flags:'g', byline:true, file:'docs/multi_spring_boot_versions.md')
+        ant.replaceregexp(match:currentVersion, replace:newVersion, flags:'g', byline:true, file:'docs/extensible_integration.md')
+        // fileset doesn't work as expected
+    }
 }
 
 //*************************************************************************
@@ -43,10 +58,12 @@ idea {
         inheritOutputDirs = true
         downloadSources = true
     }
-    project.settings {
-        compiler {
-            javac {
-                javacAdditionalOptions "-parameters"
+    project {
+        settings {
+            compiler {
+                javac {
+                    javacAdditionalOptions "-parameters"
+                }
             }
         }
     }
@@ -58,7 +75,6 @@ idea {
 
 subprojects {
     repositories {
-        jcenter()
         mavenCentral()
         maven { url 'https://repo.spring.io/milestone' }
         maven { url "https://jitpack.io" }
@@ -70,7 +86,6 @@ subprojects {
 //    apply plugin: 'ch.raffael.markdown-doclet'
     if (isLibraryProject(name)) {
         apply plugin: 'java-library'
-        apply plugin: 'maven'
         apply plugin: 'maven-publish'
         apply plugin: 'signing'
     }
@@ -98,8 +113,8 @@ subprojects {
 // Compile & Assemble
 //*************************************************************************
 
-    sourceCompatibility = JavaVersion.VERSION_11
-    targetCompatibility = JavaVersion.VERSION_11
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
 
     compileJava {
         options.compilerArgs << '-parameters'
@@ -137,10 +152,8 @@ subprojects {
         }
     }
 
-    def lombokVersion = '1.18.8'
-
     dependencies {
-        compile "org.projectlombok:lombok:${lombokVersion}"
+        implementation "org.projectlombok:lombok:${lombokVersion}"
         annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
         annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
         testAnnotationProcessor "org.projectlombok:lombok:${lombokVersion}"
@@ -157,6 +170,10 @@ subprojects {
 //*************************************************************************
 // Maven
 //*************************************************************************
+
+    javadoc {
+        options.addStringOption('Xdoclint:none', '-quiet')
+    }
 
     if (isLibraryProject(name)) {
 

@@ -17,8 +17,8 @@ package demo.skr.b;
 
 import demo.skr.model.IdBasedEntity;
 
-import javax.persistence.Entity;
-import javax.validation.constraints.NotNull;
+import jakarta.persistence.Entity;
+import jakarta.validation.constraints.NotNull;
 
 /**
  * @author <a href="https://github.com/hank-cp">Hank CP</a>

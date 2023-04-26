@@ -15,11 +15,11 @@
  */
 package org.skr.common.util;
 
+import jakarta.validation.constraints.NotNull;
 import lombok.NonNull;
 import org.apache.commons.lang3.ArrayUtils;
 import org.springframework.util.Assert;
 
-import javax.validation.constraints.NotNull;
 import java.io.*;
 import java.lang.reflect.*;
 import java.util.*;
@@ -187,7 +187,7 @@ public class BeanUtil {
     }
 
     public static <T> T getFieldValue(@NotNull Object target,
-                                      @NonNull String path) {
+                                      @NotNull String path) {
         String[] fieldPath = path.split("\\.");
         Object obj = target;
         int i=0;

@@ -16,9 +16,10 @@
 package demo.skr;
 
 import lombok.*;
+import org.skr.common.util.Checker;
 import org.skr.security.JwtPrincipal;
 
-import javax.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotNull;
 
 /**
  * @author <a href="https://github.com/hank-cp">Hank CP</a>
@@ -57,6 +58,6 @@ public class SimpleJwtPrincipal implements JwtPrincipal {
 
     @Override
     public Boolean isGhost() {
-        return ghost;
+        return Checker.isTrue(ghost);
     }
 }

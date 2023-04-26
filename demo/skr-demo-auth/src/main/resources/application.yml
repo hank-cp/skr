@@ -8,7 +8,7 @@ spring:
       ddl-auto: create-drop
     show-sql: true
     properties:
-      javax:
+      jakarta:
         persistence:
           validation:
             mode: none
@@ -25,3 +25,4 @@ tsf:
 
 lolth:
   embedded-consul: true
+  embedded-memcached: true

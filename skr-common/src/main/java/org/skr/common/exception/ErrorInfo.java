@@ -16,9 +16,10 @@
 package org.skr.common.exception;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.rits.cloning.Cloner;
+import jakarta.validation.constraints.NotNull;
 import lombok.NonNull;
 import lombok.ToString;
+import org.apache.commons.lang3.SerializationUtils;
 import org.laxture.spring.util.ApplicationContextProvider;
 import org.skr.common.util.Checker;
 import org.skr.config.ErrorMessageSource;
@@ -26,7 +27,7 @@ import org.skr.config.json.ValuedEnum;
 import org.springframework.context.NoSuchMessageException;
 import org.springframework.context.i18n.LocaleContextHolder;
 
-import javax.validation.constraints.NotNull;
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -36,7 +37,7 @@ import java.util.Optional;
  * @author <a href="https://github.com/hank-cp">Hank CP</a>
  */
 @ToString
-public class ErrorInfo {
+public class ErrorInfo implements Serializable {
 
     public enum ErrorLevel implements ValuedEnum<String> {
         WARNING("warn"), // client should prompt user with warning message
@@ -92,8 +93,8 @@ public class ErrorInfo {
     }
 
     public static ErrorInfo fromJsr303(Class<?> annotation) {
-        if (!annotation.getName().startsWith("javax.validation.constraints")) {
-            throw new ConfException(ErrorInfo.INVALID_CONFIGURATION.msgArgs("Only accept javax.validation.constraints.* annotations"));
+        if (!annotation.getName().startsWith("jakarta.validation.constraints")) {
+            throw new ConfException(ErrorInfo.INVALID_CONFIGURATION.msgArgs("Only accept jakarta.validation.constraints.* annotations"));
         }
 
         return of(INVALID_SUBMITTED_DATA.getCode(), annotation.getName()+".message");
@@ -102,7 +103,7 @@ public class ErrorInfo {
     private static ErrorInfo getOrCopy(@NonNull ErrorInfo target) {
         ErrorInfo errorInfo;
         if (target.shared) {
-            errorInfo = Cloner.shared().shallowClone(target);
+            errorInfo = SerializationUtils.clone(target);
             errorInfo.shared = false;
         } else {
             errorInfo = target;

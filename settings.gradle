@@ -8,8 +8,8 @@ include 'skr-common',
         'skr-cloud-spring',
 
         'skr-demo-common',
-        'skr-demo-perm-api',
-        'skr-demo-perm',
+        'skr-demo-registry-api',
+        'skr-demo-registry',
         'skr-demo-auth',
         'skr-demo-a-api',
         'skr-demo-a',
@@ -17,8 +17,8 @@ include 'skr-common',
         'skr-demo-all-in-one'
 
 project(":skr-demo-common").projectDir = file("demo/skr-demo-common")
-project(":skr-demo-perm-api").projectDir = file("demo/skr-demo-perm-api")
-project(":skr-demo-perm").projectDir = file("demo/skr-demo-perm")
+project(":skr-demo-registry-api").projectDir = file("demo/skr-demo-registry-api")
+project(":skr-demo-registry").projectDir = file("demo/skr-demo-registry")
 project(":skr-demo-auth").projectDir = file("demo/skr-demo-auth")
 project(":skr-demo-a-api").projectDir = file("demo/skr-demo-a-api")
 project(":skr-demo-a").projectDir = file("demo/skr-demo-a")

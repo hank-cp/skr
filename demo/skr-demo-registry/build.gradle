@@ -1,0 +1,14 @@
+ext.httpPort = "${registry_httpPort}"
+
+dependencies {
+    implementation project(':skr-demo-common')
+    implementation project(':skr-demo-registry-api')
+    implementation project(':skr-service-reg')
+
+    implementation "org.hsqldb:hsqldb"
+    // https://github.com/sixhours-team/memcached-spring-boot
+    implementation 'io.sixhours:memcached-spring-boot-starter:2.5.0'
+
+    testImplementation "org.springframework.boot:spring-boot-starter-test"
+    testImplementation "junit:junit"
+}

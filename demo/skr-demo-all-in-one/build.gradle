@@ -1,15 +1,18 @@
 dependencies {
-    compile(project(':skr-demo-common')) {
+    implementation(project(':skr-demo-common')) {
         exclude module: "skr-cloud-spring"
         exclude module: "skr-cloud-tsf"
     }
+    implementation project(':skr-app-auth')
+    implementation project(':skr-app-auth-perm')
+    implementation project(':skr-service-reg')
 
-    compile project(':skr-demo-auth')
-    compile project(':skr-demo-perm')
-    compile project(':skr-app-auth')
-    compile project(':skr-app-auth-perm')
+    implementation project(':skr-demo-auth')
+    implementation project(':skr-demo-registry-api')
+    implementation project(':skr-demo-registry')
 
     runtimeOnly "org.hsqldb:hsqldb"
 
     testImplementation "org.springframework.boot:spring-boot-starter-test"
+    testImplementation "junit:junit"
 }

@@ -1,11 +1,11 @@
 ext.httpPort = demoB_httpPort
 
 dependencies {
-    compile project(':skr-demo-common')
-    compile project(':skr-demo-a-api')
-    compile project(':skr-demo-perm-api')
-    compile project(':skr-app-auth')
-    compile project(':skr-app-auth-perm')
+    implementation project(':skr-demo-common')
+    implementation project(':skr-demo-a-api')
+    implementation project(':skr-demo-registry-api')
+    implementation project(':skr-app-auth')
+    implementation project(':skr-app-auth-perm')
 
     runtimeOnly "org.hsqldb:hsqldb"
 }

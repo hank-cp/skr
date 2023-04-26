@@ -15,9 +15,9 @@
  */
 package demo.skr.model;
 
-import javax.persistence.Id;
-import javax.persistence.MappedSuperclass;
-import javax.validation.constraints.NotNull;
+import jakarta.persistence.Id;
+import jakarta.persistence.MappedSuperclass;
+import jakarta.validation.constraints.NotNull;
 
 /**
  * @author <a href="https://github.com/hank-cp">Hank CP</a>

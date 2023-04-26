@@ -41,8 +41,7 @@ public interface CertificationHandler<Cert extends Certification> {
      * @throws AuthException if given {@link Certification} is not authenticated.
      */
     UserPrincipal authenticate(@NonNull Cert certification,
-                               Map<String, Object> arguments)
-            throws AuthException;
+                               Map<String, Object> arguments) throws AuthException;
 
     /**
      * Find {@link Certification} by given certificationIdentity.

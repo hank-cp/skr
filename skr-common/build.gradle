@@ -1,22 +1,24 @@
 dependencies {
-    compile "org.springframework.boot:spring-boot-starter-web"
-    compile "org.springframework.boot:spring-boot-starter-aop"
-    compile "org.springframework.boot:spring-boot-configuration-processor"
-    compile "org.springframework:spring-tx"
+    api "org.springframework.boot:spring-boot-starter-web"
+    api "org.springframework.boot:spring-boot-starter-aop"
+    api "org.springframework.boot:spring-boot-starter-validation"
+    api "org.springframework.boot:spring-boot-configuration-processor"
 
-    compile "io.github.openfeign:feign-core"
-    compile "org.springframework.security:spring-security-core"
-    compile "org.springframework:spring-context-support"
+    api "org.springframework.security:spring-security-core"
+    implementation "io.github.openfeign:feign-core"
+    implementation "org.springframework:spring-tx"
+    implementation "org.springframework:spring-context-support"
 
-    compile 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310'
-    compile 'com.fasterxml.jackson.datatype:jackson-datatype-jdk8'
-    compile "javax.validation:validation-api"
-    compile 'com.auth0:java-jwt:3.18.3'
-    compile 'com.github.hank-cp:spring-static-ctx:0.1.2'
-    compile "org.apache.commons:commons-lang3"
-    compile "commons-codec:commons-codec"
-    compile 'org.yaml:snakeyaml'
-    compile "uk.com.robust-it:cloning:1.9.12"
+    implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310'
+    implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jdk8'
+
+    api "org.apache.commons:commons-lang3"
+    api "commons-codec:commons-codec"
+    api 'org.yaml:snakeyaml'
+
+    api 'com.auth0:java-jwt:4.3.0'
+    api 'com.github.hank-cp:spring-static-ctx:0.1.2'
 
     testImplementation "org.springframework.boot:spring-boot-starter-test"
+    testImplementation "junit:junit"
 }

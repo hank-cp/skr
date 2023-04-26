@@ -1,5 +1,9 @@
+plugins {
+    id 'java-library'
+}
+
 ext.httpPort = demoA_httpPort
 
 dependencies {
-    compile project(':skr-demo-common')
+    api project(':skr-demo-common')
 }

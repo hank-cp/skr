@@ -8,7 +8,7 @@ spring:
       ddl-auto: create-drop
     show-sql: true
     properties:
-      javax:
+      jakarta:
         persistence:
           validation:
             mode: none

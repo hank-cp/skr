@@ -17,9 +17,9 @@ package demo.skr.auth.model;
 
 import demo.skr.model.CodeBasedEntity;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.validation.constraints.NotNull;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.validation.constraints.NotNull;
 
 /**
  * @author <a href="https://github.com/hank-cp">Hank CP</a>

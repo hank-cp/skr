@@ -26,7 +26,7 @@ import java.util.List;
 /**
  * @author <a href="https://github.com/hank-cp">Hank CP</a>
  */
-@FeignClient(name = "demo-a", qualifier = "taskRegService", primary = false)
+@FeignClient(name = "demo-a", qualifiers = "taskRegService", primary = false)
 public interface TaskRegService extends IRegService<TaskRegistryPack> {
 
     @Override

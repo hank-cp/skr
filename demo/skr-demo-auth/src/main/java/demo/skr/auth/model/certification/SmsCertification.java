@@ -22,9 +22,9 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.skr.security.Certification;
 
-import javax.persistence.Entity;
-import javax.persistence.OneToOne;
-import javax.persistence.Transient;
+import jakarta.persistence.Entity;
+import jakarta.persistence.OneToOne;
+import jakarta.persistence.Transient;
 
 /**
  * @author <a href="https://github.com/hank-cp">Hank CP</a>

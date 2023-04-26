@@ -23,6 +23,7 @@ import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -50,11 +51,11 @@ public class GeneralExceptionHandler extends ResponseEntityExceptionHandler {
     @Override
     protected ResponseEntity<Object> handleExceptionInternal(Exception ex, Object body,
                                                              HttpHeaders headers,
-                                                             HttpStatus status,
+                                                             HttpStatusCode status,
                                                              WebRequest request) {
         applicationContext.publishEvent(new ErrorOccurredEvent(ex, request));
         Object standerBody = Optional.ofNullable(body)
-                .orElse(exceptionFormatter.convert(ex));
+            .orElse(exceptionFormatter.convert(ex));
         return super.handleExceptionInternal(ex, standerBody, headers, status, request);
     }
 

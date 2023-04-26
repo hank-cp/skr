@@ -15,9 +15,9 @@
  */
 package org.skr.common.util;
 
+import jakarta.validation.ConstraintViolation;
 import org.skr.common.exception.ErrorInfo;
 
-import javax.validation.ConstraintViolation;
 import java.io.File;
 import java.time.LocalDateTime;
 import java.util.*;
