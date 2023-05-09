@@ -77,7 +77,9 @@ public class JsonUtil {
                 public boolean hasIgnoreMarker(AnnotatedMember m) {
                     return _hasOneOf(m, new Class[]{
                         JsonSkipPersistence.class, JsonIgnore.class,
-                        java.beans.Transient.class});
+                        java.beans.Transient.class,
+                        jakarta.persistence.Transient.class,
+                        org.springframework.data.annotation.Transient.class});
                 }
             });
     }
