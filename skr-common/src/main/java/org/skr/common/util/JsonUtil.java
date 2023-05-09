@@ -16,6 +16,7 @@
 package org.skr.common.util;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.*;
@@ -74,7 +75,9 @@ public class JsonUtil {
             .setAnnotationIntrospector(new JacksonAnnotationIntrospector() {
                 @Override
                 public boolean hasIgnoreMarker(AnnotatedMember m) {
-                    return _findAnnotation(m, JsonSkipPersistence.class) != null;
+                    return _hasOneOf(m, new Class[]{
+                        JsonSkipPersistence.class, JsonIgnore.class,
+                        java.beans.Transient.class});
                 }
             });
     }

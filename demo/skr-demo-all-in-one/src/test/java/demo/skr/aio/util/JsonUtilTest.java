@@ -15,6 +15,7 @@
  */
 package demo.skr.aio.util;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Test;
@@ -30,6 +31,8 @@ public class JsonUtilTest {
         public int a;
         @JsonSkipPersistence
         public int b;
+        @JsonIgnore
+        public int f;
 
         public String getC() {
             return "c";
@@ -61,12 +64,14 @@ public class JsonUtilTest {
         A a = new A();
         a.a = 1;
         a.b = 2;
+        a.f = 3;
         JsonNode json = JsonUtil.toJsonNode(objectMapper, a);
         assertThat(json.get("a"), notNullValue());
         assertThat(json.get("b"), nullValue());
         assertThat(json.get("c"), notNullValue());
         assertThat(json.get("d"), nullValue());
         assertThat(json.get("e"), nullValue());
+        assertThat(json.get("f"), nullValue());
 
         B b = new B(1, 2);
         json = JsonUtil.toJsonNode(objectMapper, b);
