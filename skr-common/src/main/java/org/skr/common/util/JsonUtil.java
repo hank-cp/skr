@@ -19,13 +19,9 @@ import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.*;
-import com.fasterxml.jackson.databind.ser.BeanPropertyWriter;
-import com.fasterxml.jackson.databind.ser.PropertyFilter;
-import com.fasterxml.jackson.databind.ser.PropertyWriter;
-import com.fasterxml.jackson.databind.ser.impl.SimpleBeanPropertyFilter;
-import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
+import com.fasterxml.jackson.databind.introspect.AnnotatedMember;
+import com.fasterxml.jackson.databind.introspect.JacksonAnnotationIntrospector;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import org.laxture.spring.util.ApplicationContextProvider;
 import org.skr.config.json.ExtendableLocalDateTimeDeserializer;
@@ -42,8 +38,6 @@ import java.util.Collection;
  * @author <a href="https://github.com/hank-cp">Hank CP</a>
  */
 public class JsonUtil {
-
-    public static final String JSON_FILTER_SKIP_PERSISTENCE = "skipPersistence";
 
     public static ObjectMapper getObjectMapper() {
         ObjectMapper objectMapper = ApplicationContextProvider.getBean(ObjectMapper.class);
@@ -71,28 +65,18 @@ public class JsonUtil {
                 .withFieldVisibility(JsonAutoDetect.Visibility.PUBLIC_ONLY)
                 .withIsGetterVisibility(JsonAutoDetect.Visibility.PUBLIC_ONLY)
                 .withGetterVisibility(JsonAutoDetect.Visibility.PUBLIC_ONLY)
-                .withSetterVisibility(JsonAutoDetect.Visibility.PUBLIC_ONLY))
-                .setFilterProvider(new SimpleFilterProvider()
-                    .addFilter(JSON_FILTER_SKIP_PERSISTENCE, SimpleBeanPropertyFilter.serializeAll()));
+                .withSetterVisibility(JsonAutoDetect.Visibility.PUBLIC_ONLY));
         return objectMapper;
     }
 
     public static ObjectMapper setupPersistentObjectMapper(ObjectMapper objectMapper) {
-        PropertyFilter ignoreFilter = new SimpleBeanPropertyFilter() {
-            @Override
-            protected boolean include(BeanPropertyWriter writer) {
-                return writer.getAnnotation(JsonSkipPersistence.class) == null;
-            }
-
-            @Override
-            protected boolean include(PropertyWriter writer) {
-                return writer.getAnnotation(JsonSkipPersistence.class) == null;
-            }
-        };
-        // REQUIRE_SETTERS_FOR_GETTERS causes ignoring getter
         return objectMapper.copy().configure(MapperFeature.REQUIRE_SETTERS_FOR_GETTERS, true)
-                .setFilterProvider(new SimpleFilterProvider()
-                .addFilter(JSON_FILTER_SKIP_PERSISTENCE, ignoreFilter));
+            .setAnnotationIntrospector(new JacksonAnnotationIntrospector() {
+                @Override
+                public boolean hasIgnoreMarker(AnnotatedMember m) {
+                    return _findAnnotation(m, JsonSkipPersistence.class) != null;
+                }
+            });
     }
 
     //*************************************************************************
