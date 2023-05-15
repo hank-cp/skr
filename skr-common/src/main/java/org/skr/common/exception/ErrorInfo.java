@@ -19,7 +19,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.NotNull;
 import lombok.NonNull;
 import lombok.ToString;
-import org.apache.commons.lang3.SerializationUtils;
 import org.laxture.spring.util.ApplicationContextProvider;
 import org.skr.common.util.Checker;
 import org.skr.config.ErrorMessageSource;
@@ -37,7 +36,7 @@ import java.util.Optional;
  * @author <a href="https://github.com/hank-cp">Hank CP</a>
  */
 @ToString
-public class ErrorInfo implements Serializable {
+public class ErrorInfo implements Serializable, Cloneable {
 
     public enum ErrorLevel implements ValuedEnum<String> {
         WARNING("warn"), // client should prompt user with warning message
@@ -103,7 +102,7 @@ public class ErrorInfo implements Serializable {
     private static ErrorInfo getOrCopy(@NonNull ErrorInfo target) {
         ErrorInfo errorInfo;
         if (target.shared) {
-            errorInfo = SerializationUtils.clone(target);
+            errorInfo = target.clone();
             errorInfo.shared = false;
         } else {
             errorInfo = target;
@@ -194,6 +193,15 @@ public class ErrorInfo implements Serializable {
         if (fieldName != null) fieldName += ": ";
         else fieldName = "";
         return fieldName + getMsg();
+    }
+
+    @Override
+    public ErrorInfo clone() {
+        try {
+            return (ErrorInfo) super.clone();
+        } catch (CloneNotSupportedException e) {
+            throw new AssertionError();
+        }
     }
 
     //*************************************************************************

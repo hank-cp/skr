@@ -19,6 +19,16 @@ import static org.junit.Assert.assertThat;
 public class BeanUtilTest {
 
     @Test
+    public void testErrorInfoClone() {
+        ErrorInfo errorInfo = ErrorInfo.INTERNAL_SERVER_ERROR.msgArgs("asdfasdf");
+        assertThat(errorInfo, not(equalTo(ErrorInfo.INTERNAL_SERVER_ERROR)));
+
+        ErrorInfo customErrorInfo = ErrorInfo.of(999, "error.TEST", ErrorInfo.ErrorLevel.FATAL, this.getClass().getClassLoader());
+        errorInfo = errorInfo.msgArgs("asdfasdf");
+        assertThat(errorInfo, not(equalTo(customErrorInfo)));
+    }
+
+    @Test
     public void callMethod() {
         ValuedEnum<?>[] values = BeanUtil.callMethod(
                 ErrorInfo.ErrorLevel.class,
