@@ -21,17 +21,20 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.HttpMethod;
+import org.springframework.security.concurrent.DelegatingSecurityContextExecutor;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.access.intercept.AuthorizationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.concurrent.Executor;
+import java.util.concurrent.ForkJoinPool;
 
 /**
  * @author <a href="https://github.com/hank-cp">Hank CP</a>
@@ -66,7 +69,7 @@ public class SecurityConfiguration {
             .anyRequest().authenticated()
         .and()
             .addFilterBefore(new JwtAuthenticationFilter(skrSecurityProperties),
-                UsernamePasswordAuthenticationFilter.class)
+                AuthorizationFilter.class)
             .addFilterBefore(jwtAuthExceptionFilter,
                 JwtAuthenticationFilter.class)
             .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
@@ -82,6 +85,11 @@ public class SecurityConfiguration {
         config.addAllowedMethod(HttpMethod.DELETE);
         source.registerCorsConfiguration("/**", config);
         return source;
+    }
+
+    @Bean
+    public Executor delegatingSecurityExecutor() {
+        return new DelegatingSecurityContextExecutor(ForkJoinPool.commonPool());
     }
 
 }

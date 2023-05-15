@@ -17,6 +17,8 @@ package org.skr.security;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.ServletRequest;
+import jakarta.servlet.ServletResponse;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -25,7 +27,7 @@ import org.skr.common.exception.AuthException;
 import org.skr.common.exception.ErrorInfo;
 import org.skr.common.util.Checker;
 import org.springframework.security.web.util.matcher.IpAddressMatcher;
-import org.springframework.web.filter.OncePerRequestFilter;
+import org.springframework.web.filter.GenericFilterBean;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -38,7 +40,7 @@ import java.util.stream.Collectors;
  * @author <a href="https://github.com/hank-cp">Hank CP</a>
  */
 @Slf4j
-public class JwtAuthenticationFilter extends OncePerRequestFilter {
+public class JwtAuthenticationFilter extends GenericFilterBean {
 
     private SkrSecurityProperties skrSecurityProperties;
 
@@ -53,16 +55,20 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     }
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request,
-                                    HttpServletResponse response,
-                                    FilterChain filterChain) throws IOException, ServletException {
+    public void doFilter(ServletRequest request,
+                         ServletResponse response,
+                         FilterChain filterChain) throws IOException, ServletException {
+        if (!((request instanceof HttpServletRequest httpRequest) && (response instanceof HttpServletResponse httpResponse))) {
+            throw new ServletException("OncePerRequestFilter only supports HTTP requests");
+        }
+
         // ignore websocket
-        if (request.getHeader("sec-websocket-protocol") == null
-                && request.getHeader("sec-websocket-key") == null) {
-            String accessToken = request.getHeader(skrSecurityProperties.getAccessToken().getHeader());
-            if (accessToken == null && !Checker.isEmpty(request.getCookies())) {
+        if (httpRequest.getHeader("sec-websocket-protocol") == null
+            && httpRequest.getHeader("sec-websocket-key") == null) {
+            String accessToken = httpRequest.getHeader(skrSecurityProperties.getAccessToken().getHeader());
+            if (accessToken == null && !Checker.isEmpty(httpRequest.getCookies())) {
                 // get access token from cookies
-                accessToken = Arrays.stream(request.getCookies())
+                accessToken = Arrays.stream(httpRequest.getCookies())
                     .filter(cookie -> cookie.getName().equals(skrSecurityProperties.getAccessToken().getHeader()))
                     .map(Cookie::getValue).findAny().orElse(null);
             }
