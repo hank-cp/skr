@@ -39,12 +39,10 @@ task(release) {
             throw new IllegalArgumentException("Argument 'newVersion' is not specified. Please carry '-PnewVersion=x.x.x' as argument.")
         }
         def currentVersion = "${version}"
-        def newVersion = getPropertyOrElse(project, 'newVersion')
+        def newVersion = getPropertyOrElse(project, 'newVersion', '')
         println "Setting version from $currentVersion to $newVersion"
 
         ant.replaceregexp(match:currentVersion, replace:newVersion, flags:'g', byline:true, file:'README.md')
-        ant.replaceregexp(match:currentVersion, replace:newVersion, flags:'g', byline:true, file:'docs/multi_spring_boot_versions.md')
-        ant.replaceregexp(match:currentVersion, replace:newVersion, flags:'g', byline:true, file:'docs/extensible_integration.md')
         // fileset doesn't work as expected
     }
 }
