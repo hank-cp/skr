@@ -99,7 +99,7 @@ public class JwtAuthenticationToken extends AbstractAuthenticationToken {
                     .map(token -> new Tuple2<>(JwtUtil.decode(token, secret), token))
                     .map(decodedTuple -> {
                         JwtPrincipal principal = JsonUtil.fromJson(
-                                properties.getJwtPrincipalClass(), decodedTuple._0);
+                                properties.getJwtPrincipalClass(), decodedTuple._0());
                         return new JwtAuthenticationToken(principal);
                     })
                     .orElse(null);
@@ -113,7 +113,7 @@ public class JwtAuthenticationToken extends AbstractAuthenticationToken {
                     .map(token -> token.replace(prefix, ""))
                     .map(token -> new Tuple2<>(JwtUtil.decode(token, secret), token))
                     .map(decodedTuple -> {
-                        JwtPrincipal principal = JsonUtil.fromJson(GhostJwtPrincipal.class, decodedTuple._0);
+                        JwtPrincipal principal = JsonUtil.fromJson(GhostJwtPrincipal.class, decodedTuple._0());
                         return new JwtAuthenticationToken(principal);
                     })
                     .orElse(null);
