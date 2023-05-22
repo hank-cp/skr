@@ -44,6 +44,10 @@ task(release) {
 
         ant.replaceregexp(match:currentVersion, replace:newVersion, flags:'g', byline:true, file:'README.md')
         // fileset doesn't work as expected
+
+        ant.propertyfile(file: "gradle.properties") {
+            entry( key: "version", value: "$newVersion")
+        }
     }
 }
 

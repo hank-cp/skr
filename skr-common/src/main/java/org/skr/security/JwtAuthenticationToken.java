@@ -30,6 +30,7 @@ import org.springframework.security.authentication.AbstractAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 
+import java.io.Serial;
 import java.util.Collections;
 import java.util.Optional;
 
@@ -38,6 +39,9 @@ import java.util.Optional;
  */
 @Slf4j
 public class JwtAuthenticationToken extends AbstractAuthenticationToken {
+
+    @Serial
+    private static final long serialVersionUID = 5139007837781843747L;
 
     private final JwtPrincipal principal;
 
