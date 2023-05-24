@@ -32,7 +32,7 @@ import org.springframework.web.filter.GenericFilterBean;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Optional;
 
 /**
  * Resolve {@link JwtAuthenticationToken} from request header
@@ -42,16 +42,13 @@ import java.util.stream.Collectors;
 @Slf4j
 public class JwtAuthenticationFilter extends GenericFilterBean {
 
-    private SkrSecurityProperties skrSecurityProperties;
+    private final SkrSecurityProperties skrSecurityProperties;
 
-    private final List<IpAddressMatcher> ipAddressMatchers;
+    private final List<String> whitelistIps;
 
     public JwtAuthenticationFilter(SkrSecurityProperties skrSecurityProperties) {
         this.skrSecurityProperties = skrSecurityProperties;
-        this.ipAddressMatchers = skrSecurityProperties.getGhostWhitelistIps() != null
-            ? skrSecurityProperties.getGhostWhitelistIps()
-                .stream().map(IpAddressMatcher::new)
-                .collect(Collectors.toList()) : List.of();
+        whitelistIps = Optional.ofNullable(skrSecurityProperties.getGhostWhitelistIps()).orElse(List.of());
     }
 
     @Override
@@ -85,7 +82,7 @@ public class JwtAuthenticationFilter extends GenericFilterBean {
     }
 
     public boolean validateRemoteIp(String remoteIp) {
-        return this.ipAddressMatchers.stream().anyMatch(matcher -> matcher.matches(remoteIp));
+        return this.whitelistIps.stream().map(IpAddressMatcher::new).anyMatch(matcher -> matcher.matches(remoteIp));
     }
 
 }
