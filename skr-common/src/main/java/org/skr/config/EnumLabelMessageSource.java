@@ -18,12 +18,11 @@ package org.skr.config;
 import org.skr.SkrProperties;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.context.MessageSourceProperties;
 import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
-import java.time.Duration;
+import java.nio.charset.StandardCharsets;
 
 /**
  * @author <a href="https://github.com/hank-cp">Hank CP</a>
@@ -31,31 +30,16 @@ import java.time.Duration;
 @Component
 public class EnumLabelMessageSource extends ResourceBundleMessageSource implements InitializingBean {
 
-    @Autowired(required = false)
-    private MessageSourceProperties messageSourceProperties;
-
     @Autowired
     private SkrProperties skrProperties;
 
     @Override
     public void afterPropertiesSet() {
-        if (messageSourceProperties == null) {
-            messageSourceProperties = new MessageSourceProperties();
-        }
-
         if (StringUtils.hasText(skrProperties.getEnumLabelPropBasename())) {
             setBasenames(StringUtils
                     .commaDelimitedListToStringArray(StringUtils.trimAllWhitespace(skrProperties.getEnumLabelPropBasename())));
         }
-        if (messageSourceProperties.getEncoding() != null) {
-            setDefaultEncoding(messageSourceProperties.getEncoding().name());
-        }
-        setFallbackToSystemLocale(messageSourceProperties.isFallbackToSystemLocale());
-        Duration cacheDuration = messageSourceProperties.getCacheDuration();
-        if (cacheDuration != null) {
-            setCacheMillis(cacheDuration.toMillis());
-        }
-        setAlwaysUseMessageFormat(messageSourceProperties.isAlwaysUseMessageFormat());
-        setUseCodeAsDefaultMessage(messageSourceProperties.isUseCodeAsDefaultMessage());
+        setDefaultEncoding(StandardCharsets.UTF_8.name());
+        setUseCodeAsDefaultMessage(true);
     }
 }

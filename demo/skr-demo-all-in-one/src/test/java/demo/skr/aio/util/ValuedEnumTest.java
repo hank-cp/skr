@@ -38,7 +38,6 @@ import static org.hamcrest.Matchers.*;
 public class ValuedEnumTest {
 
     @Test
-    @Transactional
     public void testStringEnumConversion() {
         ErrorInfo errorInfo = ErrorInfo.INTERNAL_SERVER_ERROR.msgArgs("test");
         String json = JsonUtil.toJson(errorInfo);
@@ -51,7 +50,6 @@ public class ValuedEnumTest {
     }
 
     @Test
-    @Transactional
     public void testIntegerEnumConversion() {
         String json = JsonUtil.toJson(PermissionDetail.PermissionResult.PERMISSION_LIMITED);
         assertThat(json, notNullValue());
@@ -61,6 +59,14 @@ public class ValuedEnumTest {
                 JsonUtil.fromJson(PermissionDetail.PermissionResult.class, json);
         assertThat(deserializedObj, notNullValue());
         assertThat(deserializedObj, equalTo(PermissionDetail.PermissionResult.PERMISSION_LIMITED));
+    }
+
+    @Test
+    public void testPropertiesMessages() {
+        assertThat(PermissionDetail.PermissionResult.PERMISSION_LIMITED.enumLabel(), equalTo("Permission Checking Result"));
+        assertThat(PermissionDetail.PermissionResult.PERMISSION_LIMITED.valueLabel(), equalTo("Permission limited"));
+
+        assertThat(ErrorInfo.INTERNAL_SERVER_ERROR.msgArgs("asdf").getMessage(), equalTo("内部错误: asdf"));
     }
 
 }

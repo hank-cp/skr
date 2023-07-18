@@ -15,8 +15,10 @@
  */
 package org.skr.common.exception;
 
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 
+import java.io.Serial;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -27,9 +29,17 @@ import java.util.stream.Collectors;
  */
 public class ValidationException extends RuntimeException {
 
+    @Serial
+    private static final long serialVersionUID = 2607643356290543387L;
+
     private final List<ErrorInfo> errorInfos;
 
-    public ValidationException(@NotNull List<ErrorInfo> errorInfos) {
+    public ValidationException(@NotNull ErrorInfo errorInfo) {
+        super(errorInfo.getMessage());
+        this.errorInfos = List.of(errorInfo);
+    }
+
+    public ValidationException(@NotEmpty List<ErrorInfo> errorInfos) {
         super(errorInfos.stream()
                 .map(ErrorInfo::getMessage)
                 .collect(Collectors.joining("\n")));

@@ -17,12 +17,17 @@ package org.skr.common.exception;
 
 import org.springframework.security.core.AuthenticationException;
 
+import java.io.Serial;
+
 /**
  * @author <a href="https://github.com/hank-cp">Hank CP</a>
  */
 public class AuthException extends AuthenticationException {
 
-    private ErrorInfo errorInfo;
+    @Serial
+    private static final long serialVersionUID = -1412637398991745466L;
+
+    private final ErrorInfo errorInfo;
 
     public AuthException(ErrorInfo errorInfo) {
         super(errorInfo.getMessage());

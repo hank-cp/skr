@@ -18,9 +18,13 @@ package demo.skr.aio.util;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.NullNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.junit.Test;
 import org.skr.common.util.JsonUtil;
 import org.skr.config.json.JsonSkipPersistence;
+
+import java.util.Optional;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
@@ -57,6 +61,12 @@ public class JsonUtilTest {
         @JsonSkipPersistence
         int b) {}
 
+    public static class C {
+        public Optional<Integer> a = Optional.empty();
+
+        public Optional<Integer> b;
+    }
+
     @Test
     public void testSkipPersistence() {
         ObjectMapper objectMapper = JsonUtil.setupPersistentObjectMapper(JsonUtil.getObjectMapper());
@@ -77,5 +87,30 @@ public class JsonUtilTest {
         json = JsonUtil.toJsonNode(objectMapper, b);
         assertThat(json.get("a"), notNullValue());
         assertThat(json.get("b"), nullValue());
+    }
+
+    @Test
+    public void testOptional() {
+        ObjectMapper objectMapper = JsonUtil.setupPersistentObjectMapper(JsonUtil.getObjectMapper());
+
+        C c1 = new C();
+        c1.a = Optional.of(1);
+        JsonNode json = JsonUtil.toJsonNode(objectMapper, c1);
+        assertThat(json.get("a"), notNullValue());
+        assertThat(json.get("a").asInt(), equalTo(1));
+
+        C c2 = new C();
+        json = JsonUtil.toJsonNode(objectMapper, c2);
+        assertThat(json.get("a"), equalTo(NullNode.getInstance()));
+        assertThat(json.get("b"), nullValue());
+
+        C c3 = objectMapper.convertValue(json, C.class);
+        assertThat(c3.a, equalTo(Optional.empty()));
+        assertThat(c3.b, nullValue());
+
+        ObjectNode c4Json = objectMapper.createObjectNode();
+        C c4 = objectMapper.convertValue(c4Json.put("a", "1"), C.class);
+        assertThat(c4.a, notNullValue());
+        assertThat(c4.a.get(), equalTo(1));
     }
 }
