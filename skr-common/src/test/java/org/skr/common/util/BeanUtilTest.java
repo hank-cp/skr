@@ -93,6 +93,14 @@ public class BeanUtilTest {
 
     public static class C {
         String d;
+
+        public String getEval() {
+            return d;
+        }
+
+        public boolean isFval() {
+            return true;
+        }
     }
 
     public static class D extends A {
@@ -123,6 +131,8 @@ public class BeanUtilTest {
         assertThat(BeanUtil.getFieldValue(a, "b.cList.*.d"), hasItem("c1"));
         assertThat(BeanUtil.getFieldValue(a, "b.map.*.d"), allOf(
                 (Matcher) hasSize(2), hasItem("c2"), hasItem("c3")));
+        assertThat(BeanUtil.getFieldValue(a, "c.eval"), equalTo("c0"));
+        assertThat(BeanUtil.getFieldValue(a, "c.fval"), equalTo(true));
     }
 
     @Test

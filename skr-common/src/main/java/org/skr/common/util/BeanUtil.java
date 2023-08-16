@@ -18,6 +18,7 @@ package org.skr.common.util;
 import jakarta.validation.constraints.NotNull;
 import lombok.NonNull;
 import org.apache.commons.lang3.ArrayUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.util.Assert;
 
 import java.io.*;
@@ -235,6 +236,12 @@ public class BeanUtil {
         if (Map.class.isAssignableFrom(clazz)) {
             return ((Map<?, ?>) target).get(fieldName);
         }
+
+        Object val = callMethod(target, "get"+ StringUtils.capitalize(fieldName));
+        if (val == null) {
+            val = callMethod(target, "is"+ StringUtils.capitalize(fieldName));
+        }
+        if (val != null) return val;
 
         try {
             Field field = target instanceof Class
