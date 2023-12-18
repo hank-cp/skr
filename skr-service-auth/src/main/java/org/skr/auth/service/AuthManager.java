@@ -27,7 +27,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 /**
  * @author <a href="https://github.com/hank-cp">Hank CP</a>
@@ -45,8 +44,8 @@ public abstract class AuthManager {
      * be contained in <code>principal</code>
      */
     public final UserPrincipal signUp(UserPrincipal principal,
-                                      @NonNull Certification certification,
-                                      Map<String, Object> arguments) {
+                                     @NonNull Certification certification,
+                                     Map<String, Object> arguments) {
         return saveCertification(principal, certification, arguments);
     }
 
@@ -102,30 +101,33 @@ public abstract class AuthManager {
     }
 
     protected UserPrincipal saveCertification(UserPrincipal principal,
-                                              @NonNull Certification certification,
-                                              Map<String, Object> arguments) {
+                                             @NonNull Certification certification,
+                                             Map<String, Object> arguments) {
         // certification identity must be unique
         for (CertificationHandler handler : certificationHandlers) {
-            if (handler.supports(certification)
-                    && handler.findByIdentity(certification.getIdentity()) != null) {
+            if (!handler.supports(certification)) continue;
+
+            Certification existedCertification = handler.findByIdentity(certification.getIdentity());
+            if (existedCertification == null) {
+                return handler.saveCertification(principal, certification, arguments);
+            }
+
+            // certification existed, but not belongs to given user
+            if (principal == null
+                || !Objects.equals(existedCertification.getUserPrincipalIdentity(), principal.getIdentity())) {
                 throw new AuthException(
-                        ErrorInfo.CERTIFICATION_REGISTERED.msgArgs(certification.getIdentity()));
+                    ErrorInfo.CERTIFICATION_REGISTERED.msgArgs(certification.getIdentity()));
             }
         }
-
-        for (CertificationHandler handler : certificationHandlers) {
-            if (!handler.supports(certification)) continue;
-            return handler.saveCertification(principal, certification, arguments);
-        }
-        return null;
+        return principal;
     }
 
     protected void removeCertification(@NonNull UserPrincipal principal,
-                                       @NonNull Certification certification) {
+                                      @NonNull Certification certification) {
         List<Certification> boundCertifications = certificationHandlers.stream()
                 .map(handler -> handler.getCertification(principal))
                 .filter(Objects::nonNull)
-                .collect(Collectors.toList());
+                .toList();
 
         // last certification cannot be removed, otherwise the UserPrincipal
         // will be orphan.
@@ -135,7 +137,7 @@ public abstract class AuthManager {
             throw new BizException(ErrorInfo.LAST_CERTIFICATION.msgArgs(certification.getIdentity()));
         }
 
-        for (CertificationHandler handler : certificationHandlers) {
+        for (CertificationHandler<?> handler : certificationHandlers) {
             if (!handler.supports(certification)) continue;
             handler.removeCertification(principal, certification.getIdentity());
         }

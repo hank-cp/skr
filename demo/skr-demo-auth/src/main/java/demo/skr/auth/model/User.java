@@ -50,7 +50,7 @@ public class User extends IdBasedEntity implements UserPrincipal {
 
     @Override
     public @NotNull String getIdentity() {
-        return username;
+        return Long.toString(id);
     }
 
     @Override

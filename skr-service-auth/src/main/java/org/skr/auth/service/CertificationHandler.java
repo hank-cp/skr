@@ -61,13 +61,13 @@ public interface CertificationHandler<Cert extends Certification> {
      * {@link UserPrincipal}
      */
     UserPrincipal saveCertification(UserPrincipal principal,
-                                    @NonNull Cert certification,
-                                    Map<String, Object> arguments);
+                                   @NonNull Cert certification,
+                                   Map<String, Object> arguments);
 
     /**
      * Remove a {@link Certification} for {@link UserPrincipal}
      * @param certificationIdentity of removing {@link Certification}
      */
     void removeCertification(@NonNull UserPrincipal principal,
-                             @NonNull String certificationIdentity);
+                            @NonNull String certificationIdentity);
 }

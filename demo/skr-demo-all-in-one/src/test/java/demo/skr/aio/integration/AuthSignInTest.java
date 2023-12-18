@@ -178,6 +178,16 @@ public class AuthSignInTest {
                 )))))
                 .andExpect(status().isOk());
 
+        // bind again should be ok without saving.
+        mvc.perform(post("/auth/bind-mobile")
+                .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+                .content(EntityUtils.toString(new UrlEncodedFormEntity(List.of(
+                    new BasicNameValuePair("loginToken", response.get("login-token").asText()),
+                    new BasicNameValuePair("mobile", "123456789"),
+                    new BasicNameValuePair("captcha", "qwerty")
+                )))))
+            .andExpect(status().isOk());
+
         // sign in with new certification (without tenentCode)
         mvc.perform(post("/auth/sign-in-by-sms")
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED)
