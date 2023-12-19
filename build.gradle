@@ -202,6 +202,7 @@ subprojects {
                 mavenJava(MavenPublication) {
                     groupId = project.getGroup()
                     from components.java
+                    version project.version
                     artifact sourcesJar
                     artifact javadocJar
                     pom {
