@@ -53,10 +53,17 @@ public class GeneralExceptionHandler extends ResponseEntityExceptionHandler {
                                                              HttpHeaders headers,
                                                              HttpStatusCode status,
                                                              WebRequest request) {
-        applicationContext.publishEvent(new ErrorOccurredEvent(ex, request));
-        Object standerBody = Optional.ofNullable(body)
-            .orElse(exceptionFormatter.convert(ex));
-        return super.handleExceptionInternal(ex, standerBody, headers, status, request);
+        Object respBody;
+        if (status.value() == HttpStatus.BAD_REQUEST.value()
+            || status.value() == HttpStatus.NOT_FOUND.value()
+            || status.value() == HttpStatus.METHOD_NOT_ALLOWED.value()) {
+            respBody = ErrorInfo.BAD_REQUEST.msgArgs(status.value());
+        } else {
+            applicationContext.publishEvent(new ErrorOccurredEvent(ex, request));
+            respBody = Optional.ofNullable(body)
+                .orElse(exceptionFormatter.convert(ex));
+        }
+        return super.handleExceptionInternal(ex, respBody, headers, status, request);
     }
 
     @ExceptionHandler(ConfException.class)
