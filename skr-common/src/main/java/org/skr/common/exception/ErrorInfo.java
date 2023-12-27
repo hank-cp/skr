@@ -111,6 +111,7 @@ public class ErrorInfo implements Serializable, Cloneable {
     }
 
     public ErrorInfo exception(Throwable ex) {
+        if (ex == null) return this;
         ErrorInfo errorInfo = getOrCopy(this);
         errorInfo.exception = BaseException.getStackTrace(ex);
         return errorInfo;

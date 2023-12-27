@@ -57,7 +57,7 @@ public class GeneralExceptionHandler extends ResponseEntityExceptionHandler {
         if (status.value() == HttpStatus.BAD_REQUEST.value()
             || status.value() == HttpStatus.NOT_FOUND.value()
             || status.value() == HttpStatus.METHOD_NOT_ALLOWED.value()) {
-            respBody = ErrorInfo.BAD_REQUEST.msgArgs(status.value());
+            respBody = ErrorInfo.BAD_REQUEST.msgArgs(status.value()).exception(ex);
         } else {
             applicationContext.publishEvent(new ErrorOccurredEvent(ex, request));
             respBody = Optional.ofNullable(body)
@@ -69,37 +69,37 @@ public class GeneralExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(ConfException.class)
     public ResponseEntity<Object> handleException(ConfException ex, WebRequest request) {
         return handleExceptionInternal(ex,
-                ex.getErrorInfo(),
-                new HttpHeaders(),
-                HttpStatus.INTERNAL_SERVER_ERROR,
-                request);
+            ex.getErrorInfo(),
+            new HttpHeaders(),
+            HttpStatus.INTERNAL_SERVER_ERROR,
+            request);
     }
 
     @ExceptionHandler(BizException.class)
     public ResponseEntity<Object> handleException(BizException ex, WebRequest request) {
         return handleExceptionInternal(ex,
-                ex.getErrorInfo(),
-                new HttpHeaders(),
-                HttpStatus.INTERNAL_SERVER_ERROR,
-                request);
+            ex.getErrorInfo(),
+            new HttpHeaders(),
+            HttpStatus.INTERNAL_SERVER_ERROR,
+            request);
     }
 
     @ExceptionHandler(AuthException.class)
     public ResponseEntity<Object> handleException(AuthException ex, WebRequest request) {
         return handleExceptionInternal(ex,
-                ex.getErrorInfo(),
-                new HttpHeaders(),
-                HttpStatus.UNAUTHORIZED,
-                request);
+            ex.getErrorInfo(),
+            new HttpHeaders(),
+            HttpStatus.UNAUTHORIZED,
+            request);
     }
 
     @ExceptionHandler(PermissionException.class)
     public ResponseEntity<Object> handleException(PermissionException ex, WebRequest request) {
         return handleExceptionInternal(ex,
-                ex.getErrorInfo(),
-                new HttpHeaders(),
-                HttpStatus.FORBIDDEN,
-                request);
+            ex.getErrorInfo(),
+            new HttpHeaders(),
+            HttpStatus.FORBIDDEN,
+            request);
     }
 
     @ExceptionHandler(ValidationException.class)
@@ -107,28 +107,27 @@ public class GeneralExceptionHandler extends ResponseEntityExceptionHandler {
         return handleExceptionInternal(ex,
             ex.getErrorInfos(),
             new HttpHeaders(),
-            HttpStatus.FORBIDDEN,
+            HttpStatus.BAD_REQUEST,
             request);
     }
 
     @ExceptionHandler(UnvarnishedFeignException.class)
     public ResponseEntity<Object> handleException(UnvarnishedFeignException ex, WebRequest request) {
         return handleExceptionInternal(ex,
-                ex.getErrorInfo(),
-                new HttpHeaders(),
-                HttpStatus.valueOf(ex.getResponseStatus()),
-                request);
+            ex.getErrorInfo(),
+            new HttpHeaders(),
+            HttpStatus.valueOf(ex.getResponseStatus()),
+            request);
     }
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<Object> handleUncaughtException(Exception ex, WebRequest request) {
         log.error(getStackTrace(ex));
         return handleExceptionInternal(ex, null,
-                new HttpHeaders(),
-                HttpStatus.INTERNAL_SERVER_ERROR,
-                request);
+            new HttpHeaders(),
+            HttpStatus.INTERNAL_SERVER_ERROR,
+            request);
     }
-
 
 
 }
